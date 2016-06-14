@@ -6,6 +6,7 @@ True            -> WOOHOO
 False           -> D'OH
 if .. then      -> if .. then
 else ..         -> else ..
+while           -> while
 print           -> i'llshowyou
 assignment      -> =
 equality test   -> is
