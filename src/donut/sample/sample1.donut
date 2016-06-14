@@ -2,9 +2,9 @@ Alright brain... it's all up to you {
 
     number n = 3;           Marge: number 3
     number num = 5;         Marge: number 5
-    number res;              Marge: number result
+    number res;             Marge: number result
 
-    if (n + num is 8) {
+    if (n + num is not 8 and ) {
         n = 5
         Marge: do something
     } elif {
@@ -12,4 +12,4 @@ Alright brain... it's all up to you {
     } else {
         Marge: something else
     }
-}
+} I hope I didn't brain my damage.

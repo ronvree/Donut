@@ -4,11 +4,25 @@ Float           -> dotnumber
 boolean         -> reaction
 True            -> WOOHOO
 False           -> D'OH
+array           -> bunchof
 if ..           -> if (..) {..}
 else ..         -> else {..}
 else if ..      -> elif (..) {..}
 while           -> while
-print           -> i'llshowyou
+for             -> for
+print           -> I'llshowyou
 assignment      -> =
 equality test   -> is
+                -> is not
+
+
 end of line     -> ;
+
+and             -> and
+or              -> or
+not             -> not
+
+lower than      -> <
+greater than    -> >
+LE              -> <=
+GE              -> >=
