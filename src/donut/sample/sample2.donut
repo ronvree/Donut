@@ -21,7 +21,7 @@ Alright brain... it's all up to you {
     reaction r = WOOHOO and D'OH or D'OH;
     reaction b = r xor D'OH;
 
-    reaction r = r is not b;
+    r = r is not b;
     reaction notr = not r;
 
     if (notr)   {
