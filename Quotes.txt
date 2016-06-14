@@ -3,6 +3,10 @@ DONUT
 
 ArrayIndexOutOfBounds - I'm somewhere where I don't know where I am!
 
+They didn't have any aspirin, so I got you some cigarettes.
+They didn't have any <Variable>, so I got you some NullPointerException.
+
+
 
 Oh, so they have internet on computers now!
 
@@ -41,4 +45,6 @@ You maniacs! You blew it up! Damn you! Damn you all to hell!
 Marge, I agree with you - in theory. In theory, Communism works. In theory.
 
 
+
 Donuts. Is there anything they can't do?
+
