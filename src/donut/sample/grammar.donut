@@ -5,6 +5,7 @@ boolean         -> reaction
 True            -> WOOHOO
 False           -> D'OH
 array           -> bunchof
+char            -> symbol
 if ..           -> if (..) {..}
 else ..         -> else {..}
 else if ..      -> elif (..) {..}
@@ -14,6 +15,8 @@ print           -> I'llshowyou
 assignment      -> =
 equality test   -> is
                 -> is not
+
+char array      -> bunchof symbol
 
 
 end of line     -> ;
@@ -26,3 +29,6 @@ lower than      -> <
 greater than    -> >
 LE              -> <=
 GE              -> >=
+
+begin file      -> Alright brain... it's all up to you {
+end file        -> } I hope I didn't brain my damage.

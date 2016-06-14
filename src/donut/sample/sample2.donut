@@ -10,9 +10,9 @@ Alright brain... it's all up to you {
     } else {
         n = -10;
         if (n is 0)   {
-            I'llshowyou "No";
+            Marge: I'llshowyou "No";
         } elif (WOOHOO)   {
-            I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF";
+            Marge: I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF";
         } else {
             Marge: Dead code!
         }
@@ -25,6 +25,6 @@ Alright brain... it's all up to you {
     reaction notr = not r;
 
     if (notr)   {
-        I'llshowyou "Done";
+        Marge: I'llshowyou "Done";
     }
-}
+} I hope I didn't brain my damage.
