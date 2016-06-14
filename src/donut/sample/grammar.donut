@@ -4,8 +4,9 @@ Float           -> dotnumber
 boolean         -> reaction
 True            -> WOOHOO
 False           -> D'OH
-if .. then      -> if .. then
-else ..         -> else ..
+if ..           -> if (..) {..}
+else ..         -> else {..}
+else if ..      -> elif (..) {..}
 while           -> while
 print           -> i'llshowyou
 assignment      -> =

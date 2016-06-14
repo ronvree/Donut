@@ -4,9 +4,11 @@ Alright brain... it's all up to you {
     number num = 5;         Marge: number 5
     number res;              Marge: number result
 
-    if (n + num is 8) then {
+    if (n + num is 8) {
         n = 5
         Marge: do something
+    } elif {
+        Marge: something else
     } else {
         Marge: something else
     }
