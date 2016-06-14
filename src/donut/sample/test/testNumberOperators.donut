@@ -1,0 +1,27 @@
+Alright brain... it's all up to you {
+
+    number n = 0;
+    number m;
+    number p = n + 1;
+
+    p = p + p;
+    p = (p + p);
+    p = (p + (p + p));
+
+    m = p - p;
+    n = 1 * m;
+
+    n = 4;
+    n = -n;
+
+    n = n * 2 * 3 + 2;
+
+    number r1 = p;
+    number r2 = n;
+    number r3 = 0;
+    number r4 = 4 + 4;
+    number r5 = (4 - 1) * (3 + 3);
+    number r6 = 6 - 3 * 2;
+    number r7 = -2;
+
+} I hope I didn't brain my damage.
