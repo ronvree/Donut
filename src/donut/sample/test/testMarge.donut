@@ -1,12 +1,37 @@
 Marge {
-    Created by Gijs on 14-Jun-16.
+    Created by Ron on 14-Jun-16.
 }
 
-Alright brain... it's all up to you {
+Alright brain... it's all up to you { Marge: Test
 
-    Marge: Your code goes here.
+    Marge: Code
+    Marge: Code Marge:
+    number n = 1;
+    Marge: n = 2
+    Marge { } number m = 3;
+    Marge {
+        m = 4
+    }
+    number o = 3;
+    Marge {
+        Marge {
+
+        }
+    }
+    o = 4;
+    Marge: Marge: Marge:
+    Marge: test
+    Marge: }
+    o = o; Marge: test
+    Marge: hello;o = o - 1;
 
 
+    Marge {
+        {{{{{{{{{{
+    }
 
+    o = o;Marge: HELLO
 
 } I hope I didn't brain my damage.
+
+Marge: Comment
