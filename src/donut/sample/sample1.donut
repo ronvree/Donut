@@ -1,11 +1,11 @@
 Alright brain... it's all up to you {
 
-    number n : 3;           marge: number 3
-    number num : 5;         marge: number 5
-    number res;             marge: number result
+    number n is 3;           marge: number 3
+    number num is 5;         marge: number 5
+    number res;              marge: number result
 
     if (n + num = 8) then {
-        n : 5
+        n is 5
         marge: do something
     } else {
         marge: something else

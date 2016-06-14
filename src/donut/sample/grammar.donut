@@ -7,6 +7,6 @@ False           -> D'OH
 if .. then      -> if .. then
 else ..         -> else ..
 print           -> i'llshowyou
-assignment      -> :
+assignment      -> is
 equality test   -> =
 end of line     -> ;
