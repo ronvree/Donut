@@ -1,12 +1,21 @@
-Marge {
-    Created by Gijs on 14-Jun-16.
-}
-
 Alright brain... it's all up to you {
 
-    Marge: Your code goes here.
+    number n = 5;
+    number n2 = 4;
+    reaction ohoh = WOOHOO;
 
+    if (n + n2 is 9) {
+        n2 = 7;
+    } else {
+        n = 2;
+    }
 
-
+    if (3 + n is n + 5) {
+        n = 9
+    } elif (ohoh) {
+        ohoh = D'OH
+    } else {
+        n = n + n2
+    }
 
 } I hope I didn't brain my damage.
