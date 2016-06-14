@@ -33,6 +33,10 @@ Alright brain... it's all up to you {
     w = WOOHOO and WOOHOO;
     d = WOOHOO or D'OH;
 
+    reaction p = not D'OH
+    reaction q = D'OH xor WOOHOO;
 
+    p = D'OH xor D'OH xor WOOHOO;
+    q = WOOHOO and WOOHOO or D'OH;
 
 } I hope I didn't brain my damage.
