@@ -1,0 +1,12 @@
+Integer         -> number
+Long            -> bignumber
+Float           -> dotnumber
+boolean         -> reaction
+True            -> WOOHOO
+False           -> D'OH
+if .. then      -> if .. then
+else ..         -> else ..
+print           -> i'llshowyou
+assignment      -> :
+equality test   -> =
+end of line     -> ;
