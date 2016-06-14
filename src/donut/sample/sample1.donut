@@ -1,13 +1,14 @@
 Alright brain... it's all up to you {
 
-    number n = 3;           Marge: number 3
-    number num = 5;         Marge: number 5
+    number n is 3;           Marge: number 3
+    number num is 5;         Marge: number 5
     number res;              Marge: number result
 
-    if (n + num is 8) then {
-        n = 5
+    if (n + num = 8) then {
+        n is 5
         Marge: do something
     } else {
         Marge: something else
     }
+
 }
