@@ -1,0 +1,30 @@
+Alright brain... it's all up to you {
+
+    reaction good = WOOHOO;
+    reaction bad = D'OH;
+
+    number n;
+
+    if (bad) {
+        n = 10;
+    } else {
+        n = -10;
+        if (n is 0)   {
+            I'llshowyou "No";
+        } elif (WOOHOO)   {
+            I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF"
+        } else {
+            Marge: Dead code!
+        }
+    }
+
+    reaction r = WOOHOO and D'OH or D'OH;
+    reaction b = r xor D'OH;
+
+    reaction r = r is not b;
+    reaction notr = not r;
+
+    if (notr)   {
+        I'llshowyou "Done";
+    }
+}
