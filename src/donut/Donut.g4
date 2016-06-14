@@ -1,4 +1,6 @@
-grammar Donut;
+lexer grammar Donut;
+
+import DonutVocab;
 
 
 

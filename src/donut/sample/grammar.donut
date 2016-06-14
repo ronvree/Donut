@@ -7,7 +7,7 @@ False           -> D'OH
 array           -> bunchof
 char            -> symbol
 if ..           -> if (..) {..}
-else ..         -> else {..}
+else ..         -> nope {..}
 else if ..      -> elif (..) {..}
 while           -> while
 for             -> for
@@ -18,12 +18,16 @@ equality test   -> is
 
 char array      -> bunchof symbol
 
+comment         -> Marge:
+                -> Marge {}
+
 
 end of line     -> ;
 
 and             -> and
 or              -> or
 not             -> not
+xor             -> xor
 
 lower than      -> <
 greater than    -> >

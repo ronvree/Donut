@@ -8,7 +8,7 @@ Alright brain... it's all up to you {
         n = 5
         Marge: do something
     } elif {
-        Marge: something else
+        Marge: something else;
     } else {
         Marge: something else
     }
