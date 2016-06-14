@@ -1,12 +1,21 @@
-Marge {
-    Created by Gijs on 14-Jun-16.
-}
-
 Alright brain... it's all up to you {
 
-    Marge: Your code goes here.
+    reaction r = D'OH;
+    reaction w = WOOHOO;
 
+    r = WOOHOO;
+    w = D'OH;
 
+    w = r;
+    r = w;
 
+    reaction p;
+    reaction q;
+
+    p = D'OH;
+    q = WOOHOO;
+
+    p = WOOHOO;
+    q = D'OH;
 
 } I hope I didn't brain my damage.
