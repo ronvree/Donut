@@ -1,11 +1,37 @@
-Marge {
-    Created by Gijs on 14-Jun-16.
-}
-
 Alright brain... it's all up to you {
 
-    Marge: Your code goes here.
+    reaction d = D'OH;
+    reaction w = WOOHOO;
 
+    d = not d;
+    w = not w;
+
+    d = not d;
+    w = not w;
+
+    d = d is d;
+    w = w is not w;
+
+    d = 3 > 1;
+    w = 3 < 1;
+
+    number n = 1;
+
+    d = 3 > n;
+    w = 3 < n;
+
+    d = n is n;
+    w = n is not n;
+
+    d = 3 >= 3;
+    w = 3 <= 5;
+
+    d = not (D'OH);
+    w = not (3 > 4);
+
+    d = D'OH xor WOOHOO;
+    w = WOOHOO and WOOHOO;
+    d = WOOHOO or D'OH;
 
 
 
