@@ -12,7 +12,7 @@ Alright brain... it's all up to you {
         if (n is 0)   {
             I'llshowyou "No";
         } elif (WOOHOO)   {
-            I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF"
+            I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF";
         } else {
             Marge: Dead code!
         }
