@@ -36,10 +36,9 @@ LONG : 'bignumber';
 ARRAY : 'bunchof';
 CHAR : 'symbol';
 
-IF : 'if';
+IF : 'eh?';
 ELSE : 'nope';
-ELIF : 'elif';
-WHILE : 'while';
+WHILE : 'whileyoulittle';
 FOR : 'for';
 PRINT : 'I\'llshowyou';
 COMMENT : 'Marge';
