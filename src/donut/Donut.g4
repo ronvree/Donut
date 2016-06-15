@@ -9,9 +9,9 @@ numExpr : numExpr operator numExpr
         | LPAR numExpr RPAR
         | NUM;
 
-boolExpr: boolExpr boolOperator boolExpr
+boolExpr: FALSE | TRUE
+        | boolExpr boolOperator boolExpr
         | numExpr compOperator numExpr
-        | booleanValue
         | LPAR boolExpr RPAR;
 
 
@@ -22,15 +22,11 @@ boolDecl : BOOLEANTYPE ID ASSIGN expr;
 charDecl : CHARTYPE ID ASSIGN APOSTROPHE CHAR APOSTROPHE;
 arrayDecl : ARRAYTYPE type ID ASSIGN ARRAYTYPE NUM type;
 
-booleanValue : TRUE | FALSE;
-
 type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
 operator : PLUS | MINUS | MULT | DIV | POW;
 boolOperator : AND | OR | XOR;
 compOperator : GE | LE | GT | LT;
 eqOperator : EQUALS | NOTEQUALS;
-
-
 
 
 

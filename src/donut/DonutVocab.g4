@@ -1,12 +1,5 @@
 lexer grammar DonutVocab;
 
-
-NUM : DIGIT+;
-ID : LETTER (NUM | LETTER)*;
-
-fragment DIGIT : [0-9];
-fragment LETTER : [a-zA-Z];
-
 LPAR : '(';
 RPAR : ')';
 LBRACKET  : '[';
@@ -38,8 +31,8 @@ INTTYPE : 'number';
 FLOATTYPE   : 'dotnumber';
 LONGTYPE : 'bignumber';
 BOOLEANTYPE : 'reaction';
-TRUE : 'WOOHOO';
 FALSE : 'D\'OH';
+TRUE : 'WOOHOO';
 ARRAYTYPE : 'bunchof';
 CHARTYPE : 'symbol';
 
@@ -53,6 +46,15 @@ fragment COMMENT : 'Marge';
 fragment EOL : ';';
 fragment BEGINFILE : 'Alright brain... it\'s all up to you {';
 fragment ENDFILE : '} I hope I didn\'t brain my damage.';
+
+
+NUM : DIGIT+;
+BOOLEANVALUE : FALSE | TRUE;
+
+ID : LETTER (NUM | LETTER)*;
+
+fragment DIGIT : [0-9];
+fragment LETTER : [a-zA-Z];
 
 WS : [ \n\r\t] -> skip;
 
