@@ -2,6 +2,13 @@ grammar Donut;
 
 import DonutVocab;
 
+block : LBRACE stat* RBRACE;
+
+stat: ID ASSIGN expr                            #assStat
+    | IF LPAR expr RPAR block (ELSE block)?     #ifStat
+    | WHILE expr block                          #whileStat
+    ;
+
 expr : numExpr
      | boolExpr
      | expr eqOperator expr
