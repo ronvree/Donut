@@ -3,16 +3,16 @@ grammar Donut;
 import DonutVocab;
 
 
-expr : numExpr | boolExpr | expr eqOperator expr;
+expr : numExpr | boolExpr | expr eqOperator expr | ID | LPAR expr RPAR;
 
 numExpr : numExpr operator numExpr
-        | LPAR numExpr RPAR
-        | NUM;
+        | NUM
+        ;
 
 boolExpr: FALSE | TRUE
         | boolExpr boolOperator boolExpr
         | numExpr compOperator numExpr
-        | LPAR boolExpr RPAR;
+        ;
 
 
 varDecl : intDecl | boolDecl | charDecl | arrayDecl ;
