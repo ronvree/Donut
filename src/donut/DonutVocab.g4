@@ -1,7 +1,5 @@
 lexer grammar DonutVocab;
 
-
-
 LPAR : '(';
 RPAR : ')';
 LBRACKET  : '[';
