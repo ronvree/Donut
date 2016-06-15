@@ -1,11 +1,12 @@
 lexer grammar DonutVocab;
 
-ID : LETTER (LETTER | DIGIT09)* ;
 
-DIGIT19 : [1-9];
-DIGIT09 : '0' | DIGIT19;
+NUM : DIGIT+;
+ID : LETTER (NUM | LETTER)*;
 
-LETTER: [a-zA-Z];
+fragment DIGIT : [0-9];
+fragment LETTER : [a-zA-Z];
+
 LPAR : '(';
 RPAR : ')';
 LBRACKET  : '[';
@@ -42,24 +43,17 @@ FALSE : 'D\'OH';
 ARRAYTYPE : 'bunchof';
 CHARTYPE : 'symbol';
 
-IF : 'eh?';
-ELSE : 'nope';
-WHILE : 'whileyoulittle';
-FOR : 'for';
-PRINT : 'I\'llshowyou';
-COMMENT : 'Marge';
+fragment IF : 'eh?';
+fragment ELSE : 'nope';
+fragment WHILE : 'whileyoulittle';
+fragment FOR : 'for';
+fragment PRINT : 'I\'llshowyou';
+fragment COMMENT : 'Marge';
 
-
-
-EOL : ';';
-BEGINFILE : 'Alright brain... it\'s all up to you {';
-ENDFILE : '} I hope I didn\'t brain my damage.';
+fragment EOL : ';';
+fragment BEGINFILE : 'Alright brain... it\'s all up to you {';
+fragment ENDFILE : '} I hope I didn\'t brain my damage.';
 
 WS : [ \n\r\t] -> skip;
 
-COMMENTTEXT: ~'}'*;
-COMMENTLINE : COMMENT LBRACE COMMENTTEXT RBRACE  -> skip;
-
-
-
-CHAR : . ;
+COMMENTLINE : COMMENT LBRACE ~'}'* RBRACE  -> skip;
