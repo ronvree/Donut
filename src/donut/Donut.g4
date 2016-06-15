@@ -5,7 +5,7 @@ import DonutVocab;
 block : LBRACE stat* RBRACE;
 
 stat: ID ASSIGN expr                            #assStat
-    | IF LPAR expr RPAR block (ELSE block)?     #ifStat
+    | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE expr block                          #whileStat
     ;
 
