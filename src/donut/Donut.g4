@@ -10,7 +10,6 @@ stat: ID ASSIGN expr EOL                        #assStat
     | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE LPAR expr RPAR block                #whileStat
     | varDecl                                   #declStat
-    | type ID                                   #initStat
     ;
 
 expr: prfOperator expr          #prfExpr
