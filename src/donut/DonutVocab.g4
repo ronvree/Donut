@@ -1,6 +1,10 @@
-lexer grammar DonutVocab;
+grammar DonutVocab;
 
-DIGIT : [0-9];
+DIGIT09 : [0-9];
+DIGIT19 : [1-9];
+CHAR : . ;
+ZERO : '0';
+
 LETTER: [a-zA-Z];
 LPAR : '(';
 RPAR : ')';
@@ -8,6 +12,8 @@ LBRACKET  : '[';
 RBRACKET  : ']';
 LBRACE : '{';
 RBRACE : '}';
+APOSTROPHE : '\'';
+DOT : '.';
 
 PLUS : '+';
 MINUS : '-';
@@ -27,14 +33,14 @@ AND : 'and';
 OR  : 'or';
 XOR : 'xor';
 
-INTEGER : 'number';
-FLOAT   : 'dotnumber';
-BOOLEAN : 'reaction';
+INTTYPE : 'number';
+FLOATTYPE   : 'dotnumber';
+LONGTYPE : 'bignumber';
+BOOLEANTYPE : 'reaction';
 TRUE : 'WOOHOO';
 FALSE : 'D\'OH';
-LONG : 'bignumber';
-ARRAY : 'bunchof';
-CHAR : 'symbol';
+ARRAYTYPE : 'bunchof';
+CHARTYPE : 'symbol';
 
 IF : 'eh?';
 ELSE : 'nope';
@@ -42,7 +48,6 @@ WHILE : 'whileyoulittle';
 FOR : 'for';
 PRINT : 'I\'llshowyou';
 COMMENT : 'Marge';
-COLON : ':';
 
 EOL : ';';
 BEGINFILE : 'Alright brain... it\'s all up to you {';
