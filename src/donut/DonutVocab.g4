@@ -1,5 +1,8 @@
 lexer grammar DonutVocab;
 
+WS : [ \n\r\t] -> skip;
+
+
 LPAR : '(';
 RPAR : ')';
 LBRACKET  : '[';
@@ -8,6 +11,8 @@ LBRACE : '{';
 RBRACE : '}';
 APOSTROPHE : '\'';
 DOT : '.';
+COLON: ':';
+SEMICOLON: ';';
 
 PLUS : '+';
 MINUS : '-';
@@ -36,26 +41,27 @@ TRUE : 'WOOHOO';
 ARRAYTYPE : 'bunchof';
 CHARTYPE : 'symbol';
 
-fragment IF : 'eh?';
-fragment ELSE : 'nope';
-fragment WHILE : 'whileyoulittle';
-fragment FOR : 'for';
-fragment PRINT : 'I\'llshowyou';
+ELSE : 'nope';
+WHILE : 'whileyoulittle';
+FOR : 'for';
+PRINT : 'I\'llshowyou';
 fragment COMMENT : 'Marge';
 
-fragment EOL : ';';
-fragment BEGINFILE : 'Alright brain... it\'s all up to you {';
-fragment ENDFILE : '} I hope I didn\'t brain my damage.';
+EOL : ';';
+BEGINFILE : 'Alright brain... it\'s all up to you';
+ENDFILE : 'I hope I didn\'t brain my damage.';
 
 
 NUM : DIGIT+;
 BOOLEANVALUE : FALSE | TRUE;
+IF : 'eh?';
+COMMENTLINE : COMMENT COLON .* SEMICOLON  -> skip;
 
 ID : LETTER (NUM | LETTER)*;
 
 fragment DIGIT : [0-9];
 fragment LETTER : [a-zA-Z];
 
-WS : [ \n\r\t] -> skip;
 
-COMMENTLINE : COMMENT LBRACE ~'}'* RBRACE  -> skip;
+
+CHAR : .;
