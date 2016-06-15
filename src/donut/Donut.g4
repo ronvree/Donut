@@ -1,4 +1,4 @@
-lexer grammar Donut;
+grammar Donut;
 
 import DonutVocab;
 
