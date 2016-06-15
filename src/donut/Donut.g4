@@ -2,22 +2,22 @@ grammar Donut;
 
 import DonutVocab;
 
-fragment comment : COMMENT LBRACE commentText RBRACE;
+comment : COMMENT LBRACE commentText RBRACE;
 
 varDecl : intDecl | boolDecl | charDecl | arrayDecl;
 
-intDecl : INTTYPE variable ASSIGN number;
+intDecl : INTTYPE variable ASSIGN integer;
 boolDecl : BOOLEANTYPE variable ASSIGN booleanValue;
-charDecl : CHARTYPE variable ASSIGN APOSTROPHE CHAR APOSTOPHE;
-arrayDecl : ARRAYTYPE TYPE variable ASSIGN ARRAYTYPE integer TYPE;
+charDecl : CHARTYPE variable ASSIGN APOSTROPHE CHAR APOSTROPHE;
+arrayDecl : ARRAYTYPE type variable ASSIGN ARRAYTYPE integer type;
 
 
 integer : DIGIT19 DIGIT09*;
 commentText: ~'}'*;
 
-fragment variable : LETTER numberOrLetter* ;
-fragment numberOrLetter : LETTER | DIGIT09 ;
+variable : LETTER numberOrLetter* ;
+numberOrLetter : LETTER | DIGIT09 ;
 
-fragment booleanValue : TRUE | FALSE;
+booleanValue : TRUE | FALSE;
 
-fragment TYPE : INTTYPE | BOOLEANTYPE | CHARTYPE ;
+type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
