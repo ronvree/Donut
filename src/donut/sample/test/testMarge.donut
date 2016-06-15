@@ -2,7 +2,7 @@ Marge:
     Created by Ron on 14-Jun-16.
 ;
 
-Alright brain... it's all up to you { Marge { Test }
+Alright brain... it's all up to you { Marge: Test ;
 
     Marge: Code ;
     Marge: Code ;
@@ -16,7 +16,7 @@ Alright brain... it's all up to you { Marge { Test }
     Marge:
         Marge:
 
-        ;
+
     ;
     o = 4;
     Marge: Marge: Marge {;

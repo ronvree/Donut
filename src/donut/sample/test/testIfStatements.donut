@@ -11,12 +11,12 @@ Alright brain... it's all up to you {
     }
 
     (3 + n is n + 5) eh? {
-        n = 9
+        n = 9;
     } nope {
         (ohoh) eh? {
-            ohoh = D'OH
+            ohoh = D'OH;
         } nope {
-            n = n + n2
+            n = n + n2;
         }
     }
 
