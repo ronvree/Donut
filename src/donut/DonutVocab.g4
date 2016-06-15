@@ -53,4 +53,9 @@ ENDFILE : '} I hope I didn\'t brain my damage.';
 
 WS : [ \n\r\t] -> skip;
 
+COMMENTTEXT: ~'}'*;
+COMMENTLINE : COMMENT LBRACE COMMENTTEXT RBRACE  -> skip;
+
+
+
 CHAR : . ;
