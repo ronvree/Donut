@@ -6,8 +6,8 @@ True            -> WOOHOO
 False           -> D'OH
 array           -> bunchof
 char            -> symbol
-if (..)           -> (..) eh?
-else ..         -> nope {..}
+if (..)         -> (..) eh?
+else {..}       -> nope {..}
 while           -> whileyoulittle
 for             -> for
 print           -> I'llshowyou
