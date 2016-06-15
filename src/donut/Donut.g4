@@ -2,9 +2,6 @@ grammar Donut;
 
 import DonutVocab;
 
-
-
-
 expr : numExpr
      | boolExpr
      | expr eqOperator expr
