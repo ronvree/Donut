@@ -39,4 +39,7 @@ Alright brain... it's all up to you {
     p = D'OH xor D'OH xor WOOHOO;
     q = WOOHOO and WOOHOO or D'OH;
 
+    p = D'OH and (WOOHOO or WOOHOO);
+    q = (D'OH) and WOOHOO xor (D'OH xor WOOHOO);
+
 } I hope I didn't brain my damage.

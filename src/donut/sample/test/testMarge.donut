@@ -2,12 +2,12 @@ Marge {
     Created by Ron on 14-Jun-16.
 }
 
-Alright brain... it's all up to you { Marge: Test
+Alright brain... it's all up to you { Marge { Test }
 
-    Marge: Code
-    Marge: Code Marge:
+    Marge { Code }
+    Marge { Code }
     number n = 1;
-    Marge: n = 2
+    Marge { n = 2 }
     Marge { } number m = 3;
     Marge {
         m = 4
@@ -19,19 +19,19 @@ Alright brain... it's all up to you { Marge: Test
         }
     }
     o = 4;
-    Marge: Marge: Marge:
-    Marge: test
-    Marge: }
-    o = o; Marge: test
-    Marge: hello;o = o - 1;
+    Marge { Marge { Marge { }
+    Marge { test }
+    Marge { }
+    o = o; Marge { test }
+    Marge { hello}o = o - 1;
 
 
     Marge {
         {{{{{{{{{{
     }
 
-    o = o;Marge: HELLO
+    o = o;Marge { HELLO }
 
 } I hope I didn't brain my damage.
 
-Marge: Comment
+Marge { Comment }
