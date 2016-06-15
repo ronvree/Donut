@@ -40,10 +40,8 @@ charDecl : CHARTYPE ID ASSIGN APOSTROPHE CHAR APOSTROPHE;
 arrayDecl : ARRAYTYPE type ID ASSIGN ARRAYTYPE NUM type;
 
 type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
-operator : PLUS | MINUS | MULT | DIV | POW;
 boolOperator : AND | OR | XOR;
-compOperator : GE | LE | GT | LT;
-eqOperator : EQUALS | NOTEQUALS;
+compOperator : GE | LE | GT | LT |EQUALS | NOTEQUALS;
 prfOperator : MINUS | '';
 
 
