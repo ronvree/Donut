@@ -1,6 +1,5 @@
 lexer grammar DonutVocab;
 
-WS : [ \n\r\t] -> skip;
 
 
 LPAR : '(';
@@ -21,6 +20,7 @@ MULT : '*';
 POW  : '^';
 ASSIGN : '=';
 
+NOT : 'not';
 EQUALS : 'is';
 NOTEQUALS: 'is not';
 GE : '>=';
@@ -55,7 +55,7 @@ ENDFILE : 'I hope I didn\'t brain my damage.';
 NUM : DIGIT+;
 BOOLEANVALUE : FALSE | TRUE;
 IF : 'eh?';
-COMMENTLINE : COMMENT COLON .* SEMICOLON  -> skip;
+COMMENTLINE : COMMENT COLON .*? SEMICOLON  -> skip;
 
 ID : LETTER (NUM | LETTER)*;
 
@@ -63,5 +63,6 @@ fragment DIGIT : [0-9];
 fragment LETTER : [a-zA-Z];
 
 
+WS : [ \n\r\t] -> skip;
 
 CHAR : .;
