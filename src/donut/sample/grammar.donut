@@ -6,10 +6,9 @@ True            -> WOOHOO
 False           -> D'OH
 array           -> bunchof
 char            -> symbol
-if ..           -> if (..) {..}
+if (..)           -> (..) eh?
 else ..         -> nope {..}
-else if ..      -> elif (..) {..}
-while           -> while
+while           -> whileyoulittle
 for             -> for
 print           -> I'llshowyou
 assignment      -> =
@@ -18,8 +17,7 @@ equality test   -> is
 
 char array      -> bunchof symbol
 
-comment         -> Marge:
-                -> Marge {}
+comment         -> Marge {}
 
 
 end of line     -> ;

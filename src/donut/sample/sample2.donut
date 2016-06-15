@@ -5,18 +5,19 @@ Alright brain... it's all up to you {
 
     number n;
 
-    if (bad) {
+    (bad) eh? {
         n = 10;
-    } else {
+    } nope {
         n = -10;
-        if (n is 0)   {
-            Marge: I'llshowyou "No";
-        } elif (WOOHOO)   {
-            Marge: I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF";
-        } else {
-            Marge: Dead code!
+        (n is 0) eh?  {
+            Marge { I'llshowyou "No" }
+        } nope {
+            (WOOHOO) eh?  {
+                Marge { I'llshowyou "WHY YOU LITTLE ARHSGSHDFJKSDF" }
+            } nope {
+                Marge { Dead code! }
+            }
         }
-    }
 
     reaction r = WOOHOO and D'OH or D'OH;
     reaction b = r xor D'OH;
@@ -24,7 +25,7 @@ Alright brain... it's all up to you {
     r = r is not b;
     reaction notr = not r;
 
-    if (notr)   {
-        Marge: I'llshowyou "Done";
+    (notr) eh?  {
+        Marge { I'llshowyou "Done" }
     }
 } I hope I didn't brain my damage.

@@ -1,15 +1,34 @@
 Alright brain... it's all up to you {
 
-    number n = 3;           Marge: number 3
-    number num = 5;         Marge: number 5
-    number res;             Marge: number result
+    number n = 3;           Marge { number 3 }
+    number num = 5;         Marge { number 5 }
+    number res;             Marge { number result }
 
     if (n + num is not 8 and ) {
         n = 5
-        Marge: do something
+        Marge { do something }
     } elif {
-        Marge: something else;
+        Marge { something else }
     } else {
-        Marge: something else
+        Marge { something else }
     }
+
+
+    (n + num is not 8) eh? {
+
+    } nope {
+        (n + num is 7 and) eh? {
+            Marge { do something }
+        } nope {
+            Marge { yep }
+        }
+    }
+
+    whileyoulittle (reaction) {
+
+    }
+
+
+
+
 } I hope I didn't brain my damage.

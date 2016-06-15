@@ -7,10 +7,10 @@ Alright brain... it's all up to you {
     numbers[2] = n;
 
     number i = 0;
-    while (i < numbers.length)    { Marge: A comment
+    whileyoulittle (i < numbers.length)    { Marge { A comment }
         numbers[i] = i;
         i = i + 1;
-    }                               Marge: A comment
+    }                               Marge { A comment }
 
     I'llshowyou numbers;
 
