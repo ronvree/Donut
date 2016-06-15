@@ -1,5 +1,7 @@
 lexer grammar DonutVocab;
 
+ID : LETTER (LETTER | DIGIT09)* ;
+
 DIGIT19 : [1-9];
 DIGIT09 : '0' | DIGIT19;
 
@@ -46,6 +48,8 @@ WHILE : 'whileyoulittle';
 FOR : 'for';
 PRINT : 'I\'llshowyou';
 COMMENT : 'Marge';
+
+
 
 EOL : ';';
 BEGINFILE : 'Alright brain... it\'s all up to you {';
