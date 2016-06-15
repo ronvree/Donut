@@ -11,7 +11,6 @@ RBRACE : '}';
 APOSTROPHE : '\'';
 DOT : '.';
 COLON: ':';
-SEMICOLON: ';';
 
 PLUS : '+';
 MINUS : '-';
@@ -55,7 +54,7 @@ ENDFILE : 'I hope I didn\'t brain my damage.';
 NUM : DIGIT+;
 BOOLEANVALUE : FALSE | TRUE;
 IF : 'eh?';
-COMMENTLINE : COMMENT COLON .*? SEMICOLON  -> skip;
+COMMENTLINE : COMMENT COLON .*? EOL  -> skip;
 
 ID : LETTER (NUM | LETTER)*;
 

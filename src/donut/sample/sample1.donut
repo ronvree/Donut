@@ -4,15 +4,10 @@ Alright brain... it's all up to you {
 
     number num = 5;                Marge: do something ;
 
-    number res;                     Marge: do something
-    Het is gewelllldigggg
+    number res;
 
-
-    MULTILINE COMMENTS BIAAAATCH;
-
-
-    (n + num is not 8 and ) eh? {
-        n = 5
+    (n + num is not 8) eh? {
+        n = 5;
         Marge: do
         s
         o
@@ -31,15 +26,11 @@ Alright brain... it's all up to you {
     (n + num is not 8) eh? {
 
     } nope {
-        (n + num is 7 and) eh? {
+        (n + num is 7) eh? {
         Marge: do something ;
         } nope {
         Marge: do something ;
         }
-    }
-
-    whileyoulittle (reaction) {
-
     }
 
 

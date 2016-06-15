@@ -9,8 +9,8 @@ block : LBRACE stat* RBRACE;
 stat: ID ASSIGN expr EOL                        #assStat
     | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE LPAR expr RPAR block                #whileStat
-    | varDecl EOL                               #declStat
-    | type ID EOL                               #initStat
+    | varDecl                                   #declStat
+    | type ID                                   #initStat
     ;
 
 expr: prfOperator expr          #prfExpr
@@ -34,10 +34,10 @@ varDecl : intDecl
         | arrayDecl
         ;
 
-intDecl : INTTYPE ID ASSIGN expr;
-boolDecl : BOOLEANTYPE ID ASSIGN expr;
-charDecl : CHARTYPE ID ASSIGN APOSTROPHE CHAR APOSTROPHE;
-arrayDecl : ARRAYTYPE type ID ASSIGN ARRAYTYPE NUM type;
+intDecl : INTTYPE ID (ASSIGN expr)? EOL;
+boolDecl : BOOLEANTYPE ID (ASSIGN expr)? EOL ;
+charDecl : CHARTYPE ID ASSIGN APOSTROPHE CHAR APOSTROPHE EOL;
+arrayDecl : ARRAYTYPE type ID ASSIGN ARRAYTYPE NUM type EOL;
 
 type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
 boolOperator : AND | OR | XOR;
