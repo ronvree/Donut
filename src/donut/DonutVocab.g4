@@ -1,9 +1,7 @@
-grammar DonutVocab;
+lexer grammar DonutVocab;
 
-DIGIT09 : [0-9];
 DIGIT19 : [1-9];
-CHAR : . ;
-ZERO : '0';
+DIGIT09 : '0' | DIGIT19;
 
 LETTER: [a-zA-Z];
 LPAR : '(';
@@ -54,3 +52,5 @@ BEGINFILE : 'Alright brain... it\'s all up to you {';
 ENDFILE : '} I hope I didn\'t brain my damage.';
 
 WS : [ \n\r\t] -> skip;
+
+CHAR : . ;

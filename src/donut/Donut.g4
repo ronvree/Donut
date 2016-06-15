@@ -2,9 +2,6 @@ lexer grammar Donut;
 
 import DonutVocab;
 
-
-
-
 fragment comment : COMMENT LBRACE commentText RBRACE;
 fragment commentText : (~RBRACE)*;
 
