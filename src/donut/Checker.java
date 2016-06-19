@@ -1,20 +1,29 @@
 package donut;
 
-import donut.errors.TypeError;
+import donut.errors.MissingDeclError;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Ron on 19-6-2016.
  */
-public class TypeCheckListener implements DonutListener {
+public class Checker implements DonutListener {
 
     private ParseTreeProperty<Type> types;
-    private List<TypeError> errors;
+    private List<donut.errors.Error> errors;
+    private Scope scope;
+
+    public Checker()  {
+        this.types = new ParseTreeProperty<>();
+        this.errors = new ArrayList<>();
+        this.scope = new Scope();
+    }
+
 
     @Override
     public void enterProgram(DonutParser.ProgramContext ctx) {
@@ -35,6 +44,10 @@ public class TypeCheckListener implements DonutListener {
     public void exitBlock(DonutParser.BlockContext ctx) {
 
     }
+
+    /*
+        Statements
+     */
 
     @Override
     public void enterAssStat(DonutParser.AssStatContext ctx) {
@@ -76,9 +89,13 @@ public class TypeCheckListener implements DonutListener {
 
     }
 
+    /*
+        Expressions
+     */
+
     @Override
     public void enterTrueExpr(DonutParser.TrueExprContext ctx) {
-
+        this.types.put(ctx, Type.REACTION_TYPE);
     }
 
     @Override
@@ -108,7 +125,7 @@ public class TypeCheckListener implements DonutListener {
 
     @Override
     public void enterNumExpr(DonutParser.NumExprContext ctx) {
-
+        this.types.put(ctx, Type.NUMBER_TYPE);
     }
 
     @Override
@@ -168,7 +185,7 @@ public class TypeCheckListener implements DonutListener {
 
     @Override
     public void enterFalseExpr(DonutParser.FalseExprContext ctx) {
-
+        this.types.put(ctx, Type.REACTION_TYPE);
     }
 
     @Override
@@ -198,7 +215,11 @@ public class TypeCheckListener implements DonutListener {
 
     @Override
     public void enterIdExpr(DonutParser.IdExprContext ctx) {
-
+        if (this.scope.contains(ctx.ID().getText()))   {
+            this.types.put(ctx, this.scope.getType(ctx.ID().getText()));
+        } else {
+            this.errors.add(new MissingDeclError(-1, -1, ctx.ID().getText())); // TODO -- Add line number
+        }
     }
 
     @Override
@@ -218,42 +239,44 @@ public class TypeCheckListener implements DonutListener {
 
     @Override
     public void enterIntDecl(DonutParser.IntDeclContext ctx) {
-
+        this.scope.put(ctx.ID().getText(), Type.NUMBER_TYPE);
     }
 
     @Override
     public void exitIntDecl(DonutParser.IntDeclContext ctx) {
-
+        // TODO -- Check if expr is of type NUMBER
     }
 
     @Override
     public void enterBoolDecl(DonutParser.BoolDeclContext ctx) {
 
+        // TODO -- Check if not already declared
+        this.scope.put(ctx.ID().getText(), Type.REACTION_TYPE);
     }
 
     @Override
     public void exitBoolDecl(DonutParser.BoolDeclContext ctx) {
-
+        // TODO -- Check if expr is of type REACTION
     }
 
     @Override
     public void enterCharDecl(DonutParser.CharDeclContext ctx) {
-
+        // TODO -- Char type
     }
 
     @Override
     public void exitCharDecl(DonutParser.CharDeclContext ctx) {
-
+        // TODO -- Check if expr is of type SYMBOL
     }
 
     @Override
     public void enterArrayDecl(DonutParser.ArrayDeclContext ctx) {
-
+        // TODO -- Array type recursion?
     }
 
     @Override
     public void exitArrayDecl(DonutParser.ArrayDeclContext ctx) {
-
+        // TODO -- Check if expr is of (correct) type ARRAY
     }
 
     @Override
