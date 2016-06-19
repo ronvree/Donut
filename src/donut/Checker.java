@@ -16,12 +16,12 @@ public class Checker implements DonutListener {
 
     private ParseTreeProperty<Type> types;
     private List<donut.errors.Error> errors;
-    private Scope scope;
+    private SymbolTable scopes;
 
     public Checker()  {
         this.types = new ParseTreeProperty<>();
         this.errors = new ArrayList<>();
-        this.scope = new Scope();
+        this.scopes = new SymbolTable();
     }
 
 
@@ -215,11 +215,11 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterIdExpr(DonutParser.IdExprContext ctx) {
-        if (this.scope.contains(ctx.ID().getText()))   {
-            this.types.put(ctx, this.scope.getType(ctx.ID().getText()));
-        } else {
-            this.errors.add(new MissingDeclError(-1, -1, ctx.ID().getText())); // TODO -- Add line number
-        }
+//        if (this.scope.contains(ctx.ID().getText()))   {
+//            this.types.put(ctx, this.scope.getType(ctx.ID().getText()));
+//        } else {
+//            this.errors.add(new MissingDeclError(-1, -1, ctx.ID().getText())); // TODO -- Add line number
+//        }
     }
 
     @Override
@@ -239,7 +239,7 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterIntDecl(DonutParser.IntDeclContext ctx) {
-        this.scope.put(ctx.ID().getText(), Type.NUMBER_TYPE);
+//        this.scope.put(ctx.ID().getText(), Type.NUMBER_TYPE);
     }
 
     @Override
@@ -251,7 +251,7 @@ public class Checker implements DonutListener {
     public void enterBoolDecl(DonutParser.BoolDeclContext ctx) {
 
         // TODO -- Check if not already declared
-        this.scope.put(ctx.ID().getText(), Type.REACTION_TYPE);
+//        this.scope.put(ctx.ID().getText(), Type.REACTION_TYPE);
     }
 
     @Override
