@@ -29,6 +29,16 @@ public class Scope {
         return result;
     }
 
+    public Scope deepCopy() {
+        Scope copy = new Scope();
+        copy.size = this.size;
+        for (String id : this.types.keySet())  {
+            copy.types.put(id, this.types.get(id));
+            copy.offsets.put(id, this.offsets.get(id));
+        }
+        return copy;
+    }
+
     public boolean contains(String id)  {
         return types.containsKey(id);
     }

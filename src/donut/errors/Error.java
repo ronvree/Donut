@@ -25,7 +25,7 @@ public abstract class Error {
 
     @Override
     public String toString()    {
-        return String.format("Error in line %d:%d - %s", row, column, msg);
+        return String.format("D'OH at line %d:%d - %s", row, column, msg);
     }
 
     public String getMsg() {
