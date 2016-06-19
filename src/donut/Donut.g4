@@ -36,7 +36,7 @@ varDecl : intDecl
 intDecl : INTTYPE ID (ASSIGN expr)? EOL;
 boolDecl : BOOLEANTYPE ID (ASSIGN expr)? EOL ;
 charDecl : CHARTYPE ID (ASSIGN APOSTROPHE CHAR APOSTROPHE)? EOL;
-arrayDecl : ARRAYTYPE type ID ASSIGN ARRAYTYPE NUM type EOL;
+arrayDecl : ARRAYTYPE+ type ID ASSIGN (ARRAYTYPE NUM)+ type EOL;
 
 type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
 boolOperator : AND | OR | XOR;

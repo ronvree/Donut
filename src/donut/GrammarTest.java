@@ -16,13 +16,13 @@ public class GrammarTest {
     /**
      * Test files with a full program.
      */
-    private static final String EmtpyFile = "src/donut/sample/test/testEmpty.donut";
-    private static final String IfStatementsFile = "src/donut/sample/test/testIfStatements.donut";
-    private static final String MargeFile = "src/donut/sample/test/testMarge.donut";
-    private static final String NumberOperatorsFile = "src/donut/sample/test/testNumberOperators.donut";
-    private static final String NumbersFile = "src/donut/sample/test/testNumbers.donut";
-    private static final String ReactionFile = "src/donut/sample/test/testReaction.donut";
-    private static final String ReactionOperatorsFile = "src/donut/sample/test/testReactionOperators.donut";
+    private static final String EmtpyFile = "src/donut/sample/testFiles/testEmpty.donut";
+    private static final String IfStatementsFile = "src/donut/sample/testFiles/testIfStatements.donut";
+    private static final String MargeFile = "src/donut/sample/testFiles/testMarge.donut";
+    private static final String NumberOperatorsFile = "src/donut/sample/testFiles/testNumberOperators.donut";
+    private static final String NumbersFile = "src/donut/sample/testFiles/testNumbers.donut";
+    private static final String ReactionFile = "src/donut/sample/testFiles/testReaction.donut";
+    private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/testReactionOperators.donut";
 
 
     /**
@@ -31,15 +31,19 @@ public class GrammarTest {
     private static final String IntegerDeclaration = "number n = 4;";
     private static final String IntegerDeclaration2 = "number j;";
     private static final String ArrayDeclaration = "bunchof number a = bunchof 6 number;";
+    private static final String ArrayOfArraysDeclaration = "bunchof bunchof bunchof number a = bunchof 5 bunchof 4 bunchof 3 number;";
     private static final String CharacterDeclaration = "symbol c = \'%\';";
-    private static final String CharacterDeclaration2 = "symbol g;";
+    private static final String CharacterDeclaration2 = "symbol c;";
     private static final String BooleanDeclaration = "reaction r = WOOHOO;";
     private static final String BooleanDeclaration2 = "reaction d;";
+
+    // TODO Make tests that fail.
+
 
     @Test
     public void testArrayDeclaration() {
         verify(runTest(format(ArrayDeclaration), false));
-        // TODO test arraydeclaration without assigning.
+        verify(runTest(format(ArrayOfArraysDeclaration), false));
     }
 
     @Test
@@ -96,12 +100,10 @@ public class GrammarTest {
     }
 
     public void verify(List<String> list) {
-        if (list.size() == 0) {
-            Assert.assertTrue(list.size() == 0);
+        if (list == null) {
+            Assert.assertNull(list); // List is null, so no errors.
         } else {
-            for (String s : list) {
-                System.out.println(s);
-            }
+            Assert.assertTrue(list.size() == 0); // Check if list is empty.
         }
     }
 
@@ -136,6 +138,7 @@ public class GrammarTest {
         parser.addErrorListener(errorListener);
 
         parser.program();
+
         return errorListener.getErrors();
 
     }
