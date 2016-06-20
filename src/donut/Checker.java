@@ -1,5 +1,7 @@
 package donut;
 
+import donut.errors.DoubleDeclError;
+import donut.errors.Error;
 import donut.errors.MissingDeclError;
 import donut.errors.TypeError;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -22,7 +24,7 @@ public class Checker implements DonutListener {
     /**
      * Store errors that were encountered
      */
-    private List<donut.errors.Error> errors;
+    private List<Error> errors;
     /**
      * Keep track of scopes
      */
@@ -39,6 +41,14 @@ public class Checker implements DonutListener {
         this.result = new CheckerResult();
     }
 
+    public List<Error> getErrors()  {
+        return this.errors;
+    }
+
+    /*
+        Listener methods
+     */
+
     @Override
     public void enterProgram(DonutParser.ProgramContext ctx) {
 
@@ -51,12 +61,12 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterBlock(DonutParser.BlockContext ctx) {
-
+        this.scopes.openScope();
     }
 
     @Override
     public void exitBlock(DonutParser.BlockContext ctx) {
-
+        this.scopes.closeScope();
     }
 
     /*
@@ -65,12 +75,24 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterAssStat(DonutParser.AssStatContext ctx) {
-
+        if (scopes.contains(ctx.ID().getText()))   {
+            this.types.put(ctx.ID(), scopes.getCurrentScope().getType(ctx.ID().getText()));
+        } else {
+            this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));
+        }
     }
 
     @Override
     public void exitAssStat(DonutParser.AssStatContext ctx) {
-
+        Type idType = this.types.get(ctx.ID());
+        if (idType != null)   {
+            Type exprType = this.types.get(ctx.expr());
+            if (!(idType.equals(exprType)))   {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
+            }
+        } else {
+            // Missing declaration error has already been given in the enter method
+        }
     }
 
     @Override
@@ -80,7 +102,10 @@ public class Checker implements DonutListener {
 
     @Override
     public void exitIfStat(DonutParser.IfStatContext ctx) {
-
+        Type type = this.types.get(ctx.expr());
+        if (!(type instanceof Type.ReactionType))   {
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
+        }
     }
 
     @Override
@@ -90,25 +115,32 @@ public class Checker implements DonutListener {
 
     @Override
     public void exitWhileStat(DonutParser.WhileStatContext ctx) {
-
+        Type type = this.types.get(ctx.expr());
+        if (!(type instanceof Type.ReactionType))   {
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
+        }
     }
 
     @Override
     public void enterDeclStat(DonutParser.DeclStatContext ctx) {
         Type type = makeType(ctx.type());
-        this.scopes.put(ctx.ID().getText(), type);
-        this.result.setType(ctx.ID(), type);
-        this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
+        this.types.put(ctx.ID(), type);
+        if (this.scopes.contains(ctx.ID().getText()))   {
+            this.errors.add(new DoubleDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));
+        } else {
+            this.scopes.put(ctx.ID().getText(), type);
+            this.result.setType(ctx.ID(), type);
+            this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
+        }
 
         this.result.setEntry(ctx, ctx); // TODO -- set entries correctly
     }
 
     @Override
     public void exitDeclStat(DonutParser.DeclStatContext ctx) {
-        // TODO -- check if expr type is equal to decl type
         Type idType = this.types.get(ctx.ID());
         Type exprType = this.types.get(ctx.expr());
-        if (!(idType.equals(exprType)))   {
+        if (!(idType.equals(exprType)) && ctx.ASSIGN() != null)   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
         }
 
@@ -428,6 +460,7 @@ public class Checker implements DonutListener {
         if (this.scopes.contains(id)) {
             int offset = scopes.getCurrentScope().getOffset(id);
             Type type = scopes.getCurrentScope().getType(id);
+            this.types.put(ctx, type);
             this.result.setOffset(ctx.ID(), offset);
             this.result.setType(ctx.ID(), type);
         } else {

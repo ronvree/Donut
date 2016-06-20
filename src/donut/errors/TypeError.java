@@ -9,7 +9,7 @@ public class TypeError extends Error {
 
     public TypeError(int row, int column, Type expected, Type found) {
         super(row, column);
-        this.setMsg(String.format("Type Error: expected %s, found %s", expected.toString(), found.toString()));
+        this.setMsg(String.format("Type Error: expected %s, found %s", expected, found));
     }
 
 }

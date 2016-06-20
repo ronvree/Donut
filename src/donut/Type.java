@@ -30,6 +30,11 @@ public abstract class Type {
 
     }
 
+    @Override
+    public String toString()    {
+        return getTypeKind().toString();
+    }
+
     /**
      * Reaction
      */
