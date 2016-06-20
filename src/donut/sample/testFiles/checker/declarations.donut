@@ -53,5 +53,12 @@ Alright brain... it's all up to you {
 
     number zz = 3;
 
+    (D'OH) eh? {
+        reaction yyyy = D'OH;
+    }
+    (WOOHOO) eh? {
+        number yyyy = 1;
+    }
+
 
 } I hope I didn't brain my damage.

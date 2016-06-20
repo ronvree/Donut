@@ -69,6 +69,10 @@ public class Checker implements DonutListener {
     @Override
     public void exitBlock(DonutParser.BlockContext ctx) {
         this.scopes.closeScope();
+
+        if (ctx.stat().size() > 0)   {
+            this.result.setEntry(ctx, ctx.stat(0));
+        }
     }
 
     /*
@@ -109,6 +113,8 @@ public class Checker implements DonutListener {
         } else {
             // Missing declaration error has already been given in the enter method
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -127,6 +133,8 @@ public class Checker implements DonutListener {
         if (!(type instanceof Type.ReactionType))   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -145,6 +153,8 @@ public class Checker implements DonutListener {
         if (!(type instanceof Type.ReactionType))   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     /**
@@ -165,8 +175,6 @@ public class Checker implements DonutListener {
             this.result.setType(ctx.ID(), type);
             this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
         }
-
-        this.result.setEntry(ctx, ctx); // TODO -- set entries correctly
     }
 
     /**
@@ -187,6 +195,7 @@ public class Checker implements DonutListener {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
             }
         }
+        // TODO -- Decl entry?
     }
 
     /**
@@ -491,6 +500,8 @@ public class Checker implements DonutListener {
         } else {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
         }
+
+        this.result.setEntry(ctx, ctx.expr(0));
     }
 
     /*
@@ -526,6 +537,8 @@ public class Checker implements DonutListener {
         } else {
             System.out.println("Can't recognize this prefix!");
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -554,6 +567,8 @@ public class Checker implements DonutListener {
         } else {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.REACTION_TYPE, t1));
         }
+
+        this.result.setEntry(ctx, ctx.expr(0));
     }
 
     /**
@@ -578,6 +593,7 @@ public class Checker implements DonutListener {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
         }
 
+        this.result.setEntry(ctx, ctx);
     }
 
     @Override
