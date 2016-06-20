@@ -1,7 +1,7 @@
 package donut;
 
-import donut.graphAssets.Graph;
-import donut.graphAssets.Node;
+import donut.graphassets.Graph;
+import donut.graphassets.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
