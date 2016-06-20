@@ -15,7 +15,7 @@ Alright brain... it's all up to you {
         marge: wrong comment;       Marge: Wrong comment, 'marge' has to start with a capital letter M.
                                            Gives 2 errors because parser thinks it is a declaration;
     }
-
+    Marge: Wrong comment below, does not have semicolon to end it. Gives 3 errors because parser sees Marge as a declaration.;
     Marge: wrong comment
 
 

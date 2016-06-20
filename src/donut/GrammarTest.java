@@ -14,9 +14,8 @@ import java.util.List;
  */
 public class GrammarTest {
 
-    /**
-     * Test files with a full program that have to pass the test.
-     */
+
+    // Test files with a full program that have to pass the test.
     private static final String EmtpyFile = "src/donut/sample/testFiles/GrammarTests/testEmpty.donut";
     private static final String IfStatementsFile = "src/donut/sample/testFiles/GrammarTests/testIfStatements.donut";
     private static final String MargeFile = "src/donut/sample/testFiles/GrammarTests/testMarge.donut";
@@ -26,9 +25,9 @@ public class GrammarTest {
     private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/GrammarTests/testReactionOperators.donut";
 
 
-    /**
-     * Tests for certain parts of the code that have to pass the test.
-     */
+
+    //Tests for certain parts of the code that have to pass the test.
+
     private static final String IntegerDeclaration = "number n = 4;";
     private static final String IntegerDeclaration2 = "number j;";
     private static final String ArrayDeclaration = "bunchof number a = bunchof 6 number;";
@@ -38,14 +37,13 @@ public class GrammarTest {
     private static final String BooleanDeclaration = "reaction r = WOOHOO;";
     private static final String BooleanDeclaration2 = "reaction d;";
 
-    /**
-     * Test file with a number of errors in it.
-     */
 
+     // Test files that have to fail the test.
     private static final String failTest = "src/donut/sample/testFiles/GrammarTests/failTest.donut";
+    private static final String emptyTest = "src/donut/sample/testFiles/GrammarTests/totallyEmpty.donut";
 
 
-
+     // Actual tests.
 
     @Test
     public void testArrayDeclaration() {
@@ -107,19 +105,34 @@ public class GrammarTest {
     }
 
     @Test
-    public void testFail() {fails(runTest(failTest, true));}
+    public void testFail() {
+        fails(runTest(failTest, true), 8);
+        fails(runTest(emptyTest, true), 1);
+    }
 
+
+    /**
+     * Verifies result
+     * @param list - List with errors from the errorlistener.
+     */
     public void verify(List<Error> list) {
         Assert.assertTrue(list.size() == 0);
     }
 
-    public void fails(List<Error> list) {
-        for (Error e : list) {
-            System.out.println(e.toString());
-        }
+    /**
+     * Checks whether list contains the expected number of errors.
+     * @param list - List with errors from errorlistener.
+     * @param expectedErrors - Expected errors in list.
+     */
+    public void fails(List<Error> list, int expectedErrors) {
+        Assert.assertEquals(expectedErrors, list.size());
     }
 
-
+    /**
+     * Puts the testStatement between the begin line and end line of a donut file.
+     * @param testStatement - statement to put between begin- and endline of donut file.
+     * @return Correct donutfile.
+     */
     public String format(String testStatement) {
         String beginFile = "Alright brain... it's all up to you {";
         String endFile = "} I hope I didn\'t brain my damage.";
@@ -127,8 +140,12 @@ public class GrammarTest {
     }
 
 
-
-
+    /**
+     * Runs test with given file.
+     * @param text - filename or the string to parse.
+     * @param textIsFile - true if text is a file location, false if text is the text to parse.
+     * @return
+     */
     public List<Error> runTest(String text, boolean textIsFile) {
         CharStream stream = null;
         try {
