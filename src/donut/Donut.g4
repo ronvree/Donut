@@ -25,20 +25,14 @@ expr: prfOperator expr          #prfExpr
     | NUM                       #numExpr
     | TRUE                      #trueExpr
     | FALSE                     #falseExpr
+    | (ARRAYTYPE NUM)+ type     #arrayExpr
+    | CHARACTER                 #charExpr
     ;
 
-varDecl : intDecl
-        | boolDecl
-        | charDecl
-        | arrayDecl
-        ;
+varDecl: type ID (ASSIGN expr)? EOL;
 
-intDecl : INTTYPE ID (ASSIGN expr)? EOL;
-boolDecl : BOOLEANTYPE ID (ASSIGN expr)? EOL ;
-charDecl : CHARTYPE ID (ASSIGN APOSTROPHE CHAR APOSTROPHE)? EOL;
-arrayDecl : ARRAYTYPE+ type ID ASSIGN (ARRAYTYPE NUM)+ type EOL;
+type: INTTYPE | FLOATTYPE | LONGTYPE | BOOLEANTYPE | CHARTYPE | ARRAYTYPE type;
 
-type : INTTYPE | BOOLEANTYPE | CHARTYPE ;
 boolOperator : AND | OR | XOR;
 compOperator : GE | LE | GT | LT | EQUALS | NOTEQUALS;
 prfOperator : MINUS | NOT;

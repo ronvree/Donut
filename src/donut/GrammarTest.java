@@ -1,5 +1,6 @@
 package donut;
 
+import donut.errors.Error;
 import org.antlr.v4.runtime.*;
 
 import org.junit.Assert;
@@ -14,19 +15,19 @@ import java.util.List;
 public class GrammarTest {
 
     /**
-     * Test files with a full program.
+     * Test files with a full program that have to pass the test.
      */
-    private static final String EmtpyFile = "src/donut/sample/testFiles/testEmpty.donut";
-    private static final String IfStatementsFile = "src/donut/sample/testFiles/testIfStatements.donut";
-    private static final String MargeFile = "src/donut/sample/testFiles/testMarge.donut";
-    private static final String NumberOperatorsFile = "src/donut/sample/testFiles/testNumberOperators.donut";
-    private static final String NumbersFile = "src/donut/sample/testFiles/testNumbers.donut";
-    private static final String ReactionFile = "src/donut/sample/testFiles/testReaction.donut";
-    private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/testReactionOperators.donut";
+    private static final String EmtpyFile = "src/donut/sample/testFiles/GrammarTests/testEmpty.donut";
+    private static final String IfStatementsFile = "src/donut/sample/testFiles/GrammarTests/testIfStatements.donut";
+    private static final String MargeFile = "src/donut/sample/testFiles/GrammarTests/testMarge.donut";
+    private static final String NumberOperatorsFile = "src/donut/sample/testFiles/GrammarTests/testNumberOperators.donut";
+    private static final String NumbersFile = "src/donut/sample/testFiles/GrammarTests/testNumbers.donut";
+    private static final String ReactionFile = "src/donut/sample/testFiles/GrammarTests/testReaction.donut";
+    private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/GrammarTests/testReactionOperators.donut";
 
 
     /**
-     * Tests for certain parts of the code.
+     * Tests for certain parts of the code that have to pass the test.
      */
     private static final String IntegerDeclaration = "number n = 4;";
     private static final String IntegerDeclaration2 = "number j;";
@@ -37,7 +38,13 @@ public class GrammarTest {
     private static final String BooleanDeclaration = "reaction r = WOOHOO;";
     private static final String BooleanDeclaration2 = "reaction d;";
 
-    // TODO Make tests that fail.
+    /**
+     * Test file with a number of errors in it.
+     */
+
+    private static final String failTest = "src/donut/sample/testFiles/GrammarTests/failTest.donut";
+
+
 
 
     @Test
@@ -99,11 +106,16 @@ public class GrammarTest {
         verify(runTest(ReactionOperatorsFile, true));
     }
 
-    public void verify(List<String> list) {
-        if (list == null) {
-            Assert.assertNull(list); // List is null, so no errors.
-        } else {
-            Assert.assertTrue(list.size() == 0); // Check if list is empty.
+    @Test
+    public void testFail() {fails(runTest(failTest, true));}
+
+    public void verify(List<Error> list) {
+        Assert.assertTrue(list.size() == 0);
+    }
+
+    public void fails(List<Error> list) {
+        for (Error e : list) {
+            System.out.println(e.toString());
         }
     }
 
@@ -117,16 +129,16 @@ public class GrammarTest {
 
 
 
-    public List<String> runTest(String text, boolean textIsFile) {
-        CharStream stream;
+    public List<Error> runTest(String text, boolean textIsFile) {
+        CharStream stream = null;
         try {
             if (textIsFile) {
                 stream = new ANTLRInputStream(new FileInputStream(new File(text)));
             } else {
-                stream = new ANTLRInputStream(new StringReader(text));
+                stream = new ANTLRInputStream(text);
             }
         } catch (IOException e) {
-            return null;
+            e.printStackTrace();
         }
         DonutLexer lexer = new DonutLexer(stream);
         ErrorListener errorListener = new ErrorListener();
@@ -140,6 +152,5 @@ public class GrammarTest {
         parser.program();
 
         return errorListener.getErrors();
-
     }
 }

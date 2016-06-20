@@ -62,4 +62,4 @@ fragment LETTER : [a-zA-Z];
 
 WS : [ \n\r\t] -> skip;
 
-CHAR : .;
+CHARACTER : APOSTROPHE .? APOSTROPHE;

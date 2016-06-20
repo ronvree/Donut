@@ -1,0 +1,22 @@
+Marge:
+    Created by Gijs on 20-Jun-16.
+;
+
+Alright brain... it's all up to you {
+
+    number n = 3;
+    bignumber b = 123a;             Marge: wrong declaration, gives 1 error: letter behind the number;
+
+    symbol symbol c = 'c';          Marge: Cannot use type as ID, gives 1 error.;
+
+    (a = 5) eh? {                   Marge: wrong equality test, token for equality is 'is';
+        b = 21;
+    } nope {
+        marge: wrong comment;       Marge: Wrong comment, 'marge' has to start with a capital letter M.
+                                           Gives 2 errors because parser thinks it is a declaration;
+    }
+
+
+
+
+} I hope I didn't brain my damage.
