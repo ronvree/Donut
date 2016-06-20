@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class CheckerTest {
 
-    private static final String BASE_DIR = "src/donut/sample/testFiles/checker/";
+    private static final String BASE_DIR = "src/donut/sample/testfiles/checker/";
     private static final String EXT = ".donut";
 
     @Test
