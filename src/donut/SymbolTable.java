@@ -9,8 +9,17 @@ import java.util.Stack;
  */
 public class SymbolTable {
 
+    /**
+       Stores the scopes needed for type checking
+     */
     private Stack<Scope> scopes;
+    /**
+     * Current size of the scopes (in bytes)
+     */
     private int size;
+    /**
+     * Stores the offsets of variables. The stacks allow for offset declaration in multiple scopes
+     */
     private Map<String, Stack<Integer>> offsets;
 
     public SymbolTable()    {
@@ -20,10 +29,16 @@ public class SymbolTable {
         this.size = 0;
     }
 
+    /**
+     * Open a new scope
+     */
     public void openScope() {
         this.scopes.push(this.scopes.peek().deepCopy());
     }
 
+    /**
+     * Close the current scope. Final scope cannot be closed
+     */
     public void closeScope()    {
         if (scopes.size() > 1)   {
             this.scopes.pop();
@@ -32,6 +47,12 @@ public class SymbolTable {
         }
     }
 
+    /**
+     * Put the variable id and its type in the current scope.
+     * @param id -- Variable ID
+     * @param type -- Variable type
+     * @return whether the ID did not already occur in the current scope
+     */
     public boolean put(String id, Type type)   {
         boolean result = !scopes.peek().contains(id);
         if (result)   {
@@ -42,18 +63,30 @@ public class SymbolTable {
         return result;
     }
 
+    /**
+     * Tests if a given id is declared in the current scope
+     */
     public boolean contains(String id)  {
         return this.scopes.peek().contains(id);
     }
 
+    /**
+     * Give the current scope
+     */
     public Scope getCurrentScope()  {
         return this.scopes.peek();
     }
 
+    /**
+     * Give the overview of variable ID's and declaration offsets
+     */
     public Map<String, Stack<Integer>> getOffsets() {
         return this.offsets;
     }
 
+    /**
+     * Store the offset and update the total size
+     */
     private void storeOffset(String id, Type type)  {
         if (!this.offsets.keySet().contains(id))   {
             this.offsets.put(id, new Stack<>());
@@ -63,8 +96,14 @@ public class SymbolTable {
 
     }
 
+    /**
+     * Store the types in this scope
+     */
     private class Scope {
 
+        /**
+         * Map the ID's to types
+         */
         private final Map<String, Type> types;
 
         public Scope()  {
