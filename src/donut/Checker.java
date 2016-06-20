@@ -95,8 +95,9 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterDeclStat(DonutParser.DeclStatContext ctx) {
-        this.scopes.put(ctx.ID().getText(), Type.NUMBER_TYPE);
-        this.result.setType(ctx.ID(), Type.NUMBER_TYPE);
+        Type type = makeType(ctx.type());
+        this.scopes.put(ctx.ID().getText(), type);
+        this.result.setType(ctx.ID(), type);
         this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
 
         this.result.setEntry(ctx, ctx); // TODO -- set entries correctly
@@ -105,6 +106,30 @@ public class Checker implements DonutListener {
     @Override
     public void exitDeclStat(DonutParser.DeclStatContext ctx) {
         // TODO -- check if expr type is equal to decl type
+        Type idType = this.types.get(ctx.ID());
+        Type exprType = this.types.get(ctx.expr());
+        if (!(idType.equals(exprType)))   {
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
+        }
+
+    }
+
+    private Type makeType(DonutParser.TypeContext ctx) {
+        Type type;
+        if (ctx.ARRAYTYPE() != null)   {
+            type = makeType(ctx.type());
+            type = new Type.ArrayType(type);
+        } else if (ctx.INTTYPE() != null)    {
+            type = Type.NUMBER_TYPE;
+        } else if (ctx.BOOLEANTYPE() != null)    {
+            type = Type.REACTION_TYPE;
+        } else if (ctx.CHARTYPE() != null)    {
+            type = Type.SYMBOL_TYPE;
+        } else {
+            System.out.println("Could not recognize type in Checker.makeType");
+            type = null;
+        }
+        return type;
     }
 
     /*
@@ -137,8 +162,31 @@ public class Checker implements DonutListener {
 
     @Override
     public void enterArrayExpr(DonutParser.ArrayExprContext ctx) {
-        // TODO -- make new array type
+        DonutParser.TypeContext typeContext = ctx.type();
+        Type type;
+        if (typeContext.BOOLEANTYPE() != null)   {
+            type = Type.REACTION_TYPE;
+        } else if (typeContext.CHARTYPE() != null)    {
+            type = Type.SYMBOL_TYPE;
+        } else if (typeContext.INTTYPE() != null)    {
+            type = Type.NUMBER_TYPE;
+        } else {
+            System.out.println("Unsupported type in Checker.makeArrayType");
+            type = null;
+        }
+        for (int i = 0; i < ctx.getChildCount(); i += 2)  {
+            type = new Type.ArrayType(type);
+        }
+        this.types.put(ctx, type);
     }
+
+    /*
+        -- Number operators
+     */
+
+    /*
+        -- -- Multiplication
+     */
 
     @Override
     public void enterMultExpr(DonutParser.MultExprContext ctx) {
@@ -157,11 +205,11 @@ public class Checker implements DonutListener {
                 this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
-                this.errors.add(new TypeError(-1, -1, Type.NUMBER_TYPE, t2));
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
             }
         } else {
             // NOT OK -- first argument not a number!
-            this.errors.add(new TypeError(-1, -1, Type.NUMBER_TYPE, t1));
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
         }
 
         // Set CFG entry
@@ -169,55 +217,9 @@ public class Checker implements DonutListener {
 
     }
 
-    @Override
-    public void enterMinusExpr(DonutParser.MinusExprContext ctx) {
-
-    }
-
-    @Override
-    public void exitMinusExpr(DonutParser.MinusExprContext ctx) {
-
-    }
-
-    @Override
-    public void enterPlusExpr(DonutParser.PlusExprContext ctx) {
-
-    }
-
-    @Override
-    public void exitPlusExpr(DonutParser.PlusExprContext ctx) {
-
-    }
-
-    @Override
-    public void enterParExpr(DonutParser.ParExprContext ctx) {
-
-    }
-
-    @Override
-    public void exitParExpr(DonutParser.ParExprContext ctx) {
-
-    }
-
-    @Override
-    public void enterCompExpr(DonutParser.CompExprContext ctx) {
-
-    }
-
-    @Override
-    public void exitCompExpr(DonutParser.CompExprContext ctx) {
-
-    }
-
-    @Override
-    public void enterPrfExpr(DonutParser.PrfExprContext ctx) {
-
-    }
-
-    @Override
-    public void exitPrfExpr(DonutParser.PrfExprContext ctx) {
-
-    }
+    /*
+        -- -- Division
+     */
 
     @Override
     public void enterDivExpr(DonutParser.DivExprContext ctx) {
@@ -226,8 +228,94 @@ public class Checker implements DonutListener {
 
     @Override
     public void exitDivExpr(DonutParser.DivExprContext ctx) {
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Check types
+        if (t1 instanceof Type.NumberType)   {
+            // OK
+            if (t2 instanceof Type.NumberType)   {
+                // OK -- division with numbers
+                this.types.put(ctx, Type.NUMBER_TYPE);
+            } else {
+                // NOT OK -- second argument not a number!
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
+            }
+        } else {
+            // NOT OK -- first argument not a number!
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
+        }
+
+        // Set CFG entry
+        this.result.setEntry(ctx, ctx.expr(0));
+    }
+
+    /*
+        -- -- Addition
+     */
+
+    @Override
+    public void enterPlusExpr(DonutParser.PlusExprContext ctx) {
 
     }
+
+    @Override
+    public void exitPlusExpr(DonutParser.PlusExprContext ctx) {
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Check types
+        if (t1 instanceof Type.NumberType)   {
+            // OK
+            if (t2 instanceof Type.NumberType)   {
+                // OK -- addition with numbers
+                this.types.put(ctx, Type.NUMBER_TYPE);
+            } else {
+                // NOT OK -- second argument not a number!
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
+            }
+        } else {
+            // NOT OK -- first argument not a number!
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
+        }
+
+        // Set CFG entry
+        this.result.setEntry(ctx, ctx.expr(0));
+    }
+
+    /*
+        -- -- Subtraction
+     */
+
+    @Override
+    public void enterMinusExpr(DonutParser.MinusExprContext ctx) {
+
+    }
+
+    @Override
+    public void exitMinusExpr(DonutParser.MinusExprContext ctx) {
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Check types
+        if (t1 instanceof Type.NumberType)   {
+            // OK
+            if (t2 instanceof Type.NumberType)   {
+                // OK -- subtraction with numbers
+                this.types.put(ctx, Type.NUMBER_TYPE);
+            } else {
+                // NOT OK -- second argument not a number!
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
+            }
+        } else {
+            // NOT OK -- first argument not a number!
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
+        }
+
+        // Set CFG entry
+        this.result.setEntry(ctx, ctx.expr(0));
+    }
+
+    /*
+        -- -- Powers
+     */
 
     @Override
     public void enterPowExpr(DonutParser.PowExprContext ctx) {
@@ -236,7 +324,80 @@ public class Checker implements DonutListener {
 
     @Override
     public void exitPowExpr(DonutParser.PowExprContext ctx) {
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Check types
+        if (t1 instanceof Type.NumberType)   {
+            // OK
+            if (t2 instanceof Type.NumberType)   {
+                // OK -- powers of numbers
+                this.types.put(ctx, Type.NUMBER_TYPE);
+            } else {
+                // NOT OK -- second argument not a number!
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
+            }
+        } else {
+            // NOT OK -- first argument not a number!
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
+        }
 
+        // Set CFG entry
+        this.result.setEntry(ctx, ctx.expr(0));
+    }
+
+    /*
+        -- Comparison operators
+     */
+
+    @Override
+    public void enterCompExpr(DonutParser.CompExprContext ctx) {
+
+    }
+
+    @Override
+    public void exitCompExpr(DonutParser.CompExprContext ctx) {
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Compare types
+        if (t1 instanceof Type.NumberType)   {
+            if (t2 instanceof Type.NumberType)   {
+                // OK - comparing numbers
+                this.types.put(ctx, Type.REACTION_TYPE);
+            } else {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
+            }
+        } else {
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
+        }
+    }
+
+    /*
+        -- Prefix
+     */
+
+    @Override
+    public void enterPrfExpr(DonutParser.PrfExprContext ctx) {
+
+    }
+
+    @Override
+    public void exitPrfExpr(DonutParser.PrfExprContext ctx) {
+        Type type = this.types.get(ctx.expr());
+        if (ctx.prfOperator().MINUS() != null)   {
+            if (type instanceof Type.NumberType)   {
+                this.types.put(ctx, Type.NUMBER_TYPE);
+            } else {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.prfOperator().getStart().getCharPositionInLine(), Type.NUMBER_TYPE, type));
+            }
+        } else if (ctx.prfOperator().NOT() != null) {
+            if (type instanceof Type.ReactionType)   {
+                this.types.put(ctx, Type.REACTION_TYPE);
+            } else {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.prfOperator().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
+            }
+        } else {
+            System.out.println("Can't recognize this prefix!");
+        }
     }
 
     @Override
@@ -246,7 +407,19 @@ public class Checker implements DonutListener {
 
     @Override
     public void exitBoolExpr(DonutParser.BoolExprContext ctx) {
-
+        Type t1 = this.types.get(ctx.expr(0));
+        Type t2 = this.types.get(ctx.expr(1));
+        // Check types
+        if (t1 instanceof Type.ReactionType)   {
+            if (t2 instanceof Type.ReactionType)   {
+                // OK - evaluating reactions
+                this.types.put(ctx, Type.REACTION_TYPE);
+            } else {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.REACTION_TYPE, t2));
+            }
+        } else {
+            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.REACTION_TYPE, t1));
+        }
     }
 
     @Override
@@ -267,6 +440,20 @@ public class Checker implements DonutListener {
     @Override
     public void exitIdExpr(DonutParser.IdExprContext ctx) {
 
+    }
+
+    /*
+        -- Parenthesis
+     */
+
+    @Override
+    public void enterParExpr(DonutParser.ParExprContext ctx) {
+
+    }
+
+    @Override
+    public void exitParExpr(DonutParser.ParExprContext ctx) {
+        this.types.put(ctx, this.types.get(ctx.expr()));
     }
 
     /*

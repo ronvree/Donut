@@ -14,6 +14,22 @@ public abstract class Type {
      */
     public abstract int size();
 
+    public abstract TypeKind getTypeKind();
+
+    @Override
+    public boolean equals(Object type) {
+        if (this instanceof ArrayType)   {
+            if (type instanceof ArrayType)   {
+                return ((ArrayType) this).content.equals(((ArrayType) type).content);
+            } else {
+                return false;
+            }
+        } else {
+            return this == type;
+        }
+
+    }
+
     /**
      * Reaction
      */
@@ -25,6 +41,9 @@ public abstract class Type {
         public int size() { // TODO
             return 0;
         }   // TODO
+
+        @Override
+        public TypeKind getTypeKind()   { return TypeKind.REACTION; }
 
     }
 
@@ -40,6 +59,9 @@ public abstract class Type {
             return 0;
         }   // TODO
 
+        @Override
+        public TypeKind getTypeKind()   { return TypeKind.NUMBER; }
+
     }
 
     /**
@@ -53,6 +75,9 @@ public abstract class Type {
         @Override
         public int size() { return 0; }   // TODO
 
+        @Override
+        public TypeKind getTypeKind()   { return TypeKind.SYMBOL; }
+
     }
 
     /**
@@ -62,18 +87,19 @@ public abstract class Type {
 
         private final Type content;
 
-        private ArrayType(Type type, int size)    {   // TODO - public constructor
+        public ArrayType(Type type)    {   // TODO - public constructor
             this.content = type;
 
         }
-
 
         @Override
         public int size() { // TODO
             return 0;
         }   // TODO
+
+        @Override
+        public TypeKind getTypeKind()   { return TypeKind.ARRAY; }
+
     }
-
-
 
 }

@@ -13,7 +13,7 @@ public abstract class Error {
     public Error(int row, int column)   {
         this.row = row;
         this.column = column;
-        this.msg = "";
+        this.msg = "D'OH";
     }
 
     public Error(int row, int column, String msg)   {
