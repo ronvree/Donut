@@ -1,5 +1,6 @@
 package donut;
 
+import donut.graphassets.Node;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -7,7 +8,7 @@ import donut.errors.Error;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import donut.graphassets.*;
+import donut.graphassets.Graph;
 
 /**
  * Created by Gijs on 20-Jun-16.
