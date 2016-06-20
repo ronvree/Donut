@@ -16,13 +16,13 @@ public class GrammarTest {
 
 
     // Test files with a full program that have to pass the test.
-    private static final String EmtpyFile = "src/donut/sample/testFiles/GrammarTests/testEmpty.donut";
-    private static final String IfStatementsFile = "src/donut/sample/testFiles/GrammarTests/testIfStatements.donut";
-    private static final String MargeFile = "src/donut/sample/testFiles/GrammarTests/testMarge.donut";
-    private static final String NumberOperatorsFile = "src/donut/sample/testFiles/GrammarTests/testNumberOperators.donut";
-    private static final String NumbersFile = "src/donut/sample/testFiles/GrammarTests/testNumbers.donut";
-    private static final String ReactionFile = "src/donut/sample/testFiles/GrammarTests/testReaction.donut";
-    private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/GrammarTests/testReactionOperators.donut";
+    private static final String EmtpyFile = "src/donut/sample/testFiles/grammarTests/testEmpty.donut";
+    private static final String IfStatementsFile = "src/donut/sample/testFiles/grammarTests/testIfStatements.donut";
+    private static final String MargeFile = "src/donut/sample/testFiles/grammarTests/testMarge.donut";
+    private static final String NumberOperatorsFile = "src/donut/sample/testFiles/grammarTests/testNumberOperators.donut";
+    private static final String NumbersFile = "src/donut/sample/testFiles/grammarTests/testNumbers.donut";
+    private static final String ReactionFile = "src/donut/sample/testFiles/grammarTests/testReaction.donut";
+    private static final String ReactionOperatorsFile = "src/donut/sample/testFiles/grammarTests/testReactionOperators.donut";
 
 
 
@@ -39,8 +39,8 @@ public class GrammarTest {
 
 
      // Test files that have to fail the test.
-    private static final String failTest = "src/donut/sample/testFiles/GrammarTests/failTest.donut";
-    private static final String emptyTest = "src/donut/sample/testFiles/GrammarTests/totallyEmpty.donut";
+    private static final String failTest = "src/donut/sample/testFiles/grammarTests/failTest.donut";
+    private static final String emptyTest = "src/donut/sample/testFiles/grammarTests/totallyEmpty.donut";
 
 
      // Actual tests.

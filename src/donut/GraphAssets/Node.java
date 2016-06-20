@@ -1,4 +1,4 @@
-package donut.GraphAssets;
+package donut.graphAssets;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

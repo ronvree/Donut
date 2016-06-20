@@ -1,4 +1,4 @@
-package donut.GraphAssets;
+package donut.graphAssets;
 
 import java.io.IOException;
 import java.nio.file.Files;

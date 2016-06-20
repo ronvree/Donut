@@ -1,11 +1,9 @@
 package donut;
 
-import donut.GraphAssets.Graph;
-import donut.GraphAssets.Node;
+import donut.graphAssets.Graph;
+import donut.graphAssets.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
-
-import java.util.List;
 
 /**
  * Created by Gijs on 20-Jun-16.
