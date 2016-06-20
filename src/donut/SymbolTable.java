@@ -17,15 +17,10 @@ public class SymbolTable {
      * Current size of the scopes (in bytes)
      */
     private int size;
-    /**
-     * Stores the offsets of variables. The stacks allow for offset declaration in multiple scopes
-     */
-    private Map<String, Stack<Integer>> offsets;
 
     public SymbolTable()    {
         this.scopes = new Stack<>();
         this.scopes.push(new Scope());
-        this.offsets = new HashMap<>();
         this.size = 0;
     }
 
@@ -56,9 +51,8 @@ public class SymbolTable {
     public boolean put(String id, Type type)   {
         boolean result = !scopes.peek().contains(id);
         if (result)   {
-            scopes.peek().put(id, type);
-            storeOffset(id, type);
-
+            scopes.peek().put(id, type, this.size);
+            this.size += type.size();
         }
         return result;
     }
@@ -77,47 +71,35 @@ public class SymbolTable {
         return this.scopes.peek();
     }
 
-    /**
-     * Give the overview of variable ID's and declaration offsets
-     */
-    public Map<String, Stack<Integer>> getOffsets() {
-        return this.offsets;
-    }
 
-    /**
-     * Store the offset and update the total size
-     */
-    private void storeOffset(String id, Type type)  {
-        if (!this.offsets.keySet().contains(id))   {
-            this.offsets.put(id, new Stack<>());
-        }
-        this.offsets.get(id).push(this.size);
-        this.size += type.size();
 
-    }
+
 
     /**
      * Store the types in this scope
      */
-    private class Scope {
+    public class Scope {
 
         /**
          * Map the ID's to types
          */
         private final Map<String, Type> types;
+        private final Map<String, Integer> offsets;
 
         public Scope()  {
+            this.offsets = new HashMap<>();
             this.types = new HashMap<>();
         }
 
-        public void put(String id, Type type)    {
+        public void put(String id, Type type, int offset)    {
             types.put(id, type);
+            offsets.put(id, offset);
         }
 
         public Scope deepCopy() {
             Scope copy = new Scope();
             for (String id : this.types.keySet())  {
-                copy.put(id, this.types.get(id));
+                copy.put(id, this.types.get(id), this.offsets.get(id));
             }
             return copy;
         }
@@ -129,6 +111,8 @@ public class SymbolTable {
         public Type getType(String id)   {
             return this.types.get(id);
         }
+
+        public int getOffset(String id) { return this.offsets.get(id); }
 
 
     }
