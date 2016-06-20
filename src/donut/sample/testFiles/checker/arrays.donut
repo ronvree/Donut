@@ -1,0 +1,25 @@
+Marge:
+    Created by Ron on 20-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    bunchof number a;
+    bunchof number b = bunchof 5 number;
+
+    bunchof number c = bunchof 5 reaction;      Marge: This gives an error ;
+
+    bunchof symbol string = bunchof 8 symbol;
+
+    bunchof bunchof number d = bunchof 8 bunchof 8 number;
+
+    bunchof bunchof number e = bunchof 8 bunchof number;    Marge: This gives an error ;
+
+    bunchof bunchof number f = bunchof 6 number;            Marge: This gives an error ;
+
+    bunchof number g;
+    g = bunchof 6 number;
+
+
+
+} I hope I didn't brain my damage.

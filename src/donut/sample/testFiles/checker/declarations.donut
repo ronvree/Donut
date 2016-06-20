@@ -5,24 +5,20 @@ Marge:
 Alright brain... it's all up to you {
 
     number x;
-    number x = 1;
+    number x = 1;           Marge: This gives an error ;
 
     number y = 1;
     y = 1;
 
     number z = 1;
     (D'OH) eh? {
-        number z = 0;
-    }
-
-    (y) eh? {
-
+        number z = 0;       Marge: This gives an error ;
     }
 
     number xx;
-    number xx;
+    number xx;              Marge: This gives an error ;
 
-    yy = 1;
+    yy = 1;                 Marge: This gives an error ;
 
     reaction zz = D'OH;
     zz = WOOHOO;
@@ -30,7 +26,7 @@ Alright brain... it's all up to you {
     (WOOHOO) eh? {
         number xxx = 3;
     } nope {
-        xxx = 3;
+        xxx = 3;            Marge: This gives an error ;
     }
 
     (D'OH) eh? {
@@ -45,13 +41,13 @@ Alright brain... it's all up to you {
     (WOOHOO) eh? {
        reaction zzz = D'OH;
        (WOOHOO) eh? {
-          reaction zzz = D'OH;
+          reaction zzz = D'OH;  Marge: This gives an error ;
        }
     }
 
-    reaction r = r;
+    reaction r = r;             Marge: This gives an error ;
 
-    number zz = 3;
+    number zz = 3;              Marge: This gives an error ;
 
     (D'OH) eh? {
         reaction yyyy = D'OH;
