@@ -59,6 +59,7 @@ public class Checker implements DonutListener {
 
     }
 
+
     @Override
     public void enterBlock(DonutParser.BlockContext ctx) {
         this.scopes.openScope();
@@ -140,6 +141,13 @@ public class Checker implements DonutListener {
     public void exitDeclStat(DonutParser.DeclStatContext ctx) {
         Type idType = this.types.get(ctx.ID());
         Type exprType = this.types.get(ctx.expr());
+
+        if (ctx.expr() instanceof DonutParser.IdExprContext && ctx.expr().getText().equals(ctx.ID().getText()))   {
+            this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));
+        } else {
+
+        }
+
         if (!(idType.equals(exprType)) && ctx.ASSIGN() != null)   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
         }

@@ -4,7 +4,6 @@ Marge:
 
 Alright brain... it's all up to you {
 
-
     number x;
     number x = 1;
 
@@ -28,6 +27,31 @@ Alright brain... it's all up to you {
     reaction zz = D'OH;
     zz = WOOHOO;
 
+    (WOOHOO) eh? {
+        number xxx = 3;
+    } nope {
+        xxx = 3;
+    }
+
+    (D'OH) eh? {
+        reaction yyy = D'OH;
+    }
+    (WOOHOO) eh? {
+        reaction yyy = D'OH;
+    }
+
+    reaction yyy = WOOHOO;
+
+    (WOOHOO) eh? {
+       reaction zzz = D'OH;
+       (WOOHOO) eh? {
+          reaction zzz = D'OH;
+       }
+    }
+
+    reaction r = r;
+
+    number zz = 3;
 
 
 } I hope I didn't brain my damage.
