@@ -9,7 +9,7 @@ block : LBRACE stat* RBRACE;
 stat: ID ASSIGN expr EOL                        #assStat
     | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE LPAR expr RPAR block                #whileStat
-    | varDecl                                   #declStat
+    | type ID (ASSIGN expr)? EOL                #declStat
     ;
 
 expr: prfOperator expr          #prfExpr
@@ -28,8 +28,6 @@ expr: prfOperator expr          #prfExpr
     | (ARRAYTYPE NUM)+ type     #arrayExpr
     | CHARACTER                 #charExpr
     ;
-
-varDecl: type ID (ASSIGN expr)? EOL;
 
 type: INTTYPE | FLOATTYPE | LONGTYPE | BOOLEANTYPE | CHARTYPE | ARRAYTYPE type;
 
