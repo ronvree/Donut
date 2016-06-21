@@ -11,19 +11,20 @@ import donut.spril.Reg;
  * [Load MemAddr Reg] instruction from sprockell splitted into MemAddr - DirAddr Int,
  *  MemAddr - IndAddr Reg and MemAddr - ImmValue Int.
  */
-public class LoadI extends LocalInstruction {
 
-    private int immediateValue;
+public class Load extends LocalInstruction {
+
+    private Reg registerAddress;
     private Reg inRegister;
 
-    /** LoadI instruction for sprockell type: MemAddr -> ImmValue Int */
-    public LoadI(int immediateValue, Reg register) {
-        this.immediateValue = immediateValue;
-        this.inRegister = register;
+    /** Load instruction for sprockell type: MemAddr -> IndAddr Reg */
+    public Load(Reg registerAddress, Reg inRegister) {
+        this.registerAddress = registerAddress;
+        this.inRegister = inRegister;
     }
 
-    public int getAddress() {
-        return immediateValue;
+    public Reg getRegisterAddress() {
+        return registerAddress;
     }
 
     public Reg getInRegister() {

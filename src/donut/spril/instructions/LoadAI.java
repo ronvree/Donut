@@ -1,33 +1,33 @@
 package donut.spril.instructions;
 
-import donut.spril.LocalInstruction;
-import donut.spril.Reg;
-
 /**
  * Created by Gijs on 21-Jun-16.
  */
 
+import donut.spril.LocalInstruction;
+import donut.spril.Reg;
+
 /**
- * [Load MemAddr Reg] instruction from sprockell splitted into MemAddr - Deref Reg
- *  And MemAddr - Addr Int (see LoadI.java).
+ * [Load MemAddr Reg] instruction from sprockell splitted into MemAddr - DirAddr Int,
+ *  MemAddr - IndAddr Reg and MemAddr - ImmValue Int.
  */
 
 public class LoadAI extends LocalInstruction {
 
-    private Reg registerAddress;
-    private Reg inRegister;
+    private int directAddress;
+    private Reg register;
 
-    /** LoadAI instruction for sprockell type: MemAddr -> Deref Reg */
-    public LoadAI(Reg registerAddress, Reg inRegister) {
-        this.registerAddress = registerAddress;
-        this.inRegister = inRegister;
+    /** LoadAI instruction for sprockell Load instruction with type: MemAddr -> DirAddr Int */
+    public LoadAI(int directAddress, Reg register) {
+        this.directAddress = directAddress;
+        this.register = register;
     }
 
-    public Reg getRegisterAddress() {
-        return registerAddress;
+    public int getDirectAddress() {
+        return directAddress;
     }
 
-    public Reg getInRegister() {
-        return inRegister;
+    public Reg getRegister() {
+        return register;
     }
 }

@@ -1,33 +1,33 @@
 package donut.spril.instructions;
 
-import donut.spril.LocalInstruction;
-import donut.spril.Reg;
-
 /**
  * Created by Gijs on 21-Jun-16.
  */
 
+import donut.spril.LocalInstruction;
+import donut.spril.Reg;
+
 /**
- * [Store Reg MemAddr] instruction from sprockell splitted into MemAddr - Deref Reg
- *  And MemAddr - Addr Int (see StoreI.java).
+ * [Store Reg MemAddr] instruction from sprockell splitted into MemAddr - DirAddr Int,
+ *  MemAddr - IndAddr Reg and MemAddr - ImmValue Int.
  */
 
 public class StoreAI extends LocalInstruction {
 
-    private Reg atRegister;
-    private Reg toStoreRegister;
+    private Reg register;
+    private int directAddress;
 
-    /** StoreAI instruction for sprockell type: MemAddr -> IndAddr Reg */
-    public StoreAI(Reg toStoreRegister, Reg atRegister) {
-        this.atRegister = atRegister;
-        this.toStoreRegister = toStoreRegister;
+    /** StoreAI instruction for sprockell type: MemAddr -> DirAddr Int */
+    public StoreAI(Reg register, int directAddress) {
+        this.register = register;
+        this.directAddress = directAddress;
     }
 
-    public Reg getAtRegister() {
-        return atRegister;
+    public Reg getRegister() {
+        return register;
     }
 
-    public Reg getToStoreRegister() {
-        return toStoreRegister;
+    public int getDirectAddress() {
+        return directAddress;
     }
 }
