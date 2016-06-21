@@ -17,7 +17,7 @@ public class StoreAI extends LocalInstruction {
     private Reg atRegister;
     private Reg toStoreRegister;
 
-    /** StoreAI instruction for sprockell type: MemAddr -> Deref Reg */
+    /** StoreAI instruction for sprockell type: MemAddr -> IndAddr Reg */
     public StoreAI(Reg toStoreRegister, Reg atRegister) {
         this.atRegister = atRegister;
         this.toStoreRegister = toStoreRegister;

@@ -1,8 +1,14 @@
+Local Instructions:
+
 Instruction                 |       Object
-Const                       |       Const
+----------------------------+------------------------
 Compute                     |       Compute
-Load (MemAddr - Addr Int)   |       LoadI
-Load (MemAddr - Deref Reg)  |       LoadAI
+Load (MemAddr - DirAddr Int)|       LoadI
+  & (MemAddr - ImmValue Int)|
+Load (MemAddr - IndAddr Reg)|       LoadAI
+Store(MemAddr - DirAddr Int)|       StoreI
+  & (MemAddr - IndAddr Reg) |
+Store(MemAddr - IndAddr Reg)|       StoreAI
 Branch(Target - Abs/Rel Int)|       BranchI
 Branch (Target - Ind Reg)   |       BranchAI
 Jump (Target - Abs/Rel Int) |       JumpI
@@ -11,3 +17,11 @@ Push                        |       Push
 Pop                         |       Pop
 Nop                         |       Nop
 EndProg                     |       EndProg
+
+
+System Instructions:
+
+Instruction                 |       Object
+----------------------------+------------------------
+Read (MemAddr - Addr Int)   |       ReadI
+Read (MemAddr - Deref Reg)  |       ReadAI

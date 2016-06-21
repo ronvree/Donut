@@ -8,26 +8,38 @@ import donut.spril.Reg;
  */
 
 /**
- * [Store Reg MemAddr] instruction from sprockell splitted into MemAddr - Addr Int
- *  And MemAddr - Deref Reg (see StoreAI.java).
+ * [Store Reg MemAddr] instruction from sprockell splitted into MemAddr - DirAddr Int / ImmValue Int
+ *  And MemAddr - Ind Reg (see StoreAI.java).
  */
 
 public class StoreI extends LocalInstruction {
 
     private Reg toStoreAddress;
-    private int inAddress;
+    private int directAddress;
+    private int immediateValue;
+    private boolean isAddress;
 
-    /** Store instruction for sprockell type: MemAddr -> Addr Int */
-    public StoreI(Reg toStoreAddress, int address) {
+    /** Store instruction for sprockell type: MemAddr -> Addr Int
+     *  and MemAddr -> Immvalue Int */
+    public StoreI(Reg toStoreAddress, int addressOrValue, boolean isAddress) {
         this.toStoreAddress = toStoreAddress;
-        this.inAddress = address;
+        if (isAddress) {
+            this.directAddress = addressOrValue;
+            this.isAddress = true;
+        } else {
+            this.immediateValue = addressOrValue;
+            this.isAddress = false;
+        }
     }
 
     public Reg getToStoreAddress() {
         return toStoreAddress;
     }
 
-    public int getInAddress() {
-        return inAddress;
+    public int getAddress() {
+        if (isAddress) {
+            return directAddress;
+        }
+        return immediateValue;
     }
 }

@@ -14,16 +14,28 @@ import donut.spril.Reg;
 public class LoadI extends LocalInstruction {
 
     private int directAddress;
+    private int immediateValue;
+    private boolean isAddress;
     private Reg inRegister;
 
-    /** LoadI instruction for sprockell type: MemAddr -> Addr Int */
-    private LoadI(int directAddress, Reg register) {
-        this.directAddress = directAddress;
+    /** LoadI instruction for sprockell type: MemAddr -> DirAddr Int
+     *  and MemAddr -> ImmValue Int */
+    private LoadI(int addressOrValue, Reg register, boolean isAddress) {
+        if(isAddress) {
+            this.directAddress = addressOrValue;
+            this.isAddress = true;
+        } else {
+            immediateValue = addressOrValue;
+            this.isAddress = false;
+        }
         this.inRegister = register;
     }
 
-    public int getDirectAddress() {
-        return directAddress;
+    public int getAddress() {
+        if (isAddress) {
+            return this.directAddress;
+        }
+        return immediateValue;
     }
 
     public Reg getInRegister() {
