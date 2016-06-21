@@ -1,5 +1,8 @@
-package donut;
+package donut.tests;
 
+import donut.DonutLexer;
+import donut.DonutParser;
+import donut.ErrorListener;
 import donut.errors.Error;
 import org.antlr.v4.runtime.*;
 

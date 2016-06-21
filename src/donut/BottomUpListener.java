@@ -30,8 +30,9 @@ public class BottomUpListener extends DonutBaseListener {
         in.put(ctx, node);
         out.put(ctx, node);
 
-        if (ctx.getChildCount() > 0) {
-            node.addEdge(in.get(ctx.getChild(0)));
+        // Connect start-node to first statement in block.
+        if (ctx.block().stat().size() > 0) {
+            node.addEdge(in.get(ctx.block()));
         }
 
         for (int i = 0; (i+1) < ctx.getChildCount(); i++) {
@@ -53,9 +54,10 @@ public class BottomUpListener extends DonutBaseListener {
     public void exitBlock(DonutParser.BlockContext ctx) {
         Node node;
         if (ctx.stat().size() > 0) {
+
             // In from block is first statement of all statements in this block.
             node = in.get(ctx.stat().get(0));
-            in.put(ctx, in.get(ctx.stat().get(0)));
+            in.put(ctx, node);
 
             // Connect each statement to the next one. Except for the last one.
             for (int i = 0; (i+1) < ctx.stat().size(); i++) {
@@ -91,7 +93,7 @@ public class BottomUpListener extends DonutBaseListener {
 
     @Override
     public void exitIfStat(DonutParser.IfStatContext ctx) {
-        Node iff = graph.addNode(ctx.expr().getText());
+        Node iff = graph.addNode("If " + ctx.expr().getText());
         Node after = graph.addNode("After");
 
         in.put(ctx, iff);
@@ -99,6 +101,7 @@ public class BottomUpListener extends DonutBaseListener {
 
         if (ctx.getChildCount() > 5) {
             // If statement has an else statement as well.
+
             iff.addEdge(in.get(ctx.block().get(0)));
             iff.addEdge(in.get(ctx.block().get(1)));
 
@@ -115,15 +118,23 @@ public class BottomUpListener extends DonutBaseListener {
 
     @Override
     public void exitWhileStat(DonutParser.WhileStatContext ctx) {
-        super.exitWhileStat(ctx);
+        Node node = graph.addNode("While " + ctx.expr().getText());
 
+        // Connect while node to in-node from block.
+        node.addEdge(in.get(ctx.block()));
+
+        // Connect out from block back to while-node.
+        out.get(ctx.block()).addEdge(node);
+
+        in.put(ctx, node);
+        out.put(ctx, node);
     }
 
     @Override
     public void exitDeclStat(DonutParser.DeclStatContext ctx) {
         Node node;
         if (ctx.getChildCount() > 2) {
-            node = graph.addNode(ctx.type().getText() + " "  + ctx.ID() + " " + ctx.expr().getText());
+            node = graph.addNode(ctx.type().getText() + " "  + ctx.ID() + " = " + ctx.expr().getText());
         } else {
             // No assignment.
             node = graph.addNode(ctx.type().getText() + " "  + ctx.ID());

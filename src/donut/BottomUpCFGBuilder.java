@@ -26,6 +26,10 @@ public class BottomUpCFGBuilder {
         return build(new File(fileName));
     }
 
+    public Graph getGraph() {
+        return graph;
+    }
+
     /** Builds the CFG for a program contained in a given file. */
     public Graph build(File file) {
         Graph result = null;
@@ -67,7 +71,7 @@ public class BottomUpCFGBuilder {
 
     public void printGraph(String filename) {
         try {
-            graph.writeDOT(filename.substring(0, filename.length()-5) + "Result.txt", true);
+            graph.writeDOT(filename.substring(0, filename.length()-6) + "Result.txt", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,20 +86,5 @@ public class BottomUpCFGBuilder {
     private Node addNode(ParserRuleContext node, String text) {
         return this.graph.addNode(node.getStart().getLine() + ": " + text);
     }
-
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            System.err.println("Usage: [filename]+");
-            return;
-        }
-        BottomUpCFGBuilder builder = new BottomUpCFGBuilder();
-        for (String filename : args) {
-            File file = new File(filename);
-            System.out.println(filename);
-            System.out.println(builder.build(file));
-            builder.printGraph(filename);
-        }
-    }
-
 }
 
