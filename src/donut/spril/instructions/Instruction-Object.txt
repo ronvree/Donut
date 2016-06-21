@@ -27,6 +27,6 @@ System Instructions:
 
 Instruction                 |       Object
 ----------------------------+------------------------
-Read (MemAddr - DirAddr Int)|       ReadI
-  & (MemAddr - ImmValue Int)|
-Read (MemAddr - Deref Reg)  |       ReadAI
+Read (MemAddr - DirAddr Int)|       ReadAI
+Read(MemAddr - ImmValue Int)|       ReadI
+Read (MemAddr - IndAddr Reg)|       Read
