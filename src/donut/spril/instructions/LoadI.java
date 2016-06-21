@@ -20,7 +20,7 @@ public class LoadI extends LocalInstruction {
 
     /** LoadI instruction for sprockell type: MemAddr -> DirAddr Int
      *  and MemAddr -> ImmValue Int */
-    private LoadI(int addressOrValue, Reg register, boolean isAddress) {
+    public LoadI(int addressOrValue, Reg register, boolean isAddress) {
         if(isAddress) {
             this.directAddress = addressOrValue;
             this.isAddress = true;
