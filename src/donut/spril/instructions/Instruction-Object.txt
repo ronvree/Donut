@@ -30,3 +30,14 @@ Instruction                 |       Object
 Read (MemAddr - DirAddr Int)|       ReadAI
 Read(MemAddr - ImmValue Int)|       ReadI
 Read (MemAddr - IndAddr Reg)|       Read
+
+Receive                     |       Receive
+
+Write(MemAddr - DirAddr Int)|       WriteAI
+Write(MemAddr -ImmValue Int)|       WriteI
+Write(MemAddr - IndAddr Reg)|       Write
+
+T&S (MemAddr - DirAddr Int) |       TestAndSetAI
+T&S (MemAddr - ImmValue Int)|       TestAndSetI
+T&S (MemAddr - IndAddr Reg) |       TestAndSet
+
