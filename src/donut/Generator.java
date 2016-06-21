@@ -1,17 +1,49 @@
 package donut;
 
 import donut.spril.Instruction;
+import donut.spril.Program;
+import donut.spril.Reg;
 import org.antlr.v4.runtime.tree.*;
 
 /**
  * Created by Ron on 21-6-2016.
+ *
+ * Generates Spril instructions from donut code
  */
 public class Generator implements DonutVisitor<Instruction> {
 
-
+    /**
+     * Result from the checker phase
+     */
     private CheckerResult result;
 
-    private ParseTreeProperty<LabelEntry> labels;
+
+    private ParseTreeProperty<LabelEntry> labels; // TODO -- do we need this?
+
+    /**
+     * Used for making new registers
+     */
+    private int regCount;
+    /**
+     * Bind registers to nodes
+     */
+    private ParseTreeProperty<Reg> registers;
+    /**
+     * Program to build
+     */
+    private Program program;
+
+    public Program generate(ParseTree tree, CheckerResult result)   {
+        this.program = new Program();
+        this.result = result;
+        this.labels = new ParseTreeProperty<>();
+        this.registers = new ParseTreeProperty<>();
+        this.regCount = 0;
+
+
+
+
+    }
 
 
     @Override
