@@ -36,7 +36,7 @@ public class Program {
     public void writeFile(String filename) {
         StringBuffer buffer = new StringBuffer();
         for (Instruction i : instructions) {
-            buffer.append(i.toString());
+            buffer.append(i.toString() + "\n");
         }
         try {
             Files.write(Paths.get(filename), buffer.toString().getBytes());
