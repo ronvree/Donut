@@ -8,7 +8,7 @@ public class Reg extends Operand {
     private String name;
 
     public Reg(String name) {
-        this.name = "Reg " + name;
+        this.name = name;
     }
 
     public String getName() {

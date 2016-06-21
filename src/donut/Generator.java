@@ -266,7 +266,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
     private Reg reg(ParseTree node) {
         Reg result = this.registers.get(node);
         if (result == null) {
-            result = new Reg("" + this.regCount);
+            result = new Reg("(Reg " + this.regCount + ")");
             this.registers.put(node, result);
             this.regCount++;
         }
