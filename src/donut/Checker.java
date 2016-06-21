@@ -59,21 +59,32 @@ public class Checker implements DonutListener {
 
     }
 
-
+    /** Entering a block - Open a new scope*/
     @Override
     public void enterBlock(DonutParser.BlockContext ctx) {
         this.scopes.openScope();
     }
 
+    /** Exiting a block - Close the current scope */
     @Override
     public void exitBlock(DonutParser.BlockContext ctx) {
         this.scopes.closeScope();
+
+        if (ctx.stat().size() > 0)   {
+            this.result.setEntry(ctx, ctx.stat(0));
+        }
     }
 
     /*
         Statements
      */
 
+    /**
+     * Enter an assign statement
+     * Check if the variable ID has already been declared and thus can be referenced to
+     *  - if so:  Bind the previously defined type of this variable to the ID context
+     *  - else :  Add an error
+     */
     @Override
     public void enterAssStat(DonutParser.AssStatContext ctx) {
         if (scopes.contains(ctx.ID().getText()))   {
@@ -83,17 +94,27 @@ public class Checker implements DonutListener {
         }
     }
 
+    /**
+     * Exit an assign statement
+     * Check if the ID was bound to a type (by the enter method)
+     * Check if the ID type matches the expression type
+     *  - if not: Add an error
+     */
     @Override
     public void exitAssStat(DonutParser.AssStatContext ctx) {
         Type idType = this.types.get(ctx.ID());
         if (idType != null)   {
             Type exprType = this.types.get(ctx.expr());
+            // Check if ID type matches the expression type
             if (!(idType.equals(exprType)))   {
+                // ID type does not equal the type of the expression. Add a type error
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
             }
         } else {
             // Missing declaration error has already been given in the enter method
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -101,12 +122,19 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit an if statement
+     * Check if the expression is of type REACTION
+     *  - if not: Add an error
+     */
     @Override
     public void exitIfStat(DonutParser.IfStatContext ctx) {
         Type type = this.types.get(ctx.expr());
         if (!(type instanceof Type.ReactionType))   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -114,14 +142,28 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit a while statement
+     * Check if the expression is of type REACTION
+     *  - if not: Add an error
+     */
     @Override
     public void exitWhileStat(DonutParser.WhileStatContext ctx) {
         Type type = this.types.get(ctx.expr());
         if (!(type instanceof Type.ReactionType))   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
+    /**
+     * Enter a declaration statement
+     * Check if the ID has not already been declared in this scope
+     *  - if so: Add an error
+     *  - else : Add variable to scope, which calculates the offset
+     *           Add variable + type + offset to result
+     */
     @Override
     public void enterDeclStat(DonutParser.DeclStatContext ctx) {
         Type type = makeType(ctx.type());
@@ -133,27 +175,34 @@ public class Checker implements DonutListener {
             this.result.setType(ctx.ID(), type);
             this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
         }
-
-        this.result.setEntry(ctx, ctx); // TODO -- set entries correctly
     }
 
+    /**
+     * Exit a declaration statement
+     * Make sure the statement does not declare itself (e.g. number x = x;)
+     * Add an error if this is the case
+     * Otherwise ensure that the ID type matches the expression type
+     * Add an error if this is not the case
+     */
     @Override
     public void exitDeclStat(DonutParser.DeclStatContext ctx) {
         Type idType = this.types.get(ctx.ID());
         Type exprType = this.types.get(ctx.expr());
-
         if (ctx.expr() instanceof DonutParser.IdExprContext && ctx.expr().getText().equals(ctx.ID().getText()))   {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));
         } else {
-
+            if (!(idType.equals(exprType)) && ctx.ASSIGN() != null)   {
+                this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
+            }
         }
-
-        if (!(idType.equals(exprType)) && ctx.ASSIGN() != null)   {
-            this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
-        }
-
+        // TODO -- Decl entry?
     }
 
+    /**
+     * Help method to determine the type of a TypeContext
+     * This is necessary because comparing TypeContext is not sufficient (TypeContext can be of the form: ARRAYTYPE TypeContext)
+     * This method can construct nested Array types (e.g. bunchof bunchof number)
+     */
     private Type makeType(DonutParser.TypeContext ctx) {
         Type type;
         if (ctx.ARRAYTYPE() != null)   {
@@ -200,6 +249,12 @@ public class Checker implements DonutListener {
         this.types.put(ctx, Type.SYMBOL_TYPE);
     }
 
+    /**
+     * Enter an array expression
+     * This expression constructs a new array
+     * Construct the type of the array
+     * Bind this type to the expression
+     */
     @Override
     public void enterArrayExpr(DonutParser.ArrayExprContext ctx) {
         DonutParser.TypeContext typeContext = ctx.type();
@@ -211,10 +266,10 @@ public class Checker implements DonutListener {
         } else if (typeContext.INTTYPE() != null)    {
             type = Type.NUMBER_TYPE;
         } else {
-            System.out.println("Unsupported type in Checker.makeArrayType");
+            System.out.println("Unsupported type in Checker.enterArrayExpr");
             type = null;
         }
-        for (int i = 0; i < ctx.getChildCount(); i += 2)  {
+        for (int i = 0; i < ctx.getChildCount() - 2; i += 2)  {
             type = new Type.ArrayType(type);
         }
         this.types.put(ctx, type);
@@ -233,16 +288,22 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit multiplication expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to NUMBER
+     *  - else : Add an error
+     */
     @Override
     public void exitMultExpr(DonutParser.MultExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
                 // OK -- multiplying numbers
-                this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -266,16 +327,22 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit division expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to NUMBER
+     *  - else : Add an error
+     */
     @Override
     public void exitDivExpr(DonutParser.DivExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
                 // OK -- division with numbers
-                this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -298,16 +365,22 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit addition expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to NUMBER
+     *  - else : Add an error
+     */
     @Override
     public void exitPlusExpr(DonutParser.PlusExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
                 // OK -- addition with numbers
-                this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -330,16 +403,22 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit subtraction expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to NUMBER
+     *  - else : Add an error
+     */
     @Override
     public void exitMinusExpr(DonutParser.MinusExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
                 // OK -- subtraction with numbers
-                this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -362,16 +441,22 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit power expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to NUMBER
+     *  - else : Add an error
+     */
     @Override
     public void exitPowExpr(DonutParser.PowExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
                 // OK -- powers of numbers
-                this.types.put(ctx, Type.NUMBER_TYPE);
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -394,21 +479,29 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit comparison expression
+     * Check if both expressions are of type NUMBER
+     *  - if so: Set the type of this expression to REACTION
+     *  - else : Add an error
+     */
     @Override
     public void exitCompExpr(DonutParser.CompExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.REACTION_TYPE);
         // Compare types
         if (t1 instanceof Type.NumberType)   {
             if (t2 instanceof Type.NumberType)   {
                 // OK - comparing numbers
-                this.types.put(ctx, Type.REACTION_TYPE);
             } else {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
             }
         } else {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
         }
+
+        this.result.setEntry(ctx, ctx.expr(0));
     }
 
     /*
@@ -420,24 +513,30 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit prefix expression
+     * Check if the expression is of type NUMBER (-) or REACTION (not)
+     *  - if so: Set the type of this expression to NUMBER or REACTION respectively
+     *  - else : Add an error
+     */
     @Override
     public void exitPrfExpr(DonutParser.PrfExprContext ctx) {
         Type type = this.types.get(ctx.expr());
         if (ctx.prfOperator().MINUS() != null)   {
-            if (type instanceof Type.NumberType)   {
-                this.types.put(ctx, Type.NUMBER_TYPE);
-            } else {
+            this.types.put(ctx, Type.NUMBER_TYPE);
+            if (!(type instanceof Type.NumberType))   {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.prfOperator().getStart().getCharPositionInLine(), Type.NUMBER_TYPE, type));
             }
         } else if (ctx.prfOperator().NOT() != null) {
-            if (type instanceof Type.ReactionType)   {
-                this.types.put(ctx, Type.REACTION_TYPE);
-            } else {
+            this.types.put(ctx, Type.REACTION_TYPE);
+            if (!(type instanceof Type.ReactionType))   {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.prfOperator().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
             }
         } else {
             System.out.println("Can't recognize this prefix!");
         }
+
+        this.result.setEntry(ctx, ctx.expr());
     }
 
     @Override
@@ -445,23 +544,39 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit boolean expression
+     * Check if both expressions are of type REACTION
+     *  - if so: Set the type of this expression to REACTION
+     *  - else : Add an error
+     */
     @Override
     public void exitBoolExpr(DonutParser.BoolExprContext ctx) {
         Type t1 = this.types.get(ctx.expr(0));
         Type t2 = this.types.get(ctx.expr(1));
+        this.types.put(ctx, Type.REACTION_TYPE);
         // Check types
         if (t1 instanceof Type.ReactionType)   {
             if (t2 instanceof Type.ReactionType)   {
                 // OK - evaluating reactions
-                this.types.put(ctx, Type.REACTION_TYPE);
             } else {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.REACTION_TYPE, t2));
             }
         } else {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.REACTION_TYPE, t1));
         }
+
+        this.result.setEntry(ctx, ctx.expr(0));
     }
 
+    /**
+     * Enter ID expression
+     * Check if the ID has been declared and thus can be referenced to
+     *  - if so: Query the offset and type from the scope
+     *           Bind the type to the ID context
+     *           Bind the type and offset to the ID Context in result
+     *  - else : Add an error
+     */
     @Override
     public void enterIdExpr(DonutParser.IdExprContext ctx) {
         String id = ctx.ID().getText();
@@ -476,6 +591,7 @@ public class Checker implements DonutListener {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
         }
 
+        this.result.setEntry(ctx, ctx);
     }
 
     @Override
@@ -492,6 +608,10 @@ public class Checker implements DonutListener {
 
     }
 
+    /**
+     * Exit parenthesis expression
+     * Makes sure the type bounded to the child expression gets bounded to this expression
+     */
     @Override
     public void exitParExpr(DonutParser.ParExprContext ctx) {
         this.types.put(ctx, this.types.get(ctx.expr()));

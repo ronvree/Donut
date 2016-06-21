@@ -1,0 +1,142 @@
+Marge:
+    Created by Ron on 20-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    Marge:
+        Declarations
+    ;
+
+    number a;
+    number b = 1;
+    number c = -1;
+
+    a = b;
+    a = c;
+
+    number d = 0;
+    d = 1;
+    d = -1;
+    d = --1;
+
+    reaction e = D'OH;
+    e = not D'OH;
+    e = WOOHOO;
+    e = not WOOHOO;
+    e = not not WOOHOO;
+
+    a = D'OH;           Marge: This gives a type error ;
+    e = 1;              Marge: This gives a type error ;
+
+    c = not c;          Marge: This gives two type errors (for both "not c" and assigning it to a number) ;
+    d = not WOOHOO;     Marge: This gives a type error ;
+
+    b = e;              Marge: This gives a type error ;
+
+    Marge:
+        Operators
+    ;
+
+    number f = 1 + 1;
+    number g = -1 + 1;
+
+    reaction h = D'OH xor WOOHOO;
+    reaction i = not D'OH and WOOHOO;
+
+    number j = WOOHOO xor D'OH;     Marge: This gives a type error ;
+    number k = 1 or 2;              Marge: This gives two type errors ;
+
+    reaction l = 1 + 1;             Marge: This gives a type error ;
+    reaction m = D'OH + WOOHOO;     Marge: This gives two type errors ;
+
+    reaction n = (D'OH or D'OH);
+    reaction o = ((D'OH xor WOOHOO) and WOOHOO);
+
+    reaction p = (WOOHOO and WOOHOO) + 3;       Marge: This gives two type errors ;
+    reaction q = (WOOHOO + D'OH) or D'OH;       Marge: This gives two type errors ;
+
+    Marge:
+        If statements
+    ;
+
+    (D'OH) eh? {
+    }
+
+    reaction r = WOOHOO;
+    (r) eh? {
+    }
+
+    number s = 0;
+    (s) eh? {                   Marge: This gives a type error ;
+    }
+
+    reaction t = (D'OH xor WOOHOO);
+    (t) eh? {
+    }
+
+    ((t)) eh? {
+    }
+
+    (0) eh? {                   Marge: This gives a type error ;
+    }
+
+    Marge:
+        While statements
+    ;
+
+    whileyoulittle (D'OH)   {
+    }
+
+    whileyoulittle (t)  {
+    }
+
+    whileyoulittle ((t)) {
+    }
+
+    whileyoulittle (t xor D'OH) {
+    }
+
+    whileyoulittle (1 + 1) {            Marge: This gives a type error ;
+    }
+
+    Marge:
+        Multiple scopes
+    ;
+
+    number u;
+    (WOOHOO) eh? {
+        u = 0;
+    }
+
+    reaction v = D'OH;
+    (D'OH) eh? {
+        v = 1;                          Marge: This gives a type error ;
+    }
+
+    u = 2;
+    u = D'OH;                           Marge: This gives a type error ;
+
+    number w = 1;
+    (WOOHOO) eh?    {
+        (D'OH) eh?  {
+            w = 0;
+        }
+    }
+
+    reaction x = D'OH;
+    (WOOHOO) eh?    {
+        (D'OH) eh?  {
+            x = 1;                      Marge: This gives a type error ;
+        }
+    }
+
+    Marge:
+        Symbols
+    ;
+
+    symbol y = 'c';
+    symbol z = D'OH;                    Marge: This gives a type error ;
+
+
+} I hope I didn't brain my damage.

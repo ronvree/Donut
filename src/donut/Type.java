@@ -105,6 +105,11 @@ public abstract class Type {
         @Override
         public TypeKind getTypeKind()   { return TypeKind.ARRAY; }
 
+        @Override
+        public String toString()    {
+            return super.toString() + "-" + content;
+        }
+
     }
 
 }
