@@ -7,59 +7,26 @@ public class Operator {
 
     private final String name;
 
-    public Operator(Type type)   {
-        switch (type)   {
-            case ADD:
-                this.name = "Add";
-                break;
-            case SUB:
-                this.name = "Sub";
-                break;
-            case MUL:
-                this.name = "Mul";
-                break;
-            case DIV:
-                this.name = "Div";
-                break;
-            case MOD:
-                this.name = "Mod";
-                break;
-            case EQUAL:
-                this.name = "Equal";
-                break;
-            case NEQ:
-                this.name = "NEq";
-                break;
-            case GT:
-                this.name = "Gt";
-                break;
-            case GTE:
-                this.name = "GtE";
-                break;
-            case LT:
-                this.name = "Lt";
-                break;
-            case LTE:
-                this.name = "LtE";
-                break;
-            case AND:
-                this.name = "And";
-                break;
-            case OR:
-                this.name = "Or";
-                break;
-            case XOR:
-                this.name = "Xor";
-                break;
-            case LSHIFT:
-                this.name = "LShift";
-                break;
-            case RSHIFT:
-                this.name = "RShift";
-                break;
-            default:
-                this.name = "NO SUCH OPERATOR";
-        }
+    public static final Operator ADD = new Operator("Add");
+    public static final Operator SUB = new Operator("Sub");
+    public static final Operator MUL = new Operator("Mul");
+    public static final Operator DIV = new Operator("Div");
+    public static final Operator MOD = new Operator("Mod");
+    public static final Operator EQUAL = new Operator("Equal");
+    public static final Operator NEQ = new Operator("NEq");
+    public static final Operator GT = new Operator("Gt");
+    public static final Operator GTE = new Operator("GtE");
+    public static final Operator LT = new Operator("Lt");
+    public static final Operator LTE = new Operator("LtE");
+    public static final Operator AND = new Operator("And");
+    public static final Operator OR = new Operator("Or");
+    public static final Operator XOR = new Operator("Xor");
+    public static final Operator LSHIFT = new Operator("LShift");
+    public static final Operator RSHIFT = new Operator("RShift");
+
+
+    private Operator(String name)  {
+        this.name = name;
     }
 
     public String getName() {
@@ -69,27 +36,6 @@ public class Operator {
     @Override
     public String toString()    {
         return this.name;
-    }
-
-    public enum Type    {
-        ADD,
-        SUB,
-        MUL,
-        DIV,
-        MOD,
-        EQUAL,
-        NEQ,
-        GT,
-        GTE,
-        LT,
-        LTE,
-        AND,
-        OR,
-        XOR,
-        LSHIFT,
-        RSHIFT
-        ;
-
     }
 
 }
