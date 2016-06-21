@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.tree.*;
  *
  * Generates Spril instructions from donut code
  */
-public class Generator implements DonutVisitor<Instruction> {
+public class Generator extends DonutBaseVisitor<Instruction> {
 
     private static final int TRUE = 1;
     private static final int FALSE = 0;
@@ -47,6 +47,7 @@ public class Generator implements DonutVisitor<Instruction> {
         this.registers = new ParseTreeProperty<>();
         this.regCount = 0;
         tree.accept(this);
+//        this.visit(tree);
         return program;
     }
 
@@ -250,46 +251,6 @@ public class Generator implements DonutVisitor<Instruction> {
         Other
      */
 
-    @Override
-    public Instruction visitType(DonutParser.TypeContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Instruction visitBoolOperator(DonutParser.BoolOperatorContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Instruction visitCompOperator(DonutParser.CompOperatorContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Instruction visitPrfOperator(DonutParser.PrfOperatorContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Instruction visit(ParseTree parseTree) {
-        return null;
-    }
-
-    @Override
-    public Instruction visitChildren(RuleNode ruleNode) {
-        return null;
-    }
-
-    @Override
-    public Instruction visitTerminal(TerminalNode terminalNode) {
-        return null;
-    }
-
-    @Override
-    public Instruction visitErrorNode(ErrorNode errorNode) {
-        return null;
-    }
-
 
     private Instruction emit(Instruction instr) {
         program.add(instr);
@@ -305,7 +266,7 @@ public class Generator implements DonutVisitor<Instruction> {
     private Reg reg(ParseTree node) {
         Reg result = this.registers.get(node);
         if (result == null) {
-            result = new Reg("r_" + this.regCount);
+            result = new Reg("" + this.regCount);
             this.registers.put(node, result);
             this.regCount++;
         }

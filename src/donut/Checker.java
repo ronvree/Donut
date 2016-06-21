@@ -44,6 +44,7 @@ public class Checker implements DonutListener {
     public List<Error> getErrors()  {
         return this.errors;
     }
+    public CheckerResult getResult()    { return this.result; }
 
     /*
         Listener methods

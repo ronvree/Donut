@@ -1,0 +1,26 @@
+Marge:
+    Created by Ron on 21-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    number n = 9;
+    number m = 0;
+
+    reaction r = D'OH;
+    reaction d = WOOHOO;
+
+    number a = 3 + 3;
+    reaction b = 3 is 3;
+
+    number p = (3 + 3);
+    number q = (3 + 3) - 4;
+
+    reaction x = (D'OH xor WOOHOO) or WOOHOO;
+    number y = (4 * 9) is not 5;
+    number z = -1;
+    reaction xx = not WOOHOO;
+    reaction yy = not not D'OH;
+
+
+} I hope I didn't brain my damage.
