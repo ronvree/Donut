@@ -16,6 +16,7 @@ public class BranchAI extends LocalInstruction {
 
     private Reg cmpRegister;
     private Reg targetRegister;
+    private String instruction = "Branch";
 
     /** Branch instruction for sprockell type: Target -> Ind Reg */
     public BranchAI(Reg cmpRegister, Reg targetRegister) {
@@ -29,5 +30,16 @@ public class BranchAI extends LocalInstruction {
 
     public Reg getTargetRegister() {
         return targetRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(cmpRegister)
+                .append(" ")
+                .append(targetRegister);
+        return builder.toString();
     }
 }

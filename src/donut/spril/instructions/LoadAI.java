@@ -16,6 +16,7 @@ public class LoadAI extends LocalInstruction {
 
     private int directAddress;
     private Reg register;
+    private String instruction = "Load";
 
     /** LoadAI instruction for sprockell Load instruction with type: MemAddr -> DirAddr Int */
     public LoadAI(int directAddress, Reg register) {
@@ -30,4 +31,18 @@ public class LoadAI extends LocalInstruction {
     public Reg getRegister() {
         return register;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(register.toString())
+                .append(" ")
+                .append(directAddress)
+        ;
+        return builder.toString();
+    }
+
+
 }

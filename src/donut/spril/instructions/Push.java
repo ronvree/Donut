@@ -10,6 +10,7 @@ import donut.spril.Reg;
 public class Push extends LocalInstruction {
 
     private Reg storeRegister;
+    private String instruction = "Push";
 
     /** Push instruction for sprockell */
     public Push(Reg storeRegister) {
@@ -18,5 +19,15 @@ public class Push extends LocalInstruction {
 
     public Reg getStoreRegister() {
         return storeRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(storeRegister.toString())
+        ;
+        return builder.toString();
     }
 }

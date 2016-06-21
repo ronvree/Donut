@@ -19,6 +19,9 @@ public class BranchI extends LocalInstruction {
     private int relativeAddress;
     private boolean isAbsolute;
 
+    private String instruction = "Branch";
+
+
     /** BranchI instruction for sprockell type: Target -> Abs/Rel Int */
     public BranchI(Reg cmpRegister, int address, boolean isAbsolute) {
         this.cmpRegister = cmpRegister;
@@ -41,4 +44,16 @@ public class BranchI extends LocalInstruction {
     public Reg getCmpRegister() {
         return cmpRegister;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(cmpRegister)
+                .append(" ")
+                .append(getAddress());
+        return builder.toString();
+    }
+
 }

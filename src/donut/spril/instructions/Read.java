@@ -15,6 +15,7 @@ import donut.spril.SystemInstruction;
 public class Read extends SystemInstruction {
 
     private Reg register;
+    private String instruction = "Read";
 
     /** Read instruction for sprockell type: MemAddr -> IndAddr Reg */
     public Read(Reg register) {
@@ -23,5 +24,15 @@ public class Read extends SystemInstruction {
 
     public Reg getRegister() {
         return register;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(register.toString())
+        ;
+        return builder.toString();
     }
 }

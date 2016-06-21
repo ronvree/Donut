@@ -15,6 +15,7 @@ import donut.spril.Reg;
 public class JumpAI extends LocalInstruction {
 
     private Reg targetRegister;
+    private String instruction = "Jump";
 
     /** Jump instruction for sprockell type: Target -> Ind Reg */
     public JumpAI(Reg targetRegister) {
@@ -23,5 +24,15 @@ public class JumpAI extends LocalInstruction {
 
     public Reg getTargetRegister() {
         return targetRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(targetRegister)
+        ;
+        return builder.toString();
     }
 }

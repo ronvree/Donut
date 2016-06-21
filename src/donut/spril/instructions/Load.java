@@ -16,6 +16,7 @@ public class Load extends LocalInstruction {
 
     private Reg registerAddress;
     private Reg inRegister;
+    private String instruction = "Load";
 
     /** Load instruction for sprockell type: MemAddr -> IndAddr Reg */
     public Load(Reg registerAddress, Reg inRegister) {
@@ -30,4 +31,17 @@ public class Load extends LocalInstruction {
     public Reg getInRegister() {
         return inRegister;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(registerAddress)
+                .append(" ")
+                .append(inRegister)
+        ;
+        return builder.toString();
+    }
+
 }

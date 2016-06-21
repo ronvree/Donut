@@ -17,6 +17,7 @@ public class JumpI extends LocalInstruction {
     private int targetAbsInt;
     private int targetRelInt;
     private boolean isAbsolute;
+    private String instruction = "Jump";
 
     /** Jump instruction for sprockell type: Target -> Abs Int and Target -> Rel Int.
      *  Indicated by boolean isAbsolute.
@@ -38,4 +39,13 @@ public class JumpI extends LocalInstruction {
         return targetRelInt;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(getTarget())
+        ;
+        return builder.toString();
+    }
 }

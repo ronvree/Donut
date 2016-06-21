@@ -16,6 +16,7 @@ public class Store extends LocalInstruction {
 
     private Reg atRegister;
     private Reg toStoreRegister;
+    private String instruction = "Store";
 
     /** StoreAI instruction for sprockell type: MemAddr -> IndAddr Reg */
     public Store(Reg toStoreRegister, Reg atRegister) {
@@ -29,5 +30,17 @@ public class Store extends LocalInstruction {
 
     public Reg getToStoreRegister() {
         return toStoreRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(toStoreRegister.toString())
+                .append(" ")
+                .append(atRegister.toString())
+        ;
+        return builder.toString();
     }
 }

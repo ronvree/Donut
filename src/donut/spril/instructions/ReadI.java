@@ -14,6 +14,7 @@ import donut.spril.SystemInstruction;
 public class ReadI extends SystemInstruction {
 
     private int immediateValue;
+    private String instruction = "Read";
 
     /** ReadI instruction for sprockell type: MemAddr -> ImmValue Int */
     public ReadI(int immediateValue) {
@@ -22,5 +23,15 @@ public class ReadI extends SystemInstruction {
 
     public int getImmediateValue() {
         return immediateValue;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(immediateValue)
+        ;
+        return builder.toString();
     }
 }

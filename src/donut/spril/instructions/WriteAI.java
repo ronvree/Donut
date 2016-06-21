@@ -16,6 +16,7 @@ public class WriteAI extends SystemInstruction {
 
     private Reg sourceRegister;
     private int directAddress;
+    private String instruction = "Write";
 
     /** WriteAI instruction for sprockell for type: MemAddr - DirAddr Int */
     public WriteAI(Reg sourceRegister, int directAddress) {
@@ -29,5 +30,17 @@ public class WriteAI extends SystemInstruction {
 
     public int getDirectAddress() {
         return directAddress;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(sourceRegister.toString())
+                .append(" ")
+                .append(directAddress)
+        ;
+        return builder.toString();
     }
 }

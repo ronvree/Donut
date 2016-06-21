@@ -7,8 +7,15 @@ import donut.spril.LocalInstruction;
  */
 public class EndProg extends LocalInstruction {
 
+    private String instruction = "EndProg";
+
     /** EndProg instruction for sprockell. */
     public EndProg() {
+        //Empty by design.
+    }
 
+    @Override
+    public String toString() {
+        return instruction;
     }
 }

@@ -14,6 +14,7 @@ import donut.spril.SystemInstruction;
 public class TestAndSetI extends SystemInstruction {
 
     private int immediateValue;
+    private String instruction = "TestAndSet";
 
     /** TestAndSetI instruction for sprockell for type: MemAddr - ImmValue Int */
     public TestAndSetI(int immediateValue) {
@@ -22,5 +23,15 @@ public class TestAndSetI extends SystemInstruction {
 
     public int getImmediateValue() {
         return immediateValue;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(immediateValue)
+        ;
+        return builder.toString();
     }
 }

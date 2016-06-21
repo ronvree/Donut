@@ -16,6 +16,7 @@ public class StoreI extends LocalInstruction {
 
     private Reg register;
     private int immediateValue;
+    private String instruction = "Store";
 
     /**
      * StoreI instruction for sprockell type: MemAddr -> Immvalue Int
@@ -31,5 +32,17 @@ public class StoreI extends LocalInstruction {
 
     public int getImmediateValue() {
         return immediateValue;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(register.toString())
+                .append(" ")
+                .append(immediateValue)
+        ;
+        return builder.toString();
     }
 }

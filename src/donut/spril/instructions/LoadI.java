@@ -15,6 +15,7 @@ public class LoadI extends LocalInstruction {
 
     private int immediateValue;
     private Reg inRegister;
+    private String instruction = "Load";
 
     /** LoadI instruction for sprockell type: MemAddr -> ImmValue Int */
     public LoadI(int immediateValue, Reg register) {
@@ -28,5 +29,17 @@ public class LoadI extends LocalInstruction {
 
     public Reg getInRegister() {
         return inRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(inRegister.toString())
+                .append(" ")
+                .append(immediateValue)
+        ;
+        return builder.toString();
     }
 }

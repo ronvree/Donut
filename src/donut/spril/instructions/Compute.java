@@ -13,6 +13,7 @@ public class Compute extends LocalInstruction{
     private Reg term1Reg;
     private Reg term2Reg;
     private Reg resultReg;
+    private String instruction = "Compute";
 
     public Compute(Operator op, Reg term1, Reg term2, Reg result) {
         this.operator = op;
@@ -36,4 +37,21 @@ public class Compute extends LocalInstruction{
     public Reg getResultReg() {
         return resultReg;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(operator.toString())
+                .append(" ")
+                .append(term1Reg)
+                .append(" ")
+                .append(term2Reg)
+                .append(" ")
+                .append(resultReg)
+        ;
+        return builder.toString();
+    }
+
 }

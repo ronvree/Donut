@@ -14,6 +14,7 @@ import donut.spril.SystemInstruction;
 public class TestAndSetAI extends SystemInstruction {
 
     private int directAddress;
+    private String instruction = "TestAndSet";
 
     /** TestAndSetAI instruction for sprockell for type: MemAddr - DirAddr Int */
     public TestAndSetAI(int directAddress) {
@@ -22,5 +23,15 @@ public class TestAndSetAI extends SystemInstruction {
 
     public int getDirectAddress() {
         return directAddress;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(directAddress)
+        ;
+        return builder.toString();
     }
 }

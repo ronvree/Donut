@@ -9,6 +9,7 @@ import donut.spril.Reg;
 public class Pop extends LocalInstruction {
 
     private Reg popRegister;
+    private String instruction = "Pop";
 
     /** Pop instruction for sprockell */
     public Pop(Reg popRegister) {
@@ -17,5 +18,10 @@ public class Pop extends LocalInstruction {
 
     public Reg getPopRegister() {
         return popRegister;
+    }
+
+    @Override
+    public String toString() {
+        return instruction;
     }
 }

@@ -10,6 +10,7 @@ import donut.spril.SystemInstruction;
 public class Receive extends SystemInstruction {
 
     private Reg register;
+    private String instruction = "Receive";
 
     /** Receive instruction for sprockell */
     public Receive(Reg register) {
@@ -18,5 +19,15 @@ public class Receive extends SystemInstruction {
 
     public Reg getRegister() {
         return register;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(register.toString())
+        ;
+        return builder.toString();
     }
 }

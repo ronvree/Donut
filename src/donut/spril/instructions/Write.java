@@ -16,6 +16,7 @@ public class Write extends SystemInstruction {
 
     private Reg sourceRegister;
     private Reg memoryRegister;
+    private String instruction = "Write";
 
     /** Write instruction for sprockell for type: MemAddr - IndAddr Reg */
     public Write(Reg sourceRegister, Reg memoryRegister) {
@@ -29,5 +30,17 @@ public class Write extends SystemInstruction {
 
     public Reg getMemoryRegister() {
         return memoryRegister;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(sourceRegister.toString())
+                .append(" ")
+                .append(memoryRegister.toString())
+        ;
+        return builder.toString();
     }
 }

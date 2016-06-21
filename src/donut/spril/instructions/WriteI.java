@@ -16,6 +16,7 @@ public class WriteI extends SystemInstruction {
 
     private Reg sourceRegister;
     private int immediateValue;
+    private String instruction = "Write";
 
     /** WriteI instruction for sprockell for type: MemAddr - ImmValue Int */
     public WriteI(Reg sourceRegister, int immediateValue) {
@@ -29,5 +30,17 @@ public class WriteI extends SystemInstruction {
 
     public int getImmediateValue() {
         return immediateValue;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(instruction)
+                .append(" ")
+                .append(sourceRegister.toString())
+                .append(" ")
+                .append(immediateValue)
+        ;
+        return builder.toString();
     }
 }
