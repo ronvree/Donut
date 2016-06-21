@@ -1,0 +1,9 @@
+Instruction                 |       Object
+Const                       |       Const
+Compute                     |       Compute
+Load (MemAddr - Addr Int)   |       LoadI
+Load (MemAddr - Deref Reg)  |       LoadAI
+Branch(Target - Abs/Rel Int)|       BranchI
+Branch (Target - Ind Reg)   |       BranchAI
+Jump (Target - Abs/Rel Int) |       JumpI
+Jump (Target - Ind Reg)     |       JumpAI

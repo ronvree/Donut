@@ -1,6 +1,8 @@
 package donut.spril.instructions;
 
 import donut.spril.LocalInstruction;
+import donut.spril.Operator;
+import donut.spril.Reg;
 
 /**
  * Created by Gijs on 21-Jun-16.
