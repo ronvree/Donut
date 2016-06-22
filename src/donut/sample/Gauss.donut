@@ -1,0 +1,15 @@
+Marge:
+    Created by Ron on 22-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    number x = 36;
+    number sum = 0;
+
+    whileyoulittle (x > 0) {
+        sum = sum + x;
+        x = x - 1;
+    }
+
+} I hope I didn't brain my damage.

@@ -4,6 +4,10 @@ import donut.spril.Instruction;
 import donut.spril.Operator;
 import donut.spril.Program;
 import donut.spril.Reg;
+import donut.spril.instructions.BranchI;
+import donut.spril.instructions.Compute;
+import donut.spril.instructions.LoadAI;
+import donut.spril.instructions.LoadI;
 import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.*;
 
@@ -75,6 +79,26 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIfStat(DonutParser.IfStatContext ctx) {
+
+        Instruction cmp = visit(ctx.expr());
+        Reg r_cmp = registers.get(ctx.expr());
+
+        if (ctx.ELSE() == null)   {
+            int thenLine = ctx.block(0).start.getLine();
+            emit(new BranchI(r_cmp, thenLine, true));
+            visit(ctx.block(0));
+
+
+        } else {
+
+
+
+        }
+
+
+
+
+
         return visitChildren(ctx);
     }
 
