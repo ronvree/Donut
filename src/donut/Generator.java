@@ -25,14 +25,18 @@ public class Generator extends DonutBaseVisitor<Instruction> {
      * Result from the checker phase
      */
     private CheckerResult result;
-
-
-    private ParseTreeProperty<LabelEntry> labels; // TODO -- do we need this?
-
     /**
      * Used for making new registers
      */
     private int regCount;
+    /**
+     * Line counter (used for jump instructions)
+     */
+    private int lineCount;
+    /**
+     * Stores starting lines of instructions (for jumps)
+     */
+    private ParseTreeProperty<Integer> jumpLines;
     /**
      * Bind registers to nodes
      */
@@ -45,11 +49,11 @@ public class Generator extends DonutBaseVisitor<Instruction> {
     public Program generate(ParseTree tree, CheckerResult result)   {
         this.program = new Program();
         this.result = result;
-        this.labels = new ParseTreeProperty<>();
+        this.jumpLines = new ParseTreeProperty<>();
         this.registers = new ParseTreeProperty<>();
         this.regCount = 0;
+        this.lineCount = 0;
         tree.accept(this);
-//        this.visit(tree);
         return program;
     }
 
@@ -70,6 +74,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAssStat(DonutParser.AssStatContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         Instruction first = visit(ctx.expr());
         Reg exprReg = reg(ctx.expr());
         int offset = offset(ctx.ID());
@@ -79,16 +84,13 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIfStat(DonutParser.IfStatContext ctx) {
-
+        this.jumpLines.put(ctx, lineCount);
         Instruction cmp = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
 
         if (ctx.ELSE() == null)   {
-            int thenLine = ctx.block(0).start.getLine();
-            emit(new BranchI(r_cmp, thenLine, true));
+            emit(new BranchI(r_cmp, this.jumpLines.get(ctx.block(0)), true));
             visit(ctx.block(0));
-
-
         } else {
 
 
@@ -99,7 +101,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
 
 
-        return visitChildren(ctx);
+        return cmp;
     }
 
     @Override
@@ -120,6 +122,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitParExpr(DonutParser.ParExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         Instruction instr = visitChildren(ctx);
         this.registers.put(ctx, this.registers.get(ctx.expr()));
         return instr;
@@ -127,11 +130,13 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitIdExpr(DonutParser.IdExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         return emit(new LoadAI(offset(ctx.ID()), reg(ctx)));
     }
 
     @Override
     public Instruction visitNumExpr(DonutParser.NumExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         return emit(new LoadI(Integer.parseInt(ctx.NUM().getText()), reg(ctx)));
     }
 
@@ -161,6 +166,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitMultExpr(DonutParser.MultExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -172,6 +178,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitMinusExpr(DonutParser.MinusExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -183,6 +190,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitPlusExpr(DonutParser.PlusExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -194,6 +202,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitCompExpr(DonutParser.CompExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -219,6 +228,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitDivExpr(DonutParser.DivExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -235,6 +245,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitBoolExpr(DonutParser.BoolExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr(0));
         visit(ctx.expr(1));
 
@@ -255,6 +266,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitPrfExpr(DonutParser.PrfExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         visit(ctx.expr());
         visit(ctx.prfOperator());
 
@@ -282,6 +294,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     private Instruction emit(Instruction instr) {
         program.add(instr);
+        lineCount++;
         return instr;
     }
 
@@ -305,15 +318,5 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         this.registers.put(node, reg);
     }
 
-    private class LabelEntry    {
-        private int line;
-        private boolean absolute;
-
-        public LabelEntry(int line, boolean absolute)   {
-            this.line = line;
-            this.absolute = absolute;
-        }
-
-    }
 
 }
