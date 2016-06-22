@@ -21,7 +21,7 @@ public class SymbolTable {
     public SymbolTable()    {
         this.scopes = new Stack<>();
         this.scopes.push(new Scope());
-        this.size = 0;
+        this.size = 1;
     }
 
     /**
