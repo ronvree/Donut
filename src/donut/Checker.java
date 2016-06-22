@@ -90,8 +90,7 @@ public class Checker implements DonutListener {
     public void enterAssStat(DonutParser.AssStatContext ctx) {
         if (scopes.contains(ctx.ID().getText()))   {
             this.types.put(ctx.ID(), scopes.getCurrentScope().getType(ctx.ID().getText()));
-            Type type = this.scopes.getCurrentScope().getType(ctx.ID().getText());
-            this.result.setType(ctx.ID(), type);
+            this.result.setType(ctx.ID(), this.scopes.getCurrentScope().getType(ctx.ID().getText()));
             this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
         } else {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));

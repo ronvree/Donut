@@ -37,9 +37,9 @@ public class LoadAI extends LocalInstruction {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
                 .append(" ")
-                .append(register.toString())
-                .append(" ")
                 .append(directAddress)
+                .append(" ")
+                .append(register.toString())
         ;
         return builder.toString();
     }

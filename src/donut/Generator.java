@@ -20,6 +20,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     private static final int TRUE = 1;
     private static final int FALSE = 0;
+    private static final Reg alwaysZero = new Reg("(reg0)");
 
     /**
      * Result from the checker phase
@@ -111,7 +112,15 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitDeclStat(DonutParser.DeclStatContext ctx) {
-        return visitChildren(ctx);
+        Instruction first;
+        if (ctx.getChildCount() > 3) {
+            first = visit(ctx.expr());
+            Reg resultExpr = reg(ctx.expr());
+            emit(new StoreI(resultExpr, offset(ctx.ID())));
+        } else {
+            first = emit(new StoreI(alwaysZero, offset(ctx.ID())));
+        }
+        return first;
     }
 
 

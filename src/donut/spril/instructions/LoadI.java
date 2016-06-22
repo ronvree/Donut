@@ -36,9 +36,9 @@ public class LoadI extends LocalInstruction {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
                 .append(" ")
-                .append(inRegister.toString())
-                .append(" ")
                 .append(immediateValue)
+                .append(" ")
+                .append(inRegister.toString())
         ;
         return builder.toString();
     }
