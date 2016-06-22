@@ -303,8 +303,8 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
         if (ctx.prfOperator().MINUS() != null)   {
             Reg reg = registers.get(ctx.expr());
-            setReg(ctx, reg);
             Reg temp = reg(ctx);
+            setReg(ctx, reg);
             emit(new LoadI(-1, temp));
             return emit(new Compute(Operator.MUL, reg, temp, reg));
         } else {
