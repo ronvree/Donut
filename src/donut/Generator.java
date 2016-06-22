@@ -110,11 +110,25 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitWhileStat(DonutParser.WhileStatContext ctx) {
-        return visitChildren(ctx);
+        this.jumpLines.put(ctx, lineCount);
+        int branchLine = lineCount;
+        Instruction first = visit(ctx.expr());
+        Reg r_cmp = reg(ctx.expr());
+        Instruction branch = emit(new BranchI(r_cmp, -1, true));
+        Instruction jump = emit(new JumpI(-1, false));
+        int afterJump = lineCount;
+        visit(ctx.block());
+        emit(new JumpI(branchLine, false));
+        int afterBranch = lineCount;
+        emit(new Nop());
+        program.replace(branch, new BranchI(r_cmp, afterJump, false));
+        program.replace(jump, new JumpI(afterBranch, false));
+        return first;
     }
 
     @Override
     public Instruction visitDeclStat(DonutParser.DeclStatContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         Instruction first;
         if (ctx.getChildCount() > 3) {
             first = visit(ctx.expr());

@@ -54,8 +54,10 @@ public class Program {
     }
 
     public void printInstructions() {
+        int line = 0;
         for (Instruction i : instructions) {
-            System.out.println(i.toString());
+            System.out.println(line + ": " + i.toString());
+            line++;
         }
     }
 
