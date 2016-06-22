@@ -11,12 +11,8 @@ public class Reg extends Operand {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     @Override
-    public String toString()    {
+    public String toString() {
         return this.name;
     }
 

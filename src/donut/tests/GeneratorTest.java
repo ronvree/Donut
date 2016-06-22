@@ -31,6 +31,7 @@ public class GeneratorTest {
         Generator generator = new Generator();
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
+        prog.writeHaskellFile("testResult.hs");
 
     }
 

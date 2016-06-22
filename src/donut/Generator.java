@@ -20,7 +20,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     private static final int TRUE = 1;
     private static final int FALSE = 0;
-    private static final Reg alwaysZero = new Reg("(r_alwaysZero)");
+    private static final Reg alwaysZero = new Reg("(reg0)");
 
     /**
      * Result from the checker phase
@@ -52,7 +52,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         this.result = result;
         this.jumpLines = new ParseTreeProperty<>();
         this.registers = new ParseTreeProperty<>();
-        this.regCount = 0;
+        this.regCount = 1;
         this.lineCount = 0;
         tree.accept(this);
         return program;
@@ -333,7 +333,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
     private Reg reg(ParseTree node) {
         Reg result = this.registers.get(node);
         if (result == null) {
-            result = new Reg("(Reg " + this.regCount + ")");
+            result = new Reg("(reg" + this.regCount + ")");
             this.registers.put(node, result);
             this.regCount++;
         }

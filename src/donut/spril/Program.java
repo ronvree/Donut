@@ -20,6 +20,18 @@ public class Program {
     /** Instructions */
     private List<Instruction> instructions;
 
+    /** Haskell file initialization  */
+    private String INIT_FILE =
+            "module SprockellProgram where\n" +
+            "\n" +
+            "import BasicFunctions\n" +
+            "import HardwareTypes\n" +
+            "import Sprockell\n" +
+            "import System\n" +
+            "import Simulation\n" +
+            "\n"
+            ;
+
     public Program()    {
         this.instructions = new ArrayList<>();
     }
@@ -41,11 +53,16 @@ public class Program {
         }
     }
 
-    public void writeFile(String filename) {
+    public void writeHaskellFile(String filename) {
         StringBuffer buffer = new StringBuffer();
+        buffer.append(INIT_FILE)
+                .append("program :: [Instruction]\n" +
+                        "program = [");
         for (Instruction i : instructions) {
-            buffer.append(i.toString() + "\n");
+            buffer.append("\t" + i.toString() + ",\n");
         }
+        buffer.deleteCharAt(buffer.toString().length() - 2);
+        buffer.append("\t]");
         try {
             Files.write(Paths.get(filename), buffer.toString().getBytes());
         } catch (IOException e) {
@@ -60,6 +77,4 @@ public class Program {
             line++;
         }
     }
-
-
 }
