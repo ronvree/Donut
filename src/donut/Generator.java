@@ -4,9 +4,7 @@ import donut.spril.Instruction;
 import donut.spril.Operator;
 import donut.spril.Program;
 import donut.spril.Reg;
-import donut.spril.instructions.Compute;
-import donut.spril.instructions.LoadAI;
-import donut.spril.instructions.LoadI;
+import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.*;
 
 /**
@@ -68,10 +66,11 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitAssStat(DonutParser.AssStatContext ctx) {
-
-
-
-        return visitChildren(ctx);
+        Instruction first = visit(ctx.expr());
+        Reg exprReg = reg(ctx.expr());
+        int offset = offset(ctx.ID());
+        emit(new StoreAI(exprReg, offset));
+        return first;
     }
 
     @Override
