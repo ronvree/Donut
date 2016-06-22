@@ -97,7 +97,9 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitParExpr(DonutParser.ParExprContext ctx) {
-        return visitChildren(ctx);
+        Instruction instr = visitChildren(ctx);
+        this.registers.put(ctx, this.registers.get(ctx.expr()));
+        return instr;
     }
 
     @Override
