@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class Program {
 
+    public static final String ENDPROG = "EndProg";
+
     /** Instructions */
     private List<Instruction> instructions;
 
@@ -61,8 +63,7 @@ public class Program {
         for (Instruction i : instructions) {
             buffer.append("\t" + i.toString() + ",\n");
         }
-        buffer.deleteCharAt(buffer.toString().length() - 2);
-        buffer.append("\t]");
+        buffer.append("\t" + ENDPROG + "\n\t]");
         try {
             Files.write(Paths.get(filename), buffer.toString().getBytes());
         } catch (IOException e) {
@@ -76,5 +77,6 @@ public class Program {
             System.out.println(line + ": " + i.toString());
             line++;
         }
+        System.out.println(ENDPROG);
     }
 }
