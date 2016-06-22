@@ -61,7 +61,8 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitProgram(DonutParser.ProgramContext ctx) {
-        return visitChildren(ctx);
+        visitChildren(ctx);
+        return emit(new EndProg());     // Always end program with EndProg.
     }
 
     @Override
