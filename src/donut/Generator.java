@@ -138,9 +138,9 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         if (ctx.getChildCount() > 3) {
             first = visit(ctx.expr());
             Reg resultExpr = reg(ctx.expr());
-            emit(new StoreI(resultExpr, offset(ctx.ID())));
+            emit(new StoreAI(resultExpr, offset(ctx.ID())));
         } else {
-            first = emit(new StoreI(alwaysZero, offset(ctx.ID())));
+            first = emit(new StoreAI(alwaysZero, offset(ctx.ID())));
         }
         return first;
     }
