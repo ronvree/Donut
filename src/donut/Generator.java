@@ -89,12 +89,13 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         this.jumpLines.put(ctx, lineCount);
         Instruction cmp = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
+        Instruction endJump = null;
         if (ctx.ELSE() == null)   {
             Instruction branch = emit(new BranchI(r_cmp, -1, true));
             visit(ctx.block(0));
             int branchLine = this.jumpLines.get(ctx.block(0));
             this.program.replace(branch, new BranchI(r_cmp, branchLine, true));
-
+            endJump = this.emit(new JumpI(-1, true));
         } else {
 
 
@@ -102,9 +103,8 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         }
 
 
-
-
-
+        this.program.replace(endJump, new JumpI(lineCount, true));
+        emit(new Nop());
         return cmp;
     }
 
