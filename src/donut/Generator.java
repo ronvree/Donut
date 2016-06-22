@@ -20,7 +20,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     private static final int TRUE = 1;
     private static final int FALSE = 0;
-    private static final Reg alwaysZero = new Reg("(reg0)");
+    private static final Reg alwaysZero = new Reg("(r_alwaysZero)");
 
     /**
      * Result from the checker phase

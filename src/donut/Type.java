@@ -44,8 +44,8 @@ public abstract class Type {
 
         @Override
         public int size() { // TODO
-            return 0;
-        }   // TODO
+            return 1;
+        }
 
         @Override
         public TypeKind getTypeKind()   { return TypeKind.REACTION; }
@@ -61,8 +61,8 @@ public abstract class Type {
 
         @Override
         public int size() { // TODO
-            return 0;
-        }   // TODO
+            return 1;
+        }
 
         @Override
         public TypeKind getTypeKind()   { return TypeKind.NUMBER; }
@@ -78,7 +78,7 @@ public abstract class Type {
         private SymbolType()    {}
 
         @Override
-        public int size() { return 0; }   // TODO
+        public int size() { return 1; }   // TODO
 
         @Override
         public TypeKind getTypeKind()   { return TypeKind.SYMBOL; }
