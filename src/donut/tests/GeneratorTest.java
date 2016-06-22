@@ -7,6 +7,7 @@ import donut.Generator;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,9 +22,11 @@ public class GeneratorTest {
     private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
 
+    private static final String TEST_FILE = "testResult.hs";
+
     @Test
     public void test()  {
-        DonutParser.ProgramContext programContext = parse("Gauss");
+        DonutParser.ProgramContext programContext = parse("test");
         ParseTreeWalker walker = new ParseTreeWalker();
         Checker checker = new Checker();
         walker.walk(checker, programContext);
@@ -31,8 +34,13 @@ public class GeneratorTest {
         Generator generator = new Generator();
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
-        prog.writeHaskellFile("testResult.hs");
+    }
 
+    @Test
+    public void testResult() {
+        HaskelRunner runner = new HaskelRunner();
+        int result = runner.runHaskell("testResult.hs");
+        Assert.assertEquals(result, 20);
     }
 
     private DonutParser.ProgramContext parse(String filename)   {

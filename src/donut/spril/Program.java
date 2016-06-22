@@ -22,7 +22,7 @@ public class Program {
 
     /** Haskell file initialization  */
     private String INIT_FILE =
-            "module SprockellProgram where\n" +
+            "module Main where\n" +
             "\n" +
             "import BasicFunctions\n" +
             "import HardwareTypes\n" +
@@ -63,7 +63,7 @@ public class Program {
         }
         buffer.deleteCharAt(buffer.toString().length() - 2);
         buffer.append("    ]\n")
-                .append("demoTest = sysTest [program]");
+                .append("main = sysTest [program]");
         try {
             Files.write(Paths.get(filename), buffer.toString().getBytes());
         } catch (IOException e) {
