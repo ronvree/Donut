@@ -23,7 +23,7 @@ public class GeneratorTest {
 
     @Test
     public void test()  {
-        DonutParser.ProgramContext programContext = parse("test");
+        DonutParser.ProgramContext programContext = parse("Gauss");
         ParseTreeWalker walker = new ParseTreeWalker();
         Checker checker = new Checker();
         walker.walk(checker, programContext);

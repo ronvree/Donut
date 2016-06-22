@@ -126,7 +126,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
         visit(ctx.block());
 
-        emit(new JumpI(this.jumpLines.get(ctx.expr()), false));  // Jump to compare
+        emit(new JumpI(this.jumpLines.get(ctx.expr()), true));  // Jump to compare
 
         program.replace(branch, new BranchI(r_cmp, 2, false));
         program.replace(jump, new JumpI(lineCount, true));
