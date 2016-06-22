@@ -298,6 +298,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
     @Override
     public Instruction visitPrfExpr(DonutParser.PrfExprContext ctx) {
         this.jumpLines.put(ctx, lineCount);
+
         visit(ctx.expr());
         visit(ctx.prfOperator());
 
