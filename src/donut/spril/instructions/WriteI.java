@@ -19,6 +19,7 @@ public class WriteI extends SystemInstruction {
     private String instruction = "Write";
 
     /** WriteI instruction for sprockell for type: MemAddr - ImmValue Int */
+    @Deprecated
     public WriteI(Reg sourceRegister, int immediateValue) {
         this.sourceRegister = sourceRegister;
         this.immediateValue = immediateValue;
@@ -32,7 +33,7 @@ public class WriteI extends SystemInstruction {
         return immediateValue;
     }
 
-    @Override
+    @Override @Deprecated
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)

@@ -39,7 +39,7 @@ public class WriteAI extends SystemInstruction {
                 .append(" ")
                 .append(sourceRegister.toString())
                 .append(" ")
-                .append(directAddress)
+                .append("(DirAddr " + directAddress + ")")
         ;
         return builder.toString();
     }

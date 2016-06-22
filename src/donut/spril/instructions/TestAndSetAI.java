@@ -30,7 +30,7 @@ public class TestAndSetAI extends SystemInstruction {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
                 .append(" ")
-                .append(directAddress)
+                .append("(DirAddr " + directAddress + ")")
         ;
         return builder.toString();
     }

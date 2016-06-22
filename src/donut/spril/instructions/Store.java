@@ -39,7 +39,7 @@ public class Store extends LocalInstruction {
                 .append(" ")
                 .append(toStoreRegister.toString())
                 .append(" ")
-                .append(atRegister.toString())
+                .append("(IndAddr " + atRegister.toString() + ")")
         ;
         return builder.toString();
     }

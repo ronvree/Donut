@@ -21,6 +21,8 @@ public class StoreI extends LocalInstruction {
     /**
      * StoreI instruction for sprockell type: MemAddr -> Immvalue Int
      */
+
+    @Deprecated
     public StoreI(Reg register, int immediateValue) {
         this.register = register;
         this.immediateValue = immediateValue;
@@ -34,7 +36,7 @@ public class StoreI extends LocalInstruction {
         return immediateValue;
     }
 
-    @Override
+    @Override @Deprecated
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)

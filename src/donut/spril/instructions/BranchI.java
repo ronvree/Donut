@@ -51,8 +51,14 @@ public class BranchI extends LocalInstruction {
         builder.append(instruction)
                 .append(" ")
                 .append(cmpRegister)
-                .append(" ")
-                .append(getAddress());
+                .append(" ");
+
+        if (isAbsolute) {
+            builder.append("(Abs " + absoluteAddress + ")");
+        } else {
+            builder.append("(Rel " + relativeAddress + ")");
+        }
+
         return builder.toString();
     }
 

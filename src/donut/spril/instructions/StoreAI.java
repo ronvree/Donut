@@ -39,7 +39,7 @@ public class StoreAI extends LocalInstruction {
                 .append(" ")
                 .append(register.toString())
                 .append(" ")
-                .append(directAddress)
+                .append("(DirAddr " + directAddress + ")")
         ;
         return builder.toString();
     }

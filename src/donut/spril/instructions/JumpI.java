@@ -43,9 +43,13 @@ public class JumpI extends LocalInstruction {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
-                .append(" ")
-                .append(getTarget())
-        ;
+                .append(" ");
+
+        if (isAbsolute) {
+            builder.append("(Abs " + targetAbsInt + ")");
+        } else {
+            builder.append("(Rel " + targetRelInt + ")");
+        }
         return builder.toString();
     }
 }

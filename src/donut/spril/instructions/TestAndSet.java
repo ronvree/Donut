@@ -31,7 +31,7 @@ public class TestAndSet extends SystemInstruction {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
                 .append(" ")
-                .append(register.toString())
+                .append("(IndAddr " + register.toString() + ")")
         ;
         return builder.toString();
     }

@@ -126,8 +126,8 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         emit(new JumpI(branchLine, false));
         int afterBranch = lineCount;
         emit(new Nop());
-        program.replace(branch, new BranchI(r_cmp, afterJump, false));
-        program.replace(jump, new JumpI(afterBranch, false));
+        program.replace(branch, new BranchI(r_cmp, afterJump, true));
+        program.replace(jump, new JumpI(afterBranch, true));
         return first;
     }
 

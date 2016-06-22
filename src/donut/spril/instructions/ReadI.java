@@ -17,6 +17,7 @@ public class ReadI extends SystemInstruction {
     private String instruction = "Read";
 
     /** ReadI instruction for sprockell type: MemAddr -> ImmValue Int */
+    @Deprecated
     public ReadI(int immediateValue) {
         this.immediateValue = immediateValue;
     }
@@ -30,7 +31,7 @@ public class ReadI extends SystemInstruction {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
                 .append(" ")
-                .append(immediateValue)
+                .append("(ImmValue " + immediateValue + ")")
         ;
         return builder.toString();
     }

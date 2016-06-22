@@ -39,7 +39,7 @@ public class Write extends SystemInstruction {
                 .append(" ")
                 .append(sourceRegister.toString())
                 .append(" ")
-                .append(memoryRegister.toString())
+                .append("(IndAddr " + memoryRegister.toString() + ")")
         ;
         return builder.toString();
     }

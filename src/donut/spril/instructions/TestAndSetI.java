@@ -17,6 +17,7 @@ public class TestAndSetI extends SystemInstruction {
     private String instruction = "TestAndSet";
 
     /** TestAndSetI instruction for sprockell for type: MemAddr - ImmValue Int */
+    @Deprecated
     public TestAndSetI(int immediateValue) {
         this.immediateValue = immediateValue;
     }
@@ -25,7 +26,7 @@ public class TestAndSetI extends SystemInstruction {
         return immediateValue;
     }
 
-    @Override
+    @Override @Deprecated
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(instruction)
