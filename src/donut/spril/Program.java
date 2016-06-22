@@ -31,7 +31,15 @@ public class Program {
         this.instructions.add(instr);
     }
 
-
+    public boolean replace(Instruction take, Instruction place)   {
+        int index = instructions.indexOf(take);
+        if (index == -1)   {
+            return false;
+        } else {
+            this.instructions.set(index, place);
+            return true;
+        }
+    }
 
     public void writeFile(String filename) {
         StringBuffer buffer = new StringBuffer();

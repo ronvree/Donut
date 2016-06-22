@@ -66,6 +66,7 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitBlock(DonutParser.BlockContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         return visitChildren(ctx);
     }
 
@@ -88,10 +89,12 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         this.jumpLines.put(ctx, lineCount);
         Instruction cmp = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
-
         if (ctx.ELSE() == null)   {
-            emit(new BranchI(r_cmp, this.jumpLines.get(ctx.block(0)), true));
+            Instruction branch = emit(new BranchI(r_cmp, -1, true));
             visit(ctx.block(0));
+            int branchLine = this.jumpLines.get(ctx.block(0));
+            this.program.replace(branch, new BranchI(r_cmp, branchLine, true));
+
         } else {
 
 
