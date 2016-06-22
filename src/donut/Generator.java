@@ -187,11 +187,13 @@ public class Generator extends DonutBaseVisitor<Instruction> {
 
     @Override
     public Instruction visitTrueExpr(DonutParser.TrueExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         return emit(new LoadI(TRUE, reg(ctx)));
     }
 
     @Override
     public Instruction visitFalseExpr(DonutParser.FalseExprContext ctx) {
+        this.jumpLines.put(ctx, lineCount);
         return emit(new LoadI(FALSE, reg(ctx)));
     }
 
