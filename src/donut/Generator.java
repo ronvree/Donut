@@ -89,22 +89,27 @@ public class Generator extends DonutBaseVisitor<Instruction> {
         this.jumpLines.put(ctx, lineCount);
         Instruction cmp = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
-        Instruction endJump = null;
         if (ctx.ELSE() == null)   {
-            Instruction branch = emit(new BranchI(r_cmp, -1, true));
+            Instruction branch = emit(new BranchI(r_cmp, -1, true)); // Branch to then
+            Instruction jump = emit(new JumpI( -1, true));           // Jump to end
             visit(ctx.block(0));
-            int branchLine = this.jumpLines.get(ctx.block(0));
-            this.program.replace(branch, new BranchI(r_cmp, branchLine, true));
-            endJump = this.emit(new JumpI(-1, true));
+            int thenLine = this.jumpLines.get(ctx.block(0));
+            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));
+            this.program.replace(jump, new JumpI(lineCount, true));
+            emit(new Nop());
         } else {
-
-
-
+            Instruction branch = emit(new BranchI(r_cmp, -1, true)); // Branch to then
+            Instruction jump = emit(new JumpI(-1, true)); // Jump to else
+            visit(ctx.block(0));
+            Instruction endJump = this.emit(new JumpI(-1, true)); // Jump to end
+            visit(ctx.block(1));
+            int thenLine = this.jumpLines.get(ctx.block(0));
+            int elseLine = this.jumpLines.get(ctx.block(1));
+            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));
+            this.program.replace(jump, new JumpI(elseLine, true));
+            this.program.replace(endJump, new JumpI(lineCount, true));
+            emit(new Nop());
         }
-
-
-        this.program.replace(endJump, new JumpI(lineCount, true));
-        emit(new Nop());
         return cmp;
     }
 
