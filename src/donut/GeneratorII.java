@@ -39,9 +39,10 @@ public class GeneratorII extends DonutBaseVisitor<Integer> {
 
     @Override
     public Integer visitProgram(DonutParser.ProgramContext ctx) {
+        int begin = lineCount;
         visitChildren(ctx);
         emit(new EndProg());
-        return lineCount - 1;
+        return begin;
     }
 
     @Override
