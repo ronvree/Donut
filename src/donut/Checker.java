@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Ron on 19-6-2016.
  */
-public class Checker implements DonutListener {
+public class Checker extends DonutBaseListener {
 
     /**
      * Temporarily store node types needed for type checking
