@@ -107,7 +107,7 @@ public class GeneratorII extends DonutBaseVisitor<Integer> {
     @Override
     public Integer visitDeclStat(DonutParser.DeclStatContext ctx) {
         int begin;
-        if (ctx.getChildCount() > 3) {                                      // TODO
+        if (ctx.getChildCount() > 3) {
             begin = visit(ctx.expr());
             Reg resultExpr = reg(ctx.expr());
             emit(new StoreAI(resultExpr, offset(ctx.ID())));
