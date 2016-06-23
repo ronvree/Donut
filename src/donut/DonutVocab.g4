@@ -38,7 +38,7 @@ TRUE : 'WOOHOO';
 ARRAYTYPE : 'bunchof';
 CHARTYPE : 'symbol';
 
-PARBEGIN: 'Duff';
+PARBEGIN: 'duff';
 GLOBAL: 'global';
 
 ELSE : 'nope';
