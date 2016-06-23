@@ -1,9 +1,6 @@
 package donut.tests;
 
-import donut.Checker;
-import donut.DonutLexer;
-import donut.DonutParser;
-import donut.Generator;
+import donut.*;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -31,7 +28,7 @@ public class GeneratorTest {
         Checker checker = new Checker();
         walker.walk(checker, programContext);
 
-        Generator generator = new Generator();
+        GeneratorII generator = new GeneratorII();
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
         prog.writeHaskellFile("testResult.hs");
@@ -41,7 +38,7 @@ public class GeneratorTest {
     public void testResult() {
         HaskelRunner runner = new HaskelRunner();
         int result = runner.runHaskell("testResult.hs");
-        Assert.assertEquals(result, 30);
+        Assert.assertEquals(30, result);
     }
 
     private DonutParser.ProgramContext parse(String filename)   {
