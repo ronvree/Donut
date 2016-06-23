@@ -34,13 +34,14 @@ public class GeneratorTest {
         Generator generator = new Generator();
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
+        prog.writeHaskellFile("testResult.hs");
     }
 
     @Test
     public void testResult() {
         HaskelRunner runner = new HaskelRunner();
         int result = runner.runHaskell("testResult.hs");
-        Assert.assertEquals(result, 20);
+        Assert.assertEquals(result, 30);
     }
 
     private DonutParser.ProgramContext parse(String filename)   {
