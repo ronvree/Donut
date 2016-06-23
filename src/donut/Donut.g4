@@ -5,12 +5,13 @@ import DonutVocab;
 program : BEGINFILE block ENDFILE;
 
 block : LBRACE stat* RBRACE;
+concurrentBlock: LBRACE stat* RBRACE;
 
 stat: ID ASSIGN expr EOL                        #assStat
     | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE LPAR expr RPAR block                #whileStat
     | GLOBAL? type ID (ASSIGN expr)? EOL        #declStat
-    | PARBEGIN block                            #threadStat
+    | PARBEGIN concurrentBlock                  #threadStat
     ;
 
 expr: prfOperator expr          #prfExpr

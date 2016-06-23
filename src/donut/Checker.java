@@ -201,6 +201,7 @@ public class Checker implements DonutListener {
         // TODO -- Decl entry?
     }
 
+
     /**
      * Help method to determine the type of a TypeContext
      * This is necessary because comparing TypeContext is not sufficient (TypeContext can be of the form: ARRAYTYPE TypeContext)
@@ -623,6 +624,21 @@ public class Checker implements DonutListener {
     /*
         Other
      */
+
+    /**
+     * The enter- and exitThreadStat are not implemented in this checker. See CheckerII.java for a typechecker
+     * which can handle threads.
+     */
+    @Override @Deprecated
+    public void enterThreadStat(DonutParser.ThreadStatContext ctx) {
+        // Empty by design.
+    }
+
+    @Override @Deprecated
+    public void exitThreadStat(DonutParser.ThreadStatContext ctx) {
+        // Empty by design.
+    }
+
 
     @Override
     public void enterType(DonutParser.TypeContext ctx) {
