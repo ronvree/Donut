@@ -42,4 +42,7 @@ public class CheckerResultII {
     /** Returns whether the variable is stored in shared memory */
     public boolean isShared(ParseTree node) { return this.shared.get(node); }
 
+    /** Indicate if the node is stored in shared or local memory */
+    public void setShared(ParseTree node, boolean shared) { this.shared.put(node, shared); }
+
 }

@@ -106,6 +106,7 @@ public class CheckerII extends DonutBaseListener {
             this.types.put(ctx.ID(), scopes.getCurrentScope().getType(ctx.ID().getText()));
             this.result.setType(ctx.ID(), this.scopes.getCurrentScope().getType(ctx.ID().getText()));
             this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
+            this.result.setShared(ctx.ID(), this.scopes.getCurrentScope().isShared(ctx.ID().getText()));
         } else {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), ctx.ID().getText()));
         }
@@ -183,6 +184,7 @@ public class CheckerII extends DonutBaseListener {
             this.scopes.put(ctx.ID().getText(), type, shared);
             this.result.setType(ctx.ID(), type);
             this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(ctx.ID().getText()));
+            this.result.setShared(ctx.ID(), shared);
         }
     }
 
@@ -580,9 +582,11 @@ public class CheckerII extends DonutBaseListener {
         if (this.scopes.contains(id)) {
             int offset = scopes.getCurrentScope().getOffset(id);
             Type type = scopes.getCurrentScope().getType(id);
+            boolean shared = scopes.getCurrentScope().isShared(id);
             this.types.put(ctx, type);
             this.result.setOffset(ctx.ID(), offset);
             this.result.setType(ctx.ID(), type);
+            this.result.setShared(ctx.ID(), shared);
         } else {
             // ID not declared!
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
