@@ -18,8 +18,7 @@ public class GeneratorTest {
 
     private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
-
-    private static final String TEST_FILE = "testResult.hs";
+    private static final String HASKELL_FILE = "result.hs";
 
     @Test
     public void test()  {
@@ -31,13 +30,13 @@ public class GeneratorTest {
         GeneratorII generator = new GeneratorII();
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
-        prog.writeHaskellFile("testResult.hs");
+        prog.writeHaskellFile(HASKELL_FILE);
     }
 
     @Test
     public void testResult() {
         HaskelRunner runner = new HaskelRunner();
-        int result = runner.runHaskell("testResult.hs");
+        int result = runner.runHaskell(HASKELL_FILE);
         Assert.assertEquals(30, result);
     }
 

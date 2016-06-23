@@ -38,6 +38,9 @@ TRUE : 'WOOHOO';
 ARRAYTYPE : 'bunchof';
 CHARTYPE : 'symbol';
 
+PARBEGIN: 'Duff';
+GLOBAL: 'global';
+
 ELSE : 'nope';
 WHILE : 'whileyoulittle';
 FOR : 'for';

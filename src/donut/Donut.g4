@@ -9,7 +9,8 @@ block : LBRACE stat* RBRACE;
 stat: ID ASSIGN expr EOL                        #assStat
     | LPAR expr RPAR IF block (ELSE block)?     #ifStat
     | WHILE LPAR expr RPAR block                #whileStat
-    | type ID (ASSIGN expr)? EOL                #declStat
+    | GLOBAL? type ID (ASSIGN expr)? EOL        #declStat
+    | PARBEGIN block                            #threadStat
     ;
 
 expr: prfOperator expr          #prfExpr
