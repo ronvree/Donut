@@ -10,14 +10,14 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.List;
 
-import static donut.GeneratorIII.FALSE;
-import static donut.GeneratorIII.TRUE;
-import static donut.GeneratorIII.ZEROREG;
+import static donut.GeneratorIII.*;
 
 /**
  * Created by Ron on 23-6-2016.
  */
 public class ThreadGenerator extends DonutBaseVisitor<Integer> {
+
+    private static final int LOCKDISTANCE = (SHAREDMEMSIZE - THREADS)/2;
 
     public static final Reg SPRID = new Reg("(regSprID)");
 
@@ -74,9 +74,37 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
-    /*
+    @Override
+    public Integer visitLockBlock(DonutParser.LockBlockContext ctx) {
+        int begin = lineCount;
+        this.visitChildren(ctx);
+        return begin;
+    }
+/*
         Stat
      */
+
+    @Override
+    public Integer visitLockStat(DonutParser.LockStatContext ctx) {
+        int begin = lineCount;
+        int offset = offset(ctx.ID());
+        int lockOffset = offset - LOCKDISTANCE;
+
+        emit(new TestAndSetAI(lockOffset));
+        emit(new Receive(reg(ctx)));
+        emit(new BranchI(reg(ctx), 2, false));
+        emit(new JumpI(-3, false));
+
+        visitChildren(ctx);
+
+        emit(new WriteAI(ZEROREG, lockOffset));
+        emit(new ReadAI(lockOffset));
+        emit(new Receive(reg(ctx)));
+        emit(new BranchI(reg(ctx), -2, false));
+
+
+        return begin;
+    }
 
     @Override
     public Integer visitAssStat(DonutParser.AssStatContext ctx) {
