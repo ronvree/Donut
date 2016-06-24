@@ -18,6 +18,7 @@ Alright brain... it's all up to you {
         number c;               Marge: correct, not used in parent scope;
     } nope {
         number c;               Marge: correct, not used in parent scope;
+        number b = 4;           Marge: wrong, b already used in parent scope;
     }
 
 

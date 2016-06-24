@@ -14,7 +14,7 @@ import donut.spril.SystemInstruction;
 public class ReadAI extends SystemInstruction {
 
     private int directAddress;
-    private String instruction = "Read";
+    private String instruction = "ReadInstr";
 
     /** ReadAI instruction for sprockell type: MemAddr -> DirAddr Int */
     public ReadAI(int directAddress) {

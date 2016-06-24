@@ -16,7 +16,7 @@ public class Write extends SystemInstruction {
 
     private Reg sourceRegister;
     private Reg memoryRegister;
-    private String instruction = "Write";
+    private String instruction = "WriteInstr";
 
     /** Write instruction for sprockell for type: MemAddr - IndAddr Reg */
     public Write(Reg sourceRegister, Reg memoryRegister) {

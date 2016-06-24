@@ -15,7 +15,7 @@ import donut.spril.SystemInstruction;
 public class Read extends SystemInstruction {
 
     private Reg register;
-    private String instruction = "Read";
+    private String instruction = "ReadInstr";
 
     /** Read instruction for sprockell type: MemAddr -> IndAddr Reg */
     public Read(Reg register) {

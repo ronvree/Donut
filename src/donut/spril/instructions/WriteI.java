@@ -16,7 +16,7 @@ public class WriteI extends SystemInstruction {
 
     private Reg sourceRegister;
     private int immediateValue;
-    private String instruction = "Write";
+    private String instruction = "WriteInstr";
 
     /** WriteI instruction for sprockell for type: MemAddr - ImmValue Int */
     @Deprecated

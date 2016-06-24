@@ -14,7 +14,7 @@ import donut.spril.SystemInstruction;
 public class ReadI extends SystemInstruction {
 
     private int immediateValue;
-    private String instruction = "Read";
+    private String instruction = "ReadInstr";
 
     /** ReadI instruction for sprockell type: MemAddr -> ImmValue Int */
     @Deprecated

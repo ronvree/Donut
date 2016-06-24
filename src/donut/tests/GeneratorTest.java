@@ -36,7 +36,7 @@ public class GeneratorTest {
     @Test
     public void testResult() {
         HaskelRunner runner = new HaskelRunner();
-        int result = runner.runHaskell(HASKELL_FILE);
+        int result = runner.runHaskell(HASKELL_FILE, 1);
         Assert.assertEquals(30, result);
     }
 
