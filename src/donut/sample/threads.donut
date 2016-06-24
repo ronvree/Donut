@@ -7,23 +7,28 @@ Alright brain... it's all up to you {
     Marge: Your code goes here ;
 
     global number a = 100;
-    global number b = 1;
+    global number b = 0;
 
 
 
     duff { Marge: code for thread;
-        b = b + a;
+        number i = 0;
+        whileyoulittle (i < 20) {
+            my(b) {b = b + 1;}
+            i = i + 1;
+        }
+
+        number j = 0;
+        whileyoulittle (j < 20) {
+            my(b){b = b + 1;}
+            j = j + 1;
+        }
+
+        number k = 0;
+        whileyoulittle (k < 20) {
+            my(b){b = b + 1;}
+            k = k + 1;
+        }
     }
-
-    number d;
-
-    b = b + 100;
-
-    duff {
-        a = 90;
-        b = b + 30;
-    }
-
-    b = b + 99;
 
 } I hope I didn't brain my damage.
