@@ -50,6 +50,11 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         this.regCount = 1;
         this.lineCount = 0;
         tree.accept(this);
+
+        for (Program p : programs)  {
+            p.add(new EndProg());
+        }
+
         return programs;
     }
 
@@ -61,7 +66,6 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     public Integer visitProgram(DonutParser.ProgramContext ctx) {
         int begin = lineCount;
         visitChildren(ctx);
-        emit(new EndProg());
         return begin;
     }
 
