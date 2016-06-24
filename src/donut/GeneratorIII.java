@@ -51,6 +51,8 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         this.lineCount = 0;
         tree.accept(this);
 
+        program.add(new Read(ZEROREG));
+        program.add(new Receive(ZEROREG));
         for (Program p : programs)  {
             p.add(new EndProg());
         }

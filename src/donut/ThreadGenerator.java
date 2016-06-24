@@ -47,13 +47,12 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         Reg reg = new Reg("reg1");
         emit(new LoadI(id, SPRID));
         emit(new Read(SPRID));                   // Read from reserved location in shared memory
-        emit(new Receive(reg));               // Receive value from memory
-        emit(new BranchI(reg, 2, false));    // If it is 1 -> thread can start
+        emit(new Receive(reg));                  // Receive value from memory
+        emit(new BranchI(reg, 2, false));        // If it is 1 -> thread can start
         emit(new JumpI(-3, false));
 
         for (ParseTree tree : statements)  {
             tree.accept(this);
-//            visit(tree);
         }
 
         emit(new Write(ZEROREG, SPRID));        // Write 0 to reserved location in shared memory to indicate that the thread is done
