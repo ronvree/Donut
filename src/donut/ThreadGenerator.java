@@ -19,7 +19,7 @@ import static donut.GeneratorIII.ZEROREG;
  */
 public class ThreadGenerator extends DonutBaseVisitor<Integer> {
 
-    public static final Reg SPRID = new Reg("(sprID)");
+    public static final Reg SPRID = new Reg("(regSprID)");
 
     private CheckerResultII result;
 
