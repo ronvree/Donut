@@ -43,7 +43,7 @@ public class StoreI extends LocalInstruction {
                 .append(" ")
                 .append(register.toString())
                 .append(" ")
-                .append(immediateValue)
+                .append("("+immediateValue+")")
         ;
         return builder.toString();
     }

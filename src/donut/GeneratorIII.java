@@ -85,7 +85,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         List<List<ParseTree>> partitions = new ArrayList<>();
         int partitionStart = 0;
         for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
-            if (stats.size() >= partitionSize)   {
+            if (stats.size() - partitionStart >= partitionSize)   {
                 partitions.add(stats.subList(partitionStart, partitionStart + partitionSize));
                 partitionStart += partitionSize;
             } else {
@@ -107,7 +107,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
             emit(new Receive(reg(ctx)));
 
             emit(new BranchI(reg(ctx), 2, false));
-            emit(new JumpI(-2, false));
+            emit(new JumpI(-3, false));
 
         }
 

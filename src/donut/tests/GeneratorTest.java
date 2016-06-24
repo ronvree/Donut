@@ -58,6 +58,11 @@ public class GeneratorTest {
         }
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
+
+//        System.out.println("\n\n\n\n\n\n\n\n\n");
+//        HaskelRunner runner = new HaskelRunner();
+//        runner.runHaskell("threadResult.hs", 1);
+
     }
 
     @Test
