@@ -99,9 +99,10 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 //            this.programs.add(thread);
 
             emit(new TestAndSetAI(threadID)); // Start thread
-            // TODO -- maybe wait for response
 
-            emit(new Receive(ZEROREG));
+            emit(new Receive(reg(ctx)));
+
+            emit(new BranchI(reg(ctx), -2, false));
 
         }
 
