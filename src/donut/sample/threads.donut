@@ -1,0 +1,30 @@
+Marge:
+    Created by Gijs on 22-Jun-16.
+;
+
+Alright brain... it's all up to you {
+
+    Marge: Your code goes here ;
+
+    number a = 3;
+    global number b = 1;
+
+
+
+    duff { Marge: code for thread;
+        number a = 43;
+        b = b + a;
+    }
+
+    number d;
+    number e;
+    d = d + 1;
+    e = d + e;
+    e = d + 1;
+
+
+    number f;
+    number g;
+
+
+} I hope I didn't brain my damage.
