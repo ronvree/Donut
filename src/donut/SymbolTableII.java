@@ -9,19 +9,19 @@ import java.util.Stack;
  */
 public class SymbolTableII {
 
-    /**
-     Stores the scopes needed for type checking
-     */
+    /** Stores the scopes needed for type checking */
     private Stack<Scope> scopes;
-    /**
-     * Current size of the scopes (in bytes)
-     */
+    /** Current size of the scopes (in bytes) */
     private int size;
+    /** Current size of shared memory */
+    private int sharedSize;
 
     public SymbolTableII()    {
         this.scopes = new Stack<>();
         this.scopes.push(new Scope());
-        this.size = 1;
+        this.size = 1;                                                  // Address 0 can't be used
+        this.sharedSize = GeneratorIII.THREADS;                         // Activity of threads is indicated in the first part of shared memory
+        this.sharedSize += (GeneratorIII.SHAREDMEMSIZE - sharedSize)/2; // The first half of remaining memory is used to indicate locks
     }
 
     /**
@@ -56,8 +56,13 @@ public class SymbolTableII {
     public boolean put(String id, Type type, boolean shared)   {
         boolean result = !scopes.peek().contains(id);
         if (result)   {
-            scopes.peek().put(id, type, shared, this.size);
-            this.size += type.size();
+            if (shared)   {
+                scopes.peek().put(id, type, true, this.sharedSize);
+                this.sharedSize += type.size();
+            } else {
+                scopes.peek().put(id, type, false, this.size);
+                this.size += type.size();
+            }
         }
         return result;
     }

@@ -1,0 +1,33 @@
+Marge:
+    Created by Ron on 23-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    number x = 1;
+    duff {
+        number x = 2;
+    }
+
+    global number y = 1;
+    duff {
+        y = 1;
+    }
+
+    global number z = 1;
+    duff {
+        number z = 1;           Marge: This should give an error;
+    }
+
+    global number a = 0;
+    duff {
+        a = a + 1;
+    }
+    a = a + 1;
+
+    number b = 1;
+    duff {
+        b = 2;
+    }
+
+} I hope I didn't brain my damage.
