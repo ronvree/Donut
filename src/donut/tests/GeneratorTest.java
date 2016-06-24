@@ -1,6 +1,7 @@
 package donut.tests;
 
 import donut.*;
+import donut.errors.Error;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -39,7 +40,11 @@ public class GeneratorTest {
         DonutParser.ProgramContext programContext = parse("threads");
         ParseTreeWalker walker = new ParseTreeWalker();
         CheckerII checker = new CheckerII();
+
         walker.walk(checker, programContext);
+        for(Error error : checker.getErrors()) {
+            System.err.println(error);
+        }
 
         GeneratorIII generator = new GeneratorIII();
         List<Program> programs = generator.generate(programContext, checker.getResult());

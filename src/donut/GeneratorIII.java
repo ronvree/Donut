@@ -74,10 +74,10 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         int begin = lineCount;
         // Divide statements between threads
         List<ParseTree> stats = ctx.children.subList(1, ctx.getChildCount() - 1);
-        int partitionSize = (int) Math.ceil(stats.size()/THREADS);
+        int partitionSize = (int) Math.ceil((double) stats.size()/(double) THREADS);
         List<List<ParseTree>> partitions = new ArrayList<>();
         int partitionStart = 0;
-        for (int threadID = 0; threadID < THREADS; threadID++)  {
+        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
             if (stats.size() >= partitionSize)   {
                 partitions.add(stats.subList(partitionStart, partitionStart + partitionSize));
                 partitionStart += partitionSize;
@@ -87,7 +87,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         }
 
         // Make threads
-        for (int threadID = 0; threadID < THREADS; threadID++)  {
+        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
             List<ParseTree> partition = partitions.get(threadID);
             ThreadGenerator generator = new ThreadGenerator(threadID);
 
@@ -99,7 +99,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         }
 
         // Join all threads
-        for (int threadID = 0; threadID < THREADS; threadID++)  {
+        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
             emit(new ReadAI(threadID));
             emit(new Receive(reg(ctx)));
             emit(new BranchI(reg(ctx), -2, false));

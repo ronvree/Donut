@@ -52,6 +52,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
 
         for (ParseTree tree : statements)  {
             tree.accept(this);
+//            visit(tree);
         }
 
         emit(new Write(ZEROREG, SPRID));        // Write 0 to reserved location in shared memory to indicate that the thread is done
