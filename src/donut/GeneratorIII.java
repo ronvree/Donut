@@ -47,13 +47,14 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         }
         this.result = result;
         this.registers = new ParseTreeProperty<>();
-        this.regCount = 1;
+        this.regCount = 1;                      // Reg 0 cannot be used
         this.lineCount = 0;
         tree.accept(this);
 
-        program.add(new Read(ZEROREG));
+        program.add(new Read(ZEROREG));         // Read/Receive makes sure the write buffer is empty at the end of main
         program.add(new Receive(ZEROREG));
-        for (Program p : programs)  {
+
+        for (Program p : programs)  {           // Append EndProg to all programs
             p.add(new EndProg());
         }
 
