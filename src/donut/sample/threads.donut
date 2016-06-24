@@ -22,6 +22,10 @@ Alright brain... it's all up to you {
     e = d + e;
     e = d + 1;
 
+    duff {
+        number a = 90;
+        b = b + 1;
+    }
 
     number f;
     number g;
