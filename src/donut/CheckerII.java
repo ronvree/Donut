@@ -1,9 +1,7 @@
 package donut;
 
-import donut.errors.DoubleDeclError;
+import donut.errors.*;
 import donut.errors.Error;
-import donut.errors.MissingDeclError;
-import donut.errors.TypeError;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.ArrayList;
@@ -80,6 +78,16 @@ public class CheckerII extends DonutBaseListener {
         this.scopes.closeScope();
     }
 
+    @Override
+    public void enterLockBlock(DonutParser.LockBlockContext ctx) {
+        this.scopes.openScope();
+    }
+
+    @Override
+    public void exitLockBlock(DonutParser.LockBlockContext ctx) {
+        this.scopes.closeScope();
+    }
+
     /*
         Statements
      */
@@ -92,6 +100,25 @@ public class CheckerII extends DonutBaseListener {
     @Override
     public void exitThreadStat(DonutParser.ThreadStatContext ctx) {
         super.exitThreadStat(ctx);
+    }
+
+    @Override
+    public void enterLockStat(DonutParser.LockStatContext ctx) {
+        String id = ctx.ID().getText();
+        if (scopes.getCurrentScope().isShared(id))   {
+            this.types.put(ctx.ID(), scopes.getCurrentScope().getType(id));
+            this.result.setType(ctx.ID(), this.scopes.getCurrentScope().getType(id));
+            this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(id));
+            this.result.setShared(ctx.ID(), true);
+        } else {
+            this.errors.add(new LockError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
+        }
+
+    }
+
+    @Override
+    public void exitLockStat(DonutParser.LockStatContext ctx) {
+        super.exitLockStat(ctx);
     }
 
     /**
