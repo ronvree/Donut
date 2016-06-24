@@ -41,10 +41,10 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     public List<Program> generate(ParseTree tree, CheckerResultII result)   {
         this.program = new Program();
         this.programs = new ArrayList<>();
+        this.programs.add(program);
         for (int i = 0; i < THREADS; i++)  {
             programs.add(new Program());        // Add potential threads
         }
-        this.programs.add(program);
         this.result = result;
         this.registers = new ParseTreeProperty<>();
         this.regCount = 1;
