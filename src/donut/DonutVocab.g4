@@ -41,6 +41,8 @@ CHARTYPE : 'symbol';
 PARBEGIN: 'duff';
 GLOBAL: 'global';
 
+LOCK: 'my';
+
 ELSE : 'nope';
 WHILE : 'whileyoulittle';
 FOR : 'for';

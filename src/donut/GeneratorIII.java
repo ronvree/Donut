@@ -246,7 +246,12 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
     @Override
     public Integer visitIdExpr(DonutParser.IdExprContext ctx) {
-        emit(new LoadAI(offset(ctx.ID()), reg(ctx)));
+        if (shared(ctx.ID())) {
+            emit(new ReadAI(offset(ctx.ID())));
+            emit(new Receive(reg(ctx)));
+        } else {
+            emit(new LoadAI(offset(ctx.ID()), reg(ctx)));
+        }
         return lineCount - 1;
     }
 

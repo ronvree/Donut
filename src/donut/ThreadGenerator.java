@@ -19,7 +19,7 @@ import static donut.GeneratorIII.ZEROREG;
  */
 public class ThreadGenerator extends DonutBaseVisitor<Integer> {
 
-    public static final Reg SPRID = new Reg("(regSprID)");
+    public static final Reg SPRID = new Reg("(sprID)");
 
     private CheckerResultII result;
 
@@ -58,7 +58,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         emit(new Write(ZEROREG, SPRID));        // Write 0 to reserved location in shared memory to indicate that the thread is done
         emit(new Read(SPRID));
         emit(new Receive(reg));
-        emit(new BranchI(reg, -2, false));
+        emit(new BranchI(reg, -3, false));
 
         return program;
     }
