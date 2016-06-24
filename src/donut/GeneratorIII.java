@@ -96,7 +96,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
             Program thread = generator.generate(partition, result, programs.get(threadID + 1));
             programs.set(threadID + 1, thread);
-            this.programs.add(thread);
+//            this.programs.add(thread);
 
             emit(new TestAndSetAI(threadID)); // Start thread
             // TODO -- maybe wait for response
