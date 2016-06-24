@@ -102,7 +102,8 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
             emit(new Receive(reg(ctx)));
 
-            emit(new BranchI(reg(ctx), -2, false));
+            emit(new BranchI(reg(ctx), 2, false));
+            emit(new JumpI(-2, false));
 
         }
 
