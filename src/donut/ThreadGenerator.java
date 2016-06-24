@@ -37,8 +37,8 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         this.id = id;
     }
 
-    public Program generate(List<ParseTree> statements, CheckerResultII result)   {
-        this.program = new Program();
+    public Program generate(List<ParseTree> statements, CheckerResultII result, Program thread)   {
+        this.program = thread;
         this.result = result;
         this.registers = new ParseTreeProperty<>();
         this.regCount = 1;

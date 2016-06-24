@@ -41,6 +41,9 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     public List<Program> generate(ParseTree tree, CheckerResultII result)   {
         this.program = new Program();
         this.programs = new ArrayList<>();
+        for (int i = 0; i < THREADS; i++)  {
+            programs.add(new Program());        // Add potential threads
+        }
         this.programs.add(program);
         this.result = result;
         this.registers = new ParseTreeProperty<>();
@@ -91,7 +94,8 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
             List<ParseTree> partition = partitions.get(threadID);
             ThreadGenerator generator = new ThreadGenerator(threadID);
 
-            Program thread = generator.generate(partition, result);
+            Program thread = generator.generate(partition, result, programs.get(threadID + 1));
+            programs.set(threadID + 1, thread);
             this.programs.add(thread);
 
             emit(new TestAndSetAI(threadID)); // Start thread
