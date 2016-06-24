@@ -14,44 +14,55 @@ import static donut.GeneratorIII.*;
 
 /**
  * Created by Ron on 23-6-2016.
+ *
+ * Responsible for creating a single thread that executes the given statements
  */
 public class ThreadGenerator extends DonutBaseVisitor<Integer> {
 
+    /** Distance in shared memory between a variable and its lock */
     private static final int LOCKDISTANCE = (SHAREDMEMSIZE - THREADS)/2;
-
+    /** Reference to ID register */
     public static final Reg SPRID = new Reg("(regSprID)");
-
+    /** Result from the checker phase */
     private CheckerResultII result;
-
+    /** Used for making fresh registers */
     private int regCount;
-
+    /** Count nr of lines in the program (used for jumps) */
     private int lineCount;
-
+    /** Map values to registers */
     private ParseTreeProperty<Reg> registers;
-
+    /** Thread program that will be written to */
     private Program program;
     /** Thread ID - Index in shared memory where main can communicate with the thread */
     private final int id;
 
+    /** Create a new ThreadGenerator with ID */
     public ThreadGenerator(int id)    {
         this.id = id;
     }
 
+    /**
+     * Generate a new thread in the given program
+     * @param statements -- Statements to be executed by the thread
+     * @param result     -- Checker result
+     * @param thread     -- Program that will contain the thread
+     * @return           -- The program appended with a newly generated thread executing the giving statements
+     */
     public Program generate(List<ParseTree> statements, CheckerResultII result, Program thread)   {
         this.program = thread;
         this.result = result;
         this.registers = new ParseTreeProperty<>();
-        this.regCount = 1;
+        this.regCount = 1;                       // Register 0 cannot be used
         this.lineCount = 0;
 
-        Reg reg = new Reg("reg1");
+        Reg reg = new Reg("reg1");               // Temporary use of register 1 to indicate when the thread can start
         emit(new LoadI(id, SPRID));
         emit(new Read(SPRID));                   // Read from reserved location in shared memory
         emit(new Receive(reg));                  // Receive value from memory
         emit(new BranchI(reg, 2, false));        // If it is 1 -> thread can start
         emit(new JumpI(-3, false));
 
-        for (ParseTree tree : statements)  {
+        for (ParseTree tree : statements)  {     // Generate code to execute all statements
             tree.accept(this);
         }
 
