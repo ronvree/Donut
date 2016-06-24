@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Ron on 21-6-2016.
@@ -31,6 +32,27 @@ public class GeneratorTest {
         Program prog = generator.generate(programContext, checker.getResult());
         prog.printInstructions();
         prog.writeHaskellFile(HASKELL_FILE);
+    }
+
+    @Test
+    public void testThreads() {
+        DonutParser.ProgramContext programContext = parse("threads");
+        ParseTreeWalker walker = new ParseTreeWalker();
+        CheckerII checker = new CheckerII();
+        walker.walk(checker, programContext);
+
+        GeneratorIII generator = new GeneratorIII();
+        List<Program> programs = generator.generate(programContext, checker.getResult());
+
+        for (Program prog : programs) {
+            System.out.println("====================================================");
+            prog.printInstructions();
+            System.out.println("====================================================");
+
+//            prog.writeHaskellFile(HASKELL_FILE);
+        }
+        HaskellWriter writer = new HaskellWriter();
+        writer.writeFile(programs);
     }
 
     @Test

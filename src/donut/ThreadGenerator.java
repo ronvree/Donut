@@ -19,7 +19,7 @@ import static donut.GeneratorIII.ZEROREG;
  */
 public class ThreadGenerator extends DonutBaseVisitor<Integer> {
 
-    public static final Reg SPRID = new Reg("reqSprID");
+    public static final Reg SPRID = new Reg("(regSprID)");
 
     private CheckerResultII result;
 
@@ -44,9 +44,11 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         this.regCount = 1;
         this.lineCount = 0;
 
-        emit(new ReadAI(id));                   // Read from reserved location in shared memory
-        emit(new Receive(SPRID));               // Receive value from memory
-        emit(new BranchI(SPRID, -2, false));    // If it is 1 -> thread can start
+        Reg reg = new Reg("reg1");
+        emit(new LoadI(id, SPRID));
+        emit(new Read(SPRID));                   // Read from reserved location in shared memory
+        emit(new Receive(reg));               // Receive value from memory
+        emit(new BranchI(reg, -2, false));    // If it is 1 -> thread can start
 
         for (ParseTree tree : statements)  {
             tree.accept(this);

@@ -54,9 +54,9 @@ public class BranchI extends LocalInstruction {
                 .append(" ");
 
         if (isAbsolute) {
-            builder.append("(Abs " + absoluteAddress + ")");
+            builder.append("(Abs (" + absoluteAddress + "))");
         } else {
-            builder.append("(Rel " + relativeAddress + ")");
+            builder.append("(Rel (" + relativeAddress + "))");
         }
 
         return builder.toString();

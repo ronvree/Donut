@@ -20,6 +20,8 @@ public class Program {
     /** Instructions */
     private List<Instruction> instructions;
 
+    private String programName;
+
     /** Haskell file initialization  */
     private String INIT_FILE =
             "module Main where\n" +
@@ -69,6 +71,23 @@ public class Program {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String writeProgram(String programName) {
+        this.programName = programName;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(programName + " :: [Instruction]\n")
+                .append(programName + " = [");
+        for (Instruction i : instructions) {
+            buffer.append("    " + i.toString() + ",\n");
+        }
+        buffer.deleteCharAt(buffer.toString().length() - 2);
+        buffer.append("    ]\n");
+        return buffer.toString();
+    }
+
+    public String getProgramName() {
+        return programName;
     }
 
     public void printInstructions() {
