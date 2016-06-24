@@ -56,6 +56,9 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         }
 
         emit(new Write(ZEROREG, SPRID));        // Write 0 to reserved location in shared memory to indicate that the thread is done
+        emit(new Read(SPRID));
+        emit(new Receive(reg));
+        emit(new BranchI(reg, -2, false));
 
         return program;
     }
