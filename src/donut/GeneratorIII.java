@@ -38,7 +38,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     /** List of all programs (main and threads */
     private List<Program> programs;
 
-    public Program generate(ParseTree tree, CheckerResultII result)   {
+    public List<Program> generate(ParseTree tree, CheckerResultII result)   {
         this.program = new Program();
         this.programs = new ArrayList<>();
         this.programs.add(program);
@@ -47,8 +47,12 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         this.regCount = 1;
         this.lineCount = 0;
         tree.accept(this);
-        return program;
+        return programs;
     }
+
+    /*
+        Visit methods
+     */
 
     @Override
     public Integer visitProgram(DonutParser.ProgramContext ctx) {
