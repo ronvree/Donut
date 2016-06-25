@@ -1,5 +1,8 @@
-package donut;
+package donut.generators;
 
+import donut.CheckerResultII;
+import donut.DonutBaseVisitor;
+import donut.DonutParser;
 import donut.spril.Instruction;
 import donut.spril.Operator;
 import donut.spril.Program;
@@ -8,18 +11,13 @@ import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by Ron on 23-6-2016.
- *
- * Generates Spril instructions from parsed Donut code.
- * Supports concurrency.
+ * We implemented two generator types. One that generates the main program and one that can generate threads. To ensure
+ * both generate Spril code the same way they both extend this class.
  *
  * All visitor methods return the line number of the first instruction. This makes it easier to know where to jump/branch to.
  */
-public class GeneratorIII extends DonutBaseVisitor<Integer> {
+public abstract class CodeGenetor extends DonutBaseVisitor<Integer> {
 
     /** Boolean representation in Spril instructions */
     public static final int TRUE = 1;
@@ -42,41 +40,9 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     private ParseTreeProperty<Reg> registers;
     /** Reference to the main program */
     private Program program;
-    /** List of all programs (main and threads */
-    private List<Program> programs;
-
-    /**
-     * Generate a list of programs. The main program is stored at index 0. The rest of the programs store threads
-     * @param tree -- The parsed Donut code that will be converted to Spril instructions
-     * @param result -- Result from the checker phase
-     */
-    public List<Program> generate(ParseTree tree, CheckerResultII result)   {
-        this.program = new Program();
-        this.programs = new ArrayList<>();
-        this.registers = new ParseTreeProperty<>();
-
-        this.programs.add(program);             // Add main
-        for (int i = 0; i < THREADS; i++)  {
-            programs.add(new Program());        // Add potential threads
-        }
-        this.result = result;
-        this.regCount = 1;                      // Reg 0 cannot be used
-        this.lineCount = 0;
-
-        tree.accept(this);                      // Visit the tree
-
-        program.add(new Read(ZEROREG));         // Read/Receive makes sure the write buffer is empty at the end of main
-        program.add(new Receive(ZEROREG));
-
-        for (Program p : programs)  {           // Append EndProg to all programs
-            p.add(new EndProg());
-        }
-
-        return programs;
-    }
 
     /*
-        Visit methods
+        Visitor methods
      */
 
     /** Visit program - Return first line number */
@@ -92,51 +58,6 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     public Integer visitBlock(DonutParser.BlockContext ctx) {
         int begin = lineCount;
         this.visitChildren(ctx);
-        return begin;
-    }
-
-    /** Visit concurrent block - Divides the statements in the block into partitions that are distributed over the threads.
-     *  Generate threads to execute the statements
-     *  Add instructions to the main program that will start all threads at the start of the block
-     *  and will wait at the end of the block until all threads are finished */
-    @Override
-    public Integer visitConcurrentBlock(DonutParser.ConcurrentBlockContext ctx) {
-        int begin = lineCount;
-        // Divide statements between threads
-        List<ParseTree> stats = ctx.children.subList(1, ctx.getChildCount() - 1);               // Obtain statements in block (1st and last children are braces)
-        int partitionSize = (int) Math.ceil((double) stats.size()/(double) THREADS);            // Determine partition size. Round up to ensure the amount of partitions will always equal the amount of threads
-        List<List<ParseTree>> partitions = new ArrayList<>();
-        int partitionStart = 0;
-        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {    // Take a sublist of the statements
-            if (stats.size() - partitionStart >= partitionSize)   {
-                partitions.add(stats.subList(partitionStart, partitionStart + partitionSize));
-                partitionStart += partitionSize;
-            } else {
-                partitions.add(stats.subList(partitionStart, stats.size()));
-            }
-        }
-
-        // Make threads
-        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
-            List<ParseTree> partition = partitions.get(threadID);                               // Obtain the statements to be executed by this thread
-            ThreadGenerator generator = new ThreadGenerator(threadID);                          // Create a generator that will make the thread
-
-            Program thread = generator.generate(partition, result, programs.get(threadID + 1)); // Generate the thread
-            programs.set(threadID + 1, thread);                                                 // Set the updated program (at index threadID + 1 because the 1st program is the main program)
-
-            emit(new TestAndSetAI(threadID));                                                   // Start thread by setting the reserved space in memory to 1
-            emit(new Receive(reg(ctx)));                                                        // Make sure the thread is started before continuing
-            emit(new BranchI(reg(ctx), 2, false));                                              // Thread was started     -> continue by branching over the jump instruction
-            emit(new JumpI(-3, false));                                                         // Thread was not started -> Try again
-        }
-
-        // Join all threads
-        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {    // For all threads:
-            emit(new ReadAI(threadID));                                                         // Read in shared memory if the thread has indicated that it is finished
-            emit(new Receive(reg(ctx)));                                                        // Receive reply (0 means thread is finished)
-            emit(new BranchI(reg(ctx), -2, false));                                             // If not -> read again
-        }
-
         return begin;
     }
 
@@ -406,23 +327,23 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
      */
 
     /** Add the instruction to the main program. Update the line counter */
-    private Instruction emit(Instruction instr) {
+    protected Instruction emit(Instruction instr) {
         program.add(instr);
         lineCount++;
         return instr;
     }
 
     /** Obtain the node's offset as determined by the checker phase */
-    private int offset(ParseTree node)  {
+    protected int offset(ParseTree node)  {
         return this.result.getOffset(node);
     }
 
     /** Indicates whether the node is stored globally or locally */
-    private boolean shared(ParseTree node) { return this.result.isShared(node); }
+    protected boolean shared(ParseTree node) { return this.result.isShared(node); }
 
     /** Returns a register for a given parse tree node,
      * creating a fresh register if there is none for that node. */
-    private Reg reg(ParseTree node) {
+    protected Reg reg(ParseTree node) {
         Reg result = this.registers.get(node);
         if (result == null) {
             result = new Reg("(reg" + this.regCount + ")");
@@ -432,11 +353,53 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return result;
     }
 
-
-    private void setReg(ParseTree node, Reg reg) {
+    protected void setReg(ParseTree node, Reg reg) {
         this.registers.put(node, reg);
     }
 
+    /*
+        Getters and setters
+     */
+
+    protected CheckerResultII getResult() {
+        return result;
+    }
+
+    protected void setResult(CheckerResultII result) {
+        this.result = result;
+    }
+
+    protected int getRegCount() {
+        return regCount;
+    }
+
+    protected void setRegCount(int regCount) {
+        this.regCount = regCount;
+    }
+
+    protected int getLineCount() {
+        return lineCount;
+    }
+
+    protected void setLineCount(int lineCount) {
+        this.lineCount = lineCount;
+    }
+
+    protected ParseTreeProperty<Reg> getRegisters() {
+        return registers;
+    }
+
+    protected void setRegisters(ParseTreeProperty<Reg> registers) {
+        this.registers = registers;
+    }
+
+    protected Program getProgram() {
+        return program;
+    }
+
+    protected void setProgram(Program program) {
+        this.program = program;
+    }
 
 
 }
