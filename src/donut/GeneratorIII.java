@@ -52,12 +52,13 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     public List<Program> generate(ParseTree tree, CheckerResultII result)   {
         this.program = new Program();
         this.programs = new ArrayList<>();
+        this.registers = new ParseTreeProperty<>();
+
         this.programs.add(program);             // Add main
         for (int i = 0; i < THREADS; i++)  {
             programs.add(new Program());        // Add potential threads
         }
         this.result = result;
-        this.registers = new ParseTreeProperty<>();
         this.regCount = 1;                      // Reg 0 cannot be used
         this.lineCount = 0;
 
@@ -77,6 +78,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         Visit methods
      */
 
+    /** Visit program - Return first line number */
     @Override
     public Integer visitProgram(DonutParser.ProgramContext ctx) {
         int begin = lineCount;
@@ -84,6 +86,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit block - Return first line number */
     @Override
     public Integer visitBlock(DonutParser.BlockContext ctx) {
         int begin = lineCount;
@@ -91,15 +94,19 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit concurrent block - Divides the statements in the block into partitions that are distributed over the threads.
+     *  Generate threads to execute the statements
+     *  Add instructions to the main program that will start all threads at the start of the block
+     *  and will wait at the end of the block until all threads are finished */
     @Override
     public Integer visitConcurrentBlock(DonutParser.ConcurrentBlockContext ctx) {
         int begin = lineCount;
         // Divide statements between threads
-        List<ParseTree> stats = ctx.children.subList(1, ctx.getChildCount() - 1);
-        int partitionSize = (int) Math.ceil((double) stats.size()/(double) THREADS);
+        List<ParseTree> stats = ctx.children.subList(1, ctx.getChildCount() - 1);               // Obtain statements in block (1st and last children are braces)
+        int partitionSize = (int) Math.ceil((double) stats.size()/(double) THREADS);            // Determine partition size. Round up to ensure the amount of partitions will always equal the amount of threads
         List<List<ParseTree>> partitions = new ArrayList<>();
         int partitionStart = 0;
-        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
+        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {    // Take a sublist of the statements
             if (stats.size() - partitionStart >= partitionSize)   {
                 partitions.add(stats.subList(partitionStart, partitionStart + partitionSize));
                 partitionStart += partitionSize;
@@ -110,27 +117,25 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
         // Make threads
         for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
-            List<ParseTree> partition = partitions.get(threadID);
-            ThreadGenerator generator = new ThreadGenerator(threadID);              // TODO -- Single generator for each program!!!!!
+            List<ParseTree> partition = partitions.get(threadID);                               // Obtain the statements to be executed by this thread
+            ThreadGenerator generator = new ThreadGenerator(threadID);                          // Create a generator that will make the thread
 
-            Program thread = generator.generate(partition, result, programs.get(threadID + 1));
-            programs.set(threadID + 1, thread);
+            Program thread = generator.generate(partition, result, programs.get(threadID + 1)); // Generate the thread
+            programs.set(threadID + 1, thread);                                                 // Set the updated program (at index threadID + 1 because the 1st program is the main program)
 
-            emit(new TestAndSetAI(threadID)); // Start thread
-
-            emit(new Receive(reg(ctx)));
-
-            emit(new BranchI(reg(ctx), 2, false));
-            emit(new JumpI(-3, false));
-
+            emit(new TestAndSetAI(threadID));                                                   // Start thread by setting the reserved space in memory to 1
+            emit(new Receive(reg(ctx)));                                                        // Make sure the thread is started before continuing
+            emit(new BranchI(reg(ctx), 2, false));                                              // Thread was started     -> continue by branching over the jump instruction
+            emit(new JumpI(-3, false));                                                         // Thread was not started -> Try again
         }
 
         // Join all threads
-        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
-            emit(new ReadAI(threadID));
-            emit(new Receive(reg(ctx)));
-            emit(new BranchI(reg(ctx), -2, false));
+        for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {    // For all threads:
+            emit(new ReadAI(threadID));                                                         // Read in shared memory if the thread has indicated that it is finished
+            emit(new Receive(reg(ctx)));                                                        // Receive reply (0 means thread is finished)
+            emit(new BranchI(reg(ctx), -2, false));                                             // If not -> read again
         }
+
         return begin;
     }
 
@@ -138,6 +143,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         Stat
      */
 
+    /** Visit assign statement - if the variable is global, write to shared memory. Otherwise write to local memory */
     @Override
     public Integer visitAssStat(DonutParser.AssStatContext ctx) {
         int begin = visit(ctx.expr());
@@ -151,21 +157,22 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit if statement */
     @Override
     public Integer visitIfStat(DonutParser.IfStatContext ctx) {
         int begin = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
         if (ctx.ELSE() == null)   {
-            Instruction branch = emit(new BranchI(r_cmp, -1, true)); // Branch to then
-            Instruction jump = emit(new JumpI( -1, true));           // Jump to end
+            Instruction branch = emit(new BranchI(r_cmp, -1, true));            // Branch to then
+            Instruction jump = emit(new JumpI( -1, true));                      // Jump to end
             int thenLine = visit(ctx.block(0));
-            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));
+            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));   // Now that the starting line of the block is known, update the branch instruction
             this.program.replace(jump, new JumpI(lineCount, true));
             emit(new Nop());
         } else {
-            Instruction branch = emit(new BranchI(r_cmp, -1, true)); // Branch to then
-            Instruction jump = emit(new JumpI(-1, true)); // Jump to else
-            Instruction endJump = this.emit(new JumpI(-1, true)); // Jump to end
+            Instruction branch = emit(new BranchI(r_cmp, -1, true));            // Branch to then
+            Instruction jump = emit(new JumpI(-1, true));                       // Jump to else
+            Instruction endJump = this.emit(new JumpI(-1, true));               // Jump to end
             int thenLine = visit(ctx.block(0));
             int elseLine = visit(ctx.block(1));
             this.program.replace(branch, new BranchI(r_cmp, thenLine, true));

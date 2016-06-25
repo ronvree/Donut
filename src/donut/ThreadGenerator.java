@@ -36,7 +36,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
     /** Thread ID - Index in shared memory where main can communicate with the thread */
     private final int id;
 
-    /** Create a new ThreadGenerator with ID */
+    /** Create a new ThreadGenerator with thread ID */
     public ThreadGenerator(int id)    {
         this.id = id;
     }
@@ -53,7 +53,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         this.result = result;
         this.registers = new ParseTreeProperty<>();
         this.regCount = 1;                       // Register 0 cannot be used
-        this.lineCount = thread.size();
+        this.lineCount = thread.size();          // Continue writing at the end of the program
 
         Reg reg = new Reg("reg1");               // Temporary use of register 1 to indicate when the thread can start
         emit(new LoadI(id, SPRID));
@@ -78,6 +78,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         Block
      */
 
+    /** Visit block - Return the first line number */
     @Override
     public Integer visitBlock(DonutParser.BlockContext ctx) {
         int begin = lineCount;
@@ -85,6 +86,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit lock block - Return the first line number */
     @Override
     public Integer visitLockBlock(DonutParser.LockBlockContext ctx) {
         int begin = lineCount;
@@ -96,24 +98,25 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         Stat
      */
 
+    /** Visit lock statement - Before visiting the children, generates code that checks if the variable can be locked.
+     *  Afterwards generates code that unlocks the variable */
     @Override
     public Integer visitLockStat(DonutParser.LockStatContext ctx) {
         int begin = lineCount;
         int offset = offset(ctx.ID());
-        int lockOffset = offset - LOCKDISTANCE;
+        int lockOffset = offset - LOCKDISTANCE;     // Determine the offset of the lock (distance between lock and variable in memory is constant)
 
-        emit(new TestAndSetAI(lockOffset));
+        emit(new TestAndSetAI(lockOffset));         // Test if the lock can be obtained. If not, keep trying
         emit(new Receive(reg(ctx)));
-        emit(new BranchI(reg(ctx), 2, false));
-        emit(new JumpI(-3, false));
+        emit(new BranchI(reg(ctx), 2, false));      // Lock obtained -> continue by branching over the jump
+        emit(new JumpI(-3, false));                 // Lock denied   -> Try again
 
         visitChildren(ctx);
 
-        emit(new WriteAI(ZEROREG, lockOffset));
-        emit(new ReadAI(lockOffset));
+        emit(new WriteAI(ZEROREG, lockOffset));     // Write 0 to lock to indicate the lock has been removed
+        emit(new ReadAI(lockOffset));               // Ensure the lock has been removed before continuing
         emit(new Receive(reg(ctx)));
-        emit(new BranchI(reg(ctx), -2, false));
-
+        emit(new BranchI(reg(ctx), -2, false));     // Lock still active -> read again
 
         return begin;
     }
