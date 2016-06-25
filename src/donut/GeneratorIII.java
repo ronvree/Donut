@@ -17,6 +17,7 @@ import java.util.List;
  * Generates Spril instructions from parsed Donut code.
  * Supports concurrency.
  *
+ * All visitor methods return the line number of the first instruction. This makes it easier to know where to jump/branch to.
  */
 public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
@@ -157,25 +158,26 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
-    /** Visit if statement */
+    /** Visit if statement - Makes sure the program jumps correctly for if-statements */
     @Override
     public Integer visitIfStat(DonutParser.IfStatContext ctx) {
         int begin = visit(ctx.expr());
         Reg r_cmp = registers.get(ctx.expr());
         if (ctx.ELSE() == null)   {
-            Instruction branch = emit(new BranchI(r_cmp, -1, true));            // Branch to then
+            Instruction branch = emit(new BranchI(r_cmp, -1, true));            // Branch to then (line number will be determined later)
             Instruction jump = emit(new JumpI( -1, true));                      // Jump to end
-            int thenLine = visit(ctx.block(0));
+
+            int thenLine = visit(ctx.block(0));                                 // Generate code in block
             this.program.replace(branch, new BranchI(r_cmp, thenLine, true));   // Now that the starting line of the block is known, update the branch instruction
-            this.program.replace(jump, new JumpI(lineCount, true));
-            emit(new Nop());
+            this.program.replace(jump, new JumpI(lineCount, true));             // Do the same for the jump to end
+            emit(new Nop());                                                    // Create a nop instruction so the program can jump to end
         } else {
             Instruction branch = emit(new BranchI(r_cmp, -1, true));            // Branch to then
             Instruction jump = emit(new JumpI(-1, true));                       // Jump to else
             Instruction endJump = this.emit(new JumpI(-1, true));               // Jump to end
-            int thenLine = visit(ctx.block(0));
-            int elseLine = visit(ctx.block(1));
-            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));
+            int thenLine = visit(ctx.block(0));                                 // Generate code in the 'then' block
+            int elseLine = visit(ctx.block(1));                                 // Generate code in the 'else' block
+            this.program.replace(branch, new BranchI(r_cmp, thenLine, true));   // Update the branch/jump instructions with the right line numbers
             this.program.replace(jump, new JumpI(elseLine, true));
             this.program.replace(endJump, new JumpI(lineCount, true));
             emit(new Nop());
@@ -183,24 +185,28 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit while statement - Makes sure the program jumps correctly for while-statements */
     @Override
     public Integer visitWhileStat(DonutParser.WhileStatContext ctx) {
-        int begin = visit(ctx.expr());
+        int begin = visit(ctx.expr());                                  // Generate the condition code
         Reg r_cmp = reg(ctx.expr());
-        Instruction branch = emit(new BranchI(r_cmp, -1, true)); // Branch to block
-        Instruction jump = emit(new JumpI(-1, false));           // Jump to end
-        visit(ctx.block());
-        emit(new JumpI(begin, true));  // Jump to compare
-        program.replace(branch, new BranchI(r_cmp, 2, false));
+        Instruction branch = emit(new BranchI(r_cmp, -1, true));        // Branch to block if the condition is met
+        Instruction jump = emit(new JumpI(-1, false));                  // Otherwise jump to end
+        visit(ctx.block());                                             // Generate code in block
+        emit(new JumpI(begin, true));                                   // After executing the block, jump to condition again
+        program.replace(branch, new BranchI(r_cmp, 2, false));          // Update the branch/jump instructions with the right line numbers
         program.replace(jump, new JumpI(lineCount, true));
         emit(new Nop());
         return begin;
     }
 
+    /** Visit declaration statement - First checks whether the programmer directly assigns a value to the variable
+     *  otherwise assigns the default value to the created variable.
+     *  Also checks whether the variable is declared globally or locally and stores it into shared or local memory, respectively */
     @Override
     public Integer visitDeclStat(DonutParser.DeclStatContext ctx) {
         int begin;
-        if (ctx.ASSIGN() != null) {
+        if (ctx.ASSIGN() != null) {                                         // Assign context is present -> Value is assigned
             begin = visit(ctx.expr());
             Reg resultExpr = reg(ctx.expr());
             if (ctx.GLOBAL() != null)   {
@@ -208,7 +214,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
             } else {
                 emit(new StoreAI(resultExpr, offset(ctx.ID())));
             }
-        } else {
+        } else {                                                            // No assign context -> Set default value
             begin = lineCount;
             if (ctx.GLOBAL() != null)   {
                 emit(new WriteAI(ZEROREG, offset(ctx.ID())));
@@ -219,15 +225,11 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
-    @Override
-    public Integer visitThreadStat(DonutParser.ThreadStatContext ctx) {
-        return visit(ctx.concurrentBlock());
-    }
-
     /*
         Expr
      */
 
+    /** Visit parenthesis expression - Assign the register used by the inner expression */
     @Override
     public Integer visitParExpr(DonutParser.ParExprContext ctx) {
         int begin = visitChildren(ctx);
@@ -235,6 +237,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit number expression - Load the value of the number in a register */
     @Override
     public Integer visitNumExpr(DonutParser.NumExprContext ctx) {
         emit(new LoadI(Integer.parseInt(ctx.NUM().getText()), reg(ctx)));
@@ -243,41 +246,47 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
 
     @Override
     public Integer visitCharExpr(DonutParser.CharExprContext ctx) {
-        return super.visitCharExpr(ctx);
+        return super.visitCharExpr(ctx);    // TODO
     }
 
     @Override
     public Integer visitArrayExpr(DonutParser.ArrayExprContext ctx) {
-        return super.visitArrayExpr(ctx);
+        return super.visitArrayExpr(ctx);   // TODO
     }
 
+    /** Visit true expression - Load the Spril value for true in a register */
     @Override
     public Integer visitTrueExpr(DonutParser.TrueExprContext ctx) {
         emit(new LoadI(TRUE, reg(ctx)));
         return lineCount - 1;
     }
 
+    /** Visit false expression - Load the Spril value for false in a register */
     @Override
     public Integer visitFalseExpr(DonutParser.FalseExprContext ctx) {
         emit(new LoadI(FALSE, reg(ctx)));
         return lineCount - 1;
     }
 
+    /** Visit ID expression - Obtain the offset of the variable from the checker result.
+     *  Store the value read from memory in a register */
     @Override
     public Integer visitIdExpr(DonutParser.IdExprContext ctx) {
+        int begin = lineCount;
         if (shared(ctx.ID())) {
             emit(new ReadAI(offset(ctx.ID())));
             emit(new Receive(reg(ctx)));
         } else {
             emit(new LoadAI(offset(ctx.ID()), reg(ctx)));
         }
-        return lineCount - 1;
+        return begin;
     }
 
     /*
         -- Operations
      */
 
+    /** Visit multiplication expression - Visit the two expressions first and compute the result */
     @Override
     public Integer visitMultExpr(DonutParser.MultExprContext ctx) {
         int begin = visit(ctx.expr(0));
@@ -288,6 +297,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit subtraction expression - Visit the two expressions first and compute the result */
     @Override
     public Integer visitMinusExpr(DonutParser.MinusExprContext ctx) {
         int begin = visit(ctx.expr(0));
@@ -298,6 +308,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit addition expression - Visit the two expressions first and compute the result */
     @Override
     public Integer visitPlusExpr(DonutParser.PlusExprContext ctx) {
         int begin = visit(ctx.expr(0));
@@ -308,6 +319,7 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
+    /** Visit comparison expression - Visit the two expressions first and compute the result using the correct operator */
     @Override
     public Integer visitCompExpr(DonutParser.CompExprContext ctx) {
         int begin = visit(ctx.expr(0));
@@ -332,42 +344,23 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return begin;
     }
 
-    @Override
-    public Integer visitPrfExpr(DonutParser.PrfExprContext ctx) {
-        int begin = visit(ctx.expr());
-        visit(ctx.prfOperator());
-
-        if (ctx.prfOperator().MINUS() != null)   {
-            Reg reg = registers.get(ctx.expr());
-            Reg temp = reg(ctx);
-            setReg(ctx, reg);
-            emit(new LoadI(-1, temp));
-            emit(new Compute(Operator.MUL, reg, temp, reg));
-        } else {
-            Reg temp = reg(ctx);
-            emit(new LoadI(1, temp));
-            Reg reg = registers.get(ctx.expr());
-            Instruction instr = emit(new Compute(Operator.SUB, temp, reg, reg));
-            setReg(ctx, reg);
-        }
-        return  begin;
-    }
-
+    /** Visit division expression - Visit the two expressions first and compute the result */
     @Override
     public Integer visitDivExpr(DonutParser.DivExprContext ctx) {
         int begin = visit(ctx.expr(0));
         visit(ctx.expr(1));
         Reg r0 = reg(ctx.expr(0));
         Reg r1 = reg(ctx.expr(1));
-        emit(new Compute(Operator.DIV, r0, r1, reg(ctx)));
+        emit(new Compute(Operator.DIV, r0, r1, reg(ctx))); // Div operation no longer supported by Sprockell
         return begin;
     }
 
     @Override
     public Integer visitPowExpr(DonutParser.PowExprContext ctx) {
-        return super.visitPowExpr(ctx);
+        return super.visitPowExpr(ctx);         // TODO
     }
 
+    /** Visit boolean expression - Visit the two expressions first and compute the result using the correct operator */
     @Override
     public Integer visitBoolExpr(DonutParser.BoolExprContext ctx) {
         int begin = visit(ctx.expr(0));
@@ -382,26 +375,49 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
             emit(new Compute(Operator.OR, r0, r1, reg(ctx)));
         } else if (ctx.boolOperator().XOR() != null) {
             emit(new Compute(Operator.XOR, r0, r1, reg(ctx)));
-        } else {
-            System.out.println("NO SUCH OPERATION IN GENERATOR.VISITBOOLEXPR");
         }
         return begin;
+    }
+
+    /** Visit prefix expression - Visit the expression first, then invert it */
+    @Override
+    public Integer visitPrfExpr(DonutParser.PrfExprContext ctx) {
+        int begin = visit(ctx.expr());
+        visit(ctx.prfOperator());
+
+        if (ctx.prfOperator().MINUS() != null)   {                                      // Minus prefix
+            Reg reg = registers.get(ctx.expr());                                        // Invert by multiplying with -1
+            Reg temp = reg(ctx);
+            setReg(ctx, reg);
+            emit(new LoadI(-1, temp));
+            emit(new Compute(Operator.MUL, reg, temp, reg));
+        } else {                                                                        // Not prefix
+            Reg temp = reg(ctx);                                                        // Invert by subtracting from one
+            emit(new LoadI(1, temp));
+            Reg reg = registers.get(ctx.expr());
+            emit(new Compute(Operator.SUB, temp, reg, reg));
+            setReg(ctx, reg);
+        }
+        return  begin;
     }
 
     /*
         Help functions
      */
 
+    /** Add the instruction to the main program. Update the line counter */
     private Instruction emit(Instruction instr) {
         program.add(instr);
         lineCount++;
         return instr;
     }
 
+    /** Obtain the node's offset as determined by the checker phase */
     private int offset(ParseTree node)  {
         return this.result.getOffset(node);
     }
 
+    /** Indicates whether the node is stored globally or locally */
     private boolean shared(ParseTree node) { return this.result.isShared(node); }
 
     /** Returns a register for a given parse tree node,
@@ -416,10 +432,10 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         return result;
     }
 
+    /** Set the register for this node */
     private void setReg(ParseTree node, Reg reg) {
         this.registers.put(node, reg);
     }
-
 
 
 }
