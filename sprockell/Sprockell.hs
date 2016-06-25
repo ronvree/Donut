@@ -35,12 +35,15 @@ sprockell instrs sprState reply = (sprState', request)
         (x,y)        = (regbank!regX , regbank!regY)
         aluOutput    = alu aluCode x y
 
+        aluOutputI   = alu aluCode immValue y
+
         pc'          = nextPC branch tgtCode (x,reply) (pc,immValue,y)
         sp'          = nextSP spCode sp
 
         address      = agu aguCode (addrImm,x,sp)
 
-        loadValue    = load ldCode (immValue, aluOutput, localMem!address, pc, reply)
+        loadValue    | immFlag == 0 =  load ldCode (immValue, aluOutput,  localMem!address, pc, reply)
+                     | otherwise    =  load ldCode (immValue, aluOutputI, localMem!address, pc, reply)
         regbank'     = regbank <~! (loadReg, loadValue)
 
         localMem'    = store localMem stCode (address,y)
@@ -71,6 +74,7 @@ nullcode = MachCode
         , regY     = 0
         , loadReg  = 0
         , addrImm  = 0
+        , immFlag  = 0
         }
 
 -- ============================
@@ -81,7 +85,7 @@ decode instr = case instr of
   Compute c rx ry toReg       -> nullcode {ldCode=LdAlu, aluCode=c, regX=rx, regY=ry, loadReg=toReg}
 
   ComputeI c val ry toReg     -> case val of
-                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regY=ry, loadReg=toReg}
+                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regY=ry, loadReg=toReg, immFlag=1}
                                    DirAddr n   -> nullcode -- Undefined
                                    IndAddr n   -> nullcode -- Undefined
 
