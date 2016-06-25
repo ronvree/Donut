@@ -80,8 +80,8 @@ decode instr = case instr of
 
   Compute c rx ry toReg       -> nullcode {ldCode=LdAlu, aluCode=c, regX=rx, regY=ry, loadReg=toReg}
 
-  ComputeI c val rx toReg     -> case val of
-                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regX=rx, loadReg=toReg}
+  ComputeI c val ry toReg     -> case val of
+                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regY=ry, loadReg=toReg}
                                    DirAddr n   -> nullcode -- Undefined
                                    IndAddr n   -> nullcode -- Undefined
 
