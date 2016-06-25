@@ -176,6 +176,6 @@ data MachCode = MachCode                                        -- machine code:
         , regY          :: RegAddr                              -- selects second register
         , loadReg       :: RegAddr                              -- register to load a value to
         , addrImm       :: MemAddr                              -- address for memory
-        , immFlag       :: Int                                  -- Flag for computeI
+        , flag          :: Int                                  -- Flag for computeI
         } deriving (Eq,Show)
 

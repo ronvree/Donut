@@ -34,10 +34,14 @@ sprockell instrs sprState reply = (sprState', request)
 
         (x,y)        = (regbank!regX , regbank!regY)
 
-        aluOutput    | immFlag == 0 = alu aluCode x y
-                     | otherwise = alu aluCode immValue y
+        aluOutput    | flag == 0 = alu aluCode x y
+                     | otherwise = alu aluCode immValue y               -- If flag is set, compute with immediate value
 
-        pc'          = nextPC branch tgtCode (x,reply) (pc,immValue,y)
+        b            | x == 0 = 1
+                     | otherwise = 0                                    -- For BranchF (inverted comparison)
+
+        pc'          | flag == 0 = nextPC branch tgtCode (x,reply) (pc,immValue,y) -- Branch
+                     | otherwise = nextPC branch tgtCode (b,reply) (pc,immValue,y) -- BranchF
         sp'          = nextSP spCode sp
 
         address      = agu aguCode (addrImm,x,sp)
@@ -73,7 +77,7 @@ nullcode = MachCode
         , regY     = 0
         , loadReg  = 0
         , addrImm  = 0
-        , immFlag  = 0
+        , flag     = 0
         }
 
 -- ============================
@@ -84,7 +88,7 @@ decode instr = case instr of
   Compute c rx ry toReg       -> nullcode {ldCode=LdAlu, aluCode=c, regX=rx, regY=ry, loadReg=toReg}
 
   ComputeI c val ry toReg     -> case val of
-                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regY=ry, loadReg=toReg, immFlag=1}
+                                   ImmValue n  -> nullcode {ldCode=LdAlu, aluCode=c, immValue=n, regY=ry, loadReg=toReg, flag=1}
                                    DirAddr n   -> nullcode -- Undefined
                                    IndAddr n   -> nullcode -- Undefined
 
@@ -97,6 +101,12 @@ decode instr = case instr of
                                    Abs n       -> nullcode {branch=True, tgtCode=TAbs, regX=cReg, immValue=n}
                                    Rel n       -> nullcode {branch=True, tgtCode=TRel, regX=cReg, immValue=n}
                                    Ind r       -> nullcode {branch=True, tgtCode=TInd, regX=cReg, regY=r}
+
+  BranchF cReg target         -> case target of
+                                     Abs n       -> nullcode {branch=True, tgtCode=TAbs, regX=cReg, immValue=n, flag=1}
+                                     Rel n       -> nullcode {branch=True, tgtCode=TRel, regX=cReg, immValue=n, flag=1}
+                                     Ind r       -> nullcode {branch=True, tgtCode=TInd, regX=cReg, regY=r, flag=1}
+
 
   Load memAddr toReg          -> case memAddr of
                                    ImmValue n  -> nullcode {loadReg=toReg, ldCode=LdImm, immValue=n}
