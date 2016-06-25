@@ -4,6 +4,7 @@ import donut.*;
 import donut.checkers.deprecated.Checker;
 import donut.checkers.CheckerII;
 import donut.errors.Error;
+import donut.generators.MainGenerator;
 import donut.generators.deprecated.GeneratorII;
 import donut.generators.deprecated.GeneratorIII;
 import donut.spril.Program;
@@ -50,7 +51,7 @@ public class GeneratorTest {
             System.err.println(error);
         }
 
-        GeneratorIII generator = new GeneratorIII();
+        MainGenerator generator = new MainGenerator();
         List<Program> programs = generator.generate(programContext, checker.getResult());
 
         for (Program prog : programs) {

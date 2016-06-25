@@ -31,25 +31,5 @@ Alright brain... it's all up to you {
         }
     }
 
-    duff { Marge: code for thread;
-        number i = 0;
-        whileyoulittle (i < 10) {
-            my(b){b = b + 2;}
-            i = i + 1;
-        }
-
-        number j = 0;
-        whileyoulittle (j < 10) {
-            my(b){b = b - 1;}
-            j = j + 1;
-        }
-
-        number k = 0;
-        whileyoulittle (k < 10) {
-            my(b){b = b - 1;}
-            k = k + 1;
-        }
-    }
-
 
 } I hope I didn't brain my damage.

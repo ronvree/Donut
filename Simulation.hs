@@ -1,5 +1,6 @@
 module Simulation where
 
+import Control.DeepSeq
 import BasicFunctions
 import HardwareTypes
 import Sprockell
@@ -22,7 +23,7 @@ sprockellSim instrs s (i:is) | instr /= EndProg    = (instr,s',o) : sprockellSim
                   instr  = instrs ! pc s
 
 localMemSize = 16 :: Int
-regbankSize  = 23  :: Int
+regbankSize  = 8  :: Int
 
 initSprockellState :: Value -> SprockellState
 initSprockellState sprID = SprState
@@ -47,7 +48,7 @@ clock = repeat Tick
 
 systemSim :: [[Instruction]] -> SystemState -> Clock -> [([Instruction],SystemState)]
 systemSim instrss s []     = []
-systemSim instrss s (t:ts) | not sysHalted = (instrs,s') : systemSim instrss s' ts
+systemSim instrss s (t:ts) | not sysHalted = deepseq s $ (instrs,s') : systemSim instrss s' ts
                            | otherwise     = []
                 where
                   instrs    = zipWith (!) instrss (map pc $ sprStates s)
@@ -55,7 +56,7 @@ systemSim instrss s (t:ts) | not sysHalted = (instrs,s') : systemSim instrss s' 
                   sysHalted = and $ map (==EndProg) $ zipWith (!!) instrss $ map pc $ sprStates s
 
 nrOfSprockells  = 4 :: Int
-shMemSize       = 16 :: Int
+shMemSize       = 8 :: Int
 channelDelay    = 4 :: Int
 
 initSystemState = SystemState
