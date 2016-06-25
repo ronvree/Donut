@@ -90,6 +90,10 @@ public class Program {
         return programName;
     }
 
+    public int size() {
+        return instructions.size();
+    }
+
     public void printInstructions() {
         int line = 0;
         for (Instruction i : instructions) {

@@ -53,7 +53,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         this.result = result;
         this.registers = new ParseTreeProperty<>();
         this.regCount = 1;                       // Register 0 cannot be used
-        this.lineCount = 0;
+        this.lineCount = thread.size();
 
         Reg reg = new Reg("reg1");               // Temporary use of register 1 to indicate when the thread can start
         emit(new LoadI(id, SPRID));
@@ -69,7 +69,7 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         emit(new Write(ZEROREG, SPRID));         // Write 0 to reserved location in shared memory to indicate that the thread is done
         emit(new Read(SPRID));
         emit(new Receive(reg));
-        emit(new BranchI(reg, -2, false));       // If reg contains 1 -> write not confirmed -> read again
+        emit(new BranchI(reg, -2, false));
 
         return program;
     }
