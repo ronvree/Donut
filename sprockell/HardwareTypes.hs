@@ -83,6 +83,8 @@ data Operator    = Add   | Sub | Mul -- | Div | Mod             -- Computational
 
 data Instruction = Compute Operator RegAddr RegAddr RegAddr     -- Compute op r0 r1 r2: go to "alu",
                                                                 --      do "op" on regs r0, r1, and put result in reg r2
+                 | ComputeI Operator AddrImmDI RegAddr RegAddr  -- ComputeI op n r0 r1
+                                                                --      do "op" on imm value n and r0, and put result in r1
                  | Jump Target                                  -- Jump t: jump to target t (absolute, relative, indirect)
                  | Branch RegAddr Target                        -- Branch r t: conditional jump, depending on register r
                                                                 --      if r contains 0: don't jump; otherwise: jump
