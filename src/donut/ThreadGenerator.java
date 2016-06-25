@@ -66,10 +66,10 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
             tree.accept(this);
         }
 
-        emit(new Write(ZEROREG, SPRID));        // Write 0 to reserved location in shared memory to indicate that the thread is done
+        emit(new Write(ZEROREG, SPRID));         // Write 0 to reserved location in shared memory to indicate that the thread is done
         emit(new Read(SPRID));
         emit(new Receive(reg));
-        emit(new BranchI(reg, -3, false));
+        emit(new BranchI(reg, -2, false));       // If reg contains 1 -> write not confirmed -> read again
 
         return program;
     }
@@ -91,7 +91,8 @@ public class ThreadGenerator extends DonutBaseVisitor<Integer> {
         this.visitChildren(ctx);
         return begin;
     }
-/*
+
+    /*
         Stat
      */
 

@@ -13,8 +13,13 @@ import java.util.List;
 
 /**
  * Created by Ron on 23-6-2016.
+ *
+ * Generates Spril instructions from parsed Donut code.
+ * Supports concurrency.
+ *
  */
 public class GeneratorIII extends DonutBaseVisitor<Integer> {
+
     /** Boolean representation in Spril instructions */
     public static final int TRUE = 1;
     public static final int FALSE = 0;
@@ -26,18 +31,24 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
     /** Register with zero constant */
     public static final Reg ZEROREG = new Reg("(reg0)");
 
+    /** Result of the checker phase */
     private CheckerResultII result;
-
+    /** Counter for creating fresh registers */
     private int regCount;
-
+    /** Line counter (used for jumps) */
     private int lineCount;
-
+    /** Maps expression values to registers */
     private ParseTreeProperty<Reg> registers;
     /** Reference to the main program */
     private Program program;
     /** List of all programs (main and threads */
     private List<Program> programs;
 
+    /**
+     * Generate a list of programs. The main program is stored at index 0. The rest of the programs store threads
+     * @param tree -- The parsed Donut code that will be converted to Spril instructions
+     * @param result -- Result from the checker phase
+     */
     public List<Program> generate(ParseTree tree, CheckerResultII result)   {
         this.program = new Program();
         this.programs = new ArrayList<>();
@@ -49,7 +60,8 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         this.registers = new ParseTreeProperty<>();
         this.regCount = 1;                      // Reg 0 cannot be used
         this.lineCount = 0;
-        tree.accept(this);
+
+        tree.accept(this);                      // Visit the tree
 
         program.add(new Read(ZEROREG));         // Read/Receive makes sure the write buffer is empty at the end of main
         program.add(new Receive(ZEROREG));
@@ -99,11 +111,10 @@ public class GeneratorIII extends DonutBaseVisitor<Integer> {
         // Make threads
         for (int threadID = 0; threadID < THREADS && threadID < stats.size(); threadID++)  {
             List<ParseTree> partition = partitions.get(threadID);
-            ThreadGenerator generator = new ThreadGenerator(threadID);
+            ThreadGenerator generator = new ThreadGenerator(threadID);              // TODO -- Single generator for each program!!!!!
 
             Program thread = generator.generate(partition, result, programs.get(threadID + 1));
             programs.set(threadID + 1, thread);
-//            this.programs.add(thread);
 
             emit(new TestAndSetAI(threadID)); // Start thread
 

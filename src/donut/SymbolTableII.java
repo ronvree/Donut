@@ -6,12 +6,14 @@ import java.util.Stack;
 
 /**
  * Created by Ron on 19-6-2016.
+ *
+ * Aids the checker in keeping track types, offsets and memory locations (shared or local) for variables in multiple scopes
  */
 public class SymbolTableII {
 
     /** Stores the scopes needed for type checking */
     private Stack<Scope> scopes;
-    /** Current size of the scopes (in bytes) */
+    /** Current size of the scopes (in memory addresses/ 4 bytes) */
     private int size;
     /** Current size of shared memory */
     private int sharedSize;
@@ -51,6 +53,7 @@ public class SymbolTableII {
      * Put the variable id and its type in the current scope.
      * @param id -- Variable ID
      * @param type -- Variable type
+     * @param shared -- Variable memory location (shared or local)
      * @return whether the ID did not already occur in the current scope
      */
     public boolean put(String id, Type type, boolean shared)   {
