@@ -281,4 +281,4 @@ sendOut ioCode address value = case ioCode of
         IORead    -> ReadReq  address
         IOWrite   -> WriteReq value address
         IOTest    -> TestReq  address
-        IOTestI   -> TestReqI address
+        IOTestI   -> TestReqI address           -- For TestAndSetI
