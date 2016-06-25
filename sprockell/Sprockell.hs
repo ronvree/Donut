@@ -33,17 +33,16 @@ sprockell instrs sprState reply = (sprState', request)
         MachCode{..} = decode (instrs!pc)
 
         (x,y)        = (regbank!regX , regbank!regY)
-        aluOutput    = alu aluCode x y
 
-        aluOutputI   = alu aluCode immValue y
+        aluOutput    | immFlag == 0 = alu aluCode x y
+                     | otherwise = alu aluCode immValue y
 
         pc'          = nextPC branch tgtCode (x,reply) (pc,immValue,y)
         sp'          = nextSP spCode sp
 
         address      = agu aguCode (addrImm,x,sp)
 
-        loadValue    | immFlag == 0 =  load ldCode (immValue, aluOutput,  localMem!address, pc, reply)
-                     | otherwise    =  load ldCode (immValue, aluOutputI, localMem!address, pc, reply)
+        loadValue    = load ldCode (immValue, aluOutput,  localMem!address, pc, reply)
         regbank'     = regbank <~! (loadReg, loadValue)
 
         localMem'    = store localMem stCode (address,y)

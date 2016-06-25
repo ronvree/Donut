@@ -315,20 +315,6 @@ public abstract class CodeGenetor extends DonutBaseVisitor<Integer> {
             setReg(ctx, reg);
             emit(new ComputeI(Operator.SUB, 1, reg, reg));
         }
-//
-//        if (ctx.prfOperator().MINUS() != null)   {                                      // Minus prefix
-//            Reg reg = registers.get(ctx.expr());                                        // Invert by multiplying with -1
-//            Reg temp = reg(ctx);
-//            setReg(ctx, reg);
-//            emit(new LoadI(-1, temp));
-//            emit(new Compute(Operator.MUL, reg, temp, reg));
-//        } else {                                                                        // Not prefix
-//            Reg temp = reg(ctx);                                                        // Invert by subtracting from one
-//            emit(new LoadI(1, temp));
-//            Reg reg = registers.get(ctx.expr());
-//            emit(new Compute(Operator.SUB, temp, reg, reg));
-//            setReg(ctx, reg);
-//        }
         return  begin;
     }
 
