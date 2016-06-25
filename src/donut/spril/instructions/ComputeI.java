@@ -13,7 +13,7 @@ public class ComputeI extends LocalInstruction{
     private int term1;
     private Reg term2Reg;
     private Reg resultReg;
-    private String instruction = "Compute";
+    private String instruction = "ComputeI";
 
     public ComputeI(Operator op, int term1, Reg term2, Reg result) {
         this.operator = op;

@@ -9,9 +9,14 @@ import Simulation
 program :: [Instruction]
 program = [    Load (ImmValue (3)) (reg1),
     Store (reg1) (DirAddr 1),
-    Load (DirAddr 1) (reg3),
-    ComputeI Add (ImmValue (4)) (reg3) (reg4),
-    Store (reg4) (DirAddr 1)
+    Load (ImmValue (0)) (reg2),
+    BranchF (reg2) (Abs (7)),
+    Load (ImmValue (5)) (reg3),
+    Store (reg3) (DirAddr 1),
+    Nop,
+    ReadInstr (IndAddr (reg0)),
+    Receive (reg0),
+    EndProg
     ]
 
 thread1 :: [Instruction]

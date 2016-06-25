@@ -25,6 +25,8 @@ shMem (sharedMem,requestFifo) chRequests = ((sharedMem',requestFifo'), (i,reply)
                 WriteReq v a                       -> ( Nothing            , sharedMem <~ (a,v))
                 TestReq a     | sharedMem!a == 0   -> ( Just 1             , sharedMem <~ (a,1))
                               | otherwise          -> ( Just 0             , sharedMem )
+                TestReqI a    | sharedMem!a == 1   -> ( Just 1             , sharedMem <~ (a,0))   -- TestReqI changes memory from 1 to 0 if it is 1 and returns 1 (success) otherwise do nothing and return 0 (fail)
+                              | otherwise          -> ( Just 0             , sharedMem)
 
           requestFifo'  = drop 1 requestFifo ++ filter ((/=NoRequest).snd) chRequests
 
