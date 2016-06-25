@@ -37,11 +37,11 @@ sprockell instrs sprState reply = (sprState', request)
         aluOutput    | flag == 0 = alu aluCode x y
                      | otherwise = alu aluCode immValue y               -- If flag is set, compute with immediate value
 
-        b            | x == 0 = 1
+        ix           | x == 0 = 1
                      | otherwise = 0                                    -- For BranchF (inverted comparison)
 
         pc'          | flag == 0 = nextPC branch tgtCode (x,reply) (pc,immValue,y) -- Branch
-                     | otherwise = nextPC branch tgtCode (b,reply) (pc,immValue,y) -- BranchF
+                     | otherwise = nextPC branch tgtCode (ix,reply) (pc,immValue,y) -- BranchF
         sp'          = nextSP spCode sp
 
         address      = agu aguCode (addrImm,x,sp)
