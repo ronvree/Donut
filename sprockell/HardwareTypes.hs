@@ -88,6 +88,8 @@ data Instruction = Compute Operator RegAddr RegAddr RegAddr     -- Compute op r0
                  | Jump Target                                  -- Jump t: jump to target t (absolute, relative, indirect)
                  | Branch RegAddr Target                        -- Branch r t: conditional jump, depending on register r
                                                                 --      if r contains 0: don't jump; otherwise: jump
+                 | BranchF RegAddr Target                       -- Branch r t: conditional jump, depending on register r
+                                                                                 --      if r contains 0: jump; otherwise: don't jump
 
                  | Load AddrImmDI RegAddr                       -- Load (ImmValue n) r: put value n in register r
                                                                 -- Load (DirAddr a) r : put value on memory address a in r
