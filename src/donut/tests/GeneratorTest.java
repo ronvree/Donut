@@ -1,7 +1,11 @@
 package donut.tests;
 
 import donut.*;
+import donut.checkers.deprecated.Checker;
+import donut.checkers.CheckerII;
 import donut.errors.Error;
+import donut.generators.deprecated.GeneratorII;
+import donut.generators.deprecated.GeneratorIII;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;

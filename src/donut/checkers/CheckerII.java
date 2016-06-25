@@ -1,5 +1,8 @@
-package donut;
+package donut.checkers;
 
+import donut.DonutBaseListener;
+import donut.DonutParser;
+import donut.Type;
 import donut.errors.*;
 import donut.errors.Error;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;

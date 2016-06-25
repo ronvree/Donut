@@ -1,5 +1,6 @@
-package donut;
+package donut.checkers;
 
+import donut.Type;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 

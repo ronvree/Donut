@@ -1,6 +1,6 @@
 package donut.generators;
 
-import donut.CheckerResultII;
+import donut.checkers.CheckerResultII;
 import donut.DonutBaseVisitor;
 import donut.DonutParser;
 import donut.spril.Instruction;

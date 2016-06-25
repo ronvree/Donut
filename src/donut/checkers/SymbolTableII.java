@@ -1,4 +1,7 @@
-package donut;
+package donut.checkers;
+
+import donut.Type;
+import donut.generators.deprecated.GeneratorIII;
 
 import java.util.HashMap;
 import java.util.Map;

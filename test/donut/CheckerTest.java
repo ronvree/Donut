@@ -1,5 +1,6 @@
 package donut;
 
+import donut.checkers.deprecated.Checker;
 import donut.errors.Error;
 import donut.errors.TypeError;
 import org.antlr.v4.runtime.*;

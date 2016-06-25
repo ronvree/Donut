@@ -1,5 +1,6 @@
-package donut;
+package donut.checkers.deprecated;
 
+import donut.Type;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;

@@ -1,5 +1,8 @@
-package donut;
+package donut.checkers.deprecated;
 
+import donut.DonutBaseListener;
+import donut.DonutParser;
+import donut.Type;
 import donut.errors.DoubleDeclError;
 import donut.errors.Error;
 import donut.errors.MissingDeclError;

@@ -1,5 +1,6 @@
 package donut;
 
+import donut.checkers.CheckerII;
 import donut.errors.Error;
 import donut.errors.TypeError;
 import org.antlr.v4.runtime.*;
@@ -11,8 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Ron on 23-6-2016.

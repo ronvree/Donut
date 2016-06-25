@@ -1,5 +1,8 @@
-package donut;
+package donut.generators.deprecated;
 
+import donut.checkers.CheckerResultII;
+import donut.DonutBaseVisitor;
+import donut.DonutParser;
 import donut.spril.Instruction;
 import donut.spril.Operator;
 import donut.spril.Program;

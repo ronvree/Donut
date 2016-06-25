@@ -1,6 +1,6 @@
 package donut.tests;
 
-import donut.Checker;
+import donut.checkers.deprecated.Checker;
 import donut.DonutLexer;
 import donut.DonutParser;
 import donut.errors.Error;

@@ -1,4 +1,6 @@
-package donut;
+package donut.checkers.deprecated;
+
+import donut.Type;
 
 import java.util.HashMap;
 import java.util.Map;

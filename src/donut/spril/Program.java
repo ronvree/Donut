@@ -1,9 +1,5 @@
 package donut.spril;
 
-import donut.CheckerResult;
-import donut.Generator;
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
