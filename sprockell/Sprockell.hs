@@ -139,6 +139,11 @@ decode instr = case instr of
                                    DirAddr a   -> nullcode {ioCode=IOTest, ldCode=LdMem, aguCode=AguDir, addrImm=a}
                                    IndAddr p   -> nullcode {ioCode=IOTest, ldCode=LdMem, aguCode=AguInd, regX=p}
 
+  TestAndSetI memAddr        -> case memAddr of
+                                   ImmValue n  -> nullcode -- undefined
+                                   DirAddr a   -> nullcode {ioCode=IOTestI, ldCode=LdMem, aguCode=AguDir, addrImm=a, flag=1}
+                                   IndAddr p   -> nullcode {ioCode=IOTestI, ldCode=LdMem, aguCode=AguInd, regX=p, flag=1}
+
   EndProg                     -> nullcode {tgtCode=TRel, immValue=0}
 
   Nop                         -> nullcode
@@ -276,3 +281,4 @@ sendOut ioCode address value = case ioCode of
         IORead    -> ReadReq  address
         IOWrite   -> WriteReq value address
         IOTest    -> TestReq  address
+        IOTestI   -> TestReqI address

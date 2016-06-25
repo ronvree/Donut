@@ -40,6 +40,7 @@ data Request    = NoRequest                                     -- No request to
                 | ReadReq MemAddr                               -- Request to shared memory to send the value at the given address
                 | WriteReq Value MemAddr                        -- Request to write a value to a given address in shared memory
                 | TestReq MemAddr                               -- Request to test-and-Set at the given address in shared memory
+                | TestReqI MemAddr                              -- Request to test-and-Set inverse at the given address in shared memory
                 deriving (Eq,Show,Generic,NFData)
 
 type IndRequests        = [(SprID, Request)]                    -- A list of requests together with the sprockell-IDs of the sender
@@ -109,6 +110,10 @@ data Instruction = Compute Operator RegAddr RegAddr RegAddr     -- Compute op r0
                                                                 -- Reply will contain 1 on success, and 0 on failure.
                                                                 -- This is an atomic operation; it might therefore be
                                                                 -- used to implement locks or synchronisation.
+                 | TestAndSetI AddrImmDI                        -- Request a test on address for 1 and sets it to 0 if it is.
+                                                                -- Reply will contain 1 on success, and 0 on failure.
+                                                                -- This is an atomic operation; it might therefore be
+                                                                -- used to implement locks or synchronisation.
 
                                                                 -- For ReadInstr, WriteInstr, TestAndSet:
                                                                 --     address only as DirAddr, IndAddr; not as ImmValue
@@ -162,6 +167,7 @@ data IOCode     = IONone                                        -- code to instr
                 | IORead
                 | IOWrite
                 | IOTest
+                | IOTestI
                 deriving (Eq,Show)
 
 data MachCode = MachCode                                        -- machine code: fields contain codes as described above
