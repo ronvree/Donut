@@ -42,7 +42,7 @@ public class GeneratorTest {
 
     @Test
     public void testThreads() {
-        DonutParser.ProgramContext programContext = parse("threads");
+        DonutParser.ProgramContext programContext = parse("threads2");
         ParseTreeWalker walker = new ParseTreeWalker();
         CheckerII checker = new CheckerII();
 
