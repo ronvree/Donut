@@ -8,11 +8,12 @@ import Simulation
 
 program :: [Instruction]
 program = [    Load (ImmValue (3)) (reg1),
-    Store (reg1) (DirAddr 1),
+    WriteInstr (reg1) (DirAddr 9),
     Load (ImmValue (0)) (reg2),
-    BranchF (reg2) (Abs (7)),
+    Branch (reg2) (Abs (5)),
+    Jump (Abs 7),
     Load (ImmValue (5)) (reg3),
-    Store (reg3) (DirAddr 1),
+    WriteInstr (reg3) (DirAddr 9),
     Nop,
     ReadInstr (IndAddr (reg0)),
     Receive (reg0),

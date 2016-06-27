@@ -5,12 +5,21 @@ import org.junit.Test;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Gijs on 22-Jun-16.
  */
 
 public class HaskelRunner {
+
+    public static final String FILE_DIR = "C:\\Users\\Gijs\\IdeaProjects\\CompilerConstruction\\Donut";
+    public static final int NR_OF_SPROCKELLS = 4;
+    public static final int NR_OF_LINES = 6 + NR_OF_SPROCKELLS;
+    public static final int SHARED_MEM_SIZE = 16;
+
+    private ArrayList<ArrayList> localMem;
+    private ArrayList<Integer> sharedMem;
 
     public HaskelRunner() {
         // Empty by design.
@@ -19,24 +28,24 @@ public class HaskelRunner {
     /**
      * Create and runs specified file and returns value from given localMemory address of the Sprockell.
      * @param fileName Haskell file to run.
-     * @param address localMemory address to read, starting at zero.
-     * @return
      */
 
-    public int runHaskell(String fileName, int address) {
+    public void runHaskell(String fileName) {
         if (createExecutable(fileName)) {
             String data = runExecutable();
-            ArrayList<Integer> localMemory = getLocalMemory(data);
-            return localMemory.get(address);
+            localMem = getLocalMemory(data);
+            sharedMem = getSharedMemory(data);
+//            System.out.println("\n\n\n\n\n\n");
+//            System.out.println(localMemory.toString());
+//            System.out.println(sharedMemory.toString());
         }
-        return -1;
     }
 
 
-    private String runExecutable() {
+    public String runExecutable() {
         try {
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec("result.exe", null, new File("C:\\Users\\Gijs\\IdeaProjects\\CompilerConstruction\\Donut"));
+            Process proc = rt.exec("result.exe", null, new File(FILE_DIR));
 
             Collector errorCollector = new
                     Collector(proc.getErrorStream(), "ERROR");
@@ -49,15 +58,14 @@ public class HaskelRunner {
 
             int exitVal = proc.waitFor();
 //            System.out.println("Process exitValue: " + exitVal);
-            String res = outputCollector.getResult();
-            return res;
+            return outputCollector.getResult();
         } catch (Throwable t) {
             t.printStackTrace();
         }
         return null;
     }
 
-    private boolean createExecutable(String fileName) {
+    public boolean createExecutable(String fileName) {
 
         // Because we create a .exe file, this will not run on operating systems other than Windows;
         String os = System.getProperty("os.name");
@@ -65,50 +73,78 @@ public class HaskelRunner {
             System.err.println("HaskellRunner not available on your OS. \nSorry...");
             return false;
         }
+
         String command = "ghc -o result " + fileName;       // Create executable.
         try {
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(command, null, new File("C:\\Users\\Gijs\\IdeaProjects\\CompilerConstruction\\Donut"));
+            Process proc = rt.exec(command, null, new File(FILE_DIR));
 
-//            Collector errorCollector = new
-//                    Collector(proc.getErrorStream(), "ERROR");
-//
-//            Collector outputCollector = new
-//                    Collector(proc.getInputStream(), "OUTPUT");
-//
-//            errorCollector.start();
-//            outputCollector.start();
+            Collector errorCollector = new
+                    Collector(proc.getErrorStream(), "ERROR");
+
+            Collector outputCollector = new
+                    Collector(proc.getInputStream(), "OUTPUT");
+
+            errorCollector.start();
+            outputCollector.start();
 
             int exitVal = proc.waitFor();
 //            System.out.println("Process exitValue: " + exitVal);
-//                String res = outputCollector.result;
-//                filterData(res);
         } catch (Throwable t) {
             t.printStackTrace();
+            return false;
         }
         return true;
     }
 
 
-    public ArrayList<Integer> getLocalMemory(String data) {
-        ArrayList<Integer> localMem = new ArrayList<>();
+    public ArrayList<ArrayList> getLocalMemory(String data) {
+        ArrayList<ArrayList> result = new ArrayList<>();
 //        System.out.println(data);
-        String mem = data.split("localMem")[1];
-        String[] m = mem.split(",");
+        String[] mem = data.split("localMem");
+        for (int i = 1; i < mem.length; i++) {
+            System.out.println(i + " " + mem[i]);
 
-        // First slot in local memory is always zero.
-        localMem.add(0);
-        // skip first local memory slot, this cannot be changed and will always be zero.
-        for (int i = 1; i < m.length - 1; i++) {
-//            System.out.println(m[i]);
-            localMem.add(Integer.parseInt(m[i]));
+            String[] m = mem[1].split(",");
+
+            ArrayList<Integer> localMem = new ArrayList<>();
+
+            // First slot in local memory is always zero.
+            localMem.add(0);
+            // skip first local memory slot, this cannot be changed and will always be zero.
+            for (int j = 1; j < m.length - 1; j++) {
+                try {
+                    localMem.add(Integer.parseInt(m[j].trim()));
+                } catch (NumberFormatException e) {
+                    localMem.add(Integer.parseInt(m[j].split("\\]")[0]));
+                    break;
+                }
+            }
+            result.add(localMem);
         }
-        String last = m[m.length - 1].split("\\]")[0];
-        localMem.add(Integer.parseInt(last));
-        return localMem;
+        System.out.println("Result " + result);
+        return result;
+    }
+
+    public ArrayList<Integer> getSharedMemory(String data) {
+        ArrayList<Integer> sharedMem = new ArrayList<>();
+        String mem = data.substring(data.length() - (SHARED_MEM_SIZE*2+2)).split("\\]")[0];
+        System.out.println("mem: " + mem);
+        String[] res = mem.split(",");
+        for(int i = 0; i < res.length; i ++) {
+            sharedMem.add(Integer.parseInt(res[i]));
+        }
+        return sharedMem;
     }
 
 
+    public ArrayList<ArrayList> getLocalMem() {
+        return localMem;
+    }
+
+    public ArrayList<Integer> getSharedMem() {
+        return sharedMem;
+    }
 }
 
 class Collector extends Thread {
@@ -122,19 +158,26 @@ class Collector extends Thread {
     }
 
     public void run() {
+        StringBuffer buffer = new StringBuffer();
         try {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
-            String line = null;
+            String line;
+            int i = 0;
             while ((line = br.readLine()) != null) {
-                System.out.println(type + ">" + line);
-                if (line.contains("localMem")) {
-                    result = line;
+//                System.out.println(type + "> " + line);
+                buffer.append(line + "\n");
+                if (i >= HaskelRunner.NR_OF_LINES) {
+                    buffer = new StringBuffer();
+                    i = 0;
                 }
+                i++;
             }
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
+//        System.out.println("buffer: " + buffer.toString());
+        result = buffer.toString();
     }
 
 
