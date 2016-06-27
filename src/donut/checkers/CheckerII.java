@@ -12,8 +12,13 @@ import java.util.List;
 
 /**
  * Created by Ron on 23-6-2016.
+ *
+ * Responsible for:
+ *  - Type checking
+ *  - Calculating offset
+ *  - Correct declarations/visibility of variables in multiple scopes
+ *  - Distinguishing between shared and local variables
  */
-
 public class CheckerII extends DonutBaseListener {
 
     /**
@@ -50,42 +55,37 @@ public class CheckerII extends DonutBaseListener {
         Listener methods
      */
 
-    @Override
-    public void enterProgram(DonutParser.ProgramContext ctx) {
-        super.enterProgram(ctx);
-    }
-
-    @Override
-    public void exitProgram(DonutParser.ProgramContext ctx) {
-        super.exitProgram(ctx);
-    }
-
-
+    /** Enter block - Open a new scope */
     @Override
     public void enterBlock(DonutParser.BlockContext ctx) {
         this.scopes.openScope();
     }
 
+    /** Exit block - Close the scope */
     @Override
     public void exitBlock(DonutParser.BlockContext ctx) {
         this.scopes.closeScope();
     }
 
+    /** Enter concurrent block - Open a new scope, where only global variables are visible */
     @Override
     public void enterConcurrentBlock(DonutParser.ConcurrentBlockContext ctx) {
         this.scopes.openSharedScope();
     }
 
+    /** Exit concurrent block - Close the scope */
     @Override
     public void exitConcurrentBlock(DonutParser.ConcurrentBlockContext ctx) {
         this.scopes.closeScope();
     }
 
+    /** Enter lock block - Open a new scope */
     @Override
     public void enterLockBlock(DonutParser.LockBlockContext ctx) {
         this.scopes.openScope();
     }
 
+    /** Exit lock block - Close the scope */
     @Override
     public void exitLockBlock(DonutParser.LockBlockContext ctx) {
         this.scopes.closeScope();
@@ -95,16 +95,9 @@ public class CheckerII extends DonutBaseListener {
         Statements
      */
 
-    @Override
-    public void enterThreadStat(DonutParser.ThreadStatContext ctx) {
-        super.enterThreadStat(ctx);
-    }
-
-    @Override
-    public void exitThreadStat(DonutParser.ThreadStatContext ctx) {
-        super.exitThreadStat(ctx);
-    }
-
+    /** Enter lock statement - Checks if the variable to be locked is already declared and if so, also checks
+     *  whether the variable is declared globally or not. Only shared variables can be locked. When these
+     *  requirements are met, bind the variable data to the ID context node */
     @Override
     public void enterLockStat(DonutParser.LockStatContext ctx) {
         String id = ctx.ID().getText();
@@ -120,11 +113,6 @@ public class CheckerII extends DonutBaseListener {
         } else {
             this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
         }
-    }
-
-    @Override
-    public void exitLockStat(DonutParser.LockStatContext ctx) {
-        super.exitLockStat(ctx);
     }
 
     /**
@@ -177,11 +165,6 @@ public class CheckerII extends DonutBaseListener {
         if (!(type instanceof Type.ReactionType))   {
             this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr().getStart().getCharPositionInLine(), Type.REACTION_TYPE, type));
         }
-
-    }
-
-    @Override
-    public void enterWhileStat(DonutParser.WhileStatContext ctx) {
 
     }
 
@@ -328,11 +311,6 @@ public class CheckerII extends DonutBaseListener {
         -- -- Multiplication
      */
 
-    @Override
-    public void enterMultExpr(DonutParser.MultExprContext ctx) {
-
-    }
-
     /**
      * Exit multiplication expression
      * Check if both expressions are of type NUMBER
@@ -365,11 +343,6 @@ public class CheckerII extends DonutBaseListener {
         -- -- Division
      */
 
-    @Override
-    public void enterDivExpr(DonutParser.DivExprContext ctx) {
-
-    }
-
     /**
      * Exit division expression
      * Check if both expressions are of type NUMBER
@@ -400,11 +373,6 @@ public class CheckerII extends DonutBaseListener {
     /*
         -- -- Addition
      */
-
-    @Override
-    public void enterPlusExpr(DonutParser.PlusExprContext ctx) {
-
-    }
 
     /**
      * Exit addition expression
@@ -437,11 +405,6 @@ public class CheckerII extends DonutBaseListener {
         -- -- Subtraction
      */
 
-    @Override
-    public void enterMinusExpr(DonutParser.MinusExprContext ctx) {
-
-    }
-
     /**
      * Exit subtraction expression
      * Check if both expressions are of type NUMBER
@@ -472,11 +435,6 @@ public class CheckerII extends DonutBaseListener {
     /*
         -- -- Powers
      */
-
-    @Override
-    public void enterPowExpr(DonutParser.PowExprContext ctx) {
-
-    }
 
     /**
      * Exit power expression
@@ -509,11 +467,6 @@ public class CheckerII extends DonutBaseListener {
         -- Comparison operators
      */
 
-    @Override
-    public void enterCompExpr(DonutParser.CompExprContext ctx) {
-
-    }
-
     /**
      * Exit comparison expression
      * Check if both expressions are of type NUMBER
@@ -542,11 +495,6 @@ public class CheckerII extends DonutBaseListener {
         -- Prefix
      */
 
-    @Override
-    public void enterPrfExpr(DonutParser.PrfExprContext ctx) {
-
-    }
-
     /**
      * Exit prefix expression
      * Check if the expression is of type NUMBER (-) or REACTION (not)
@@ -569,11 +517,6 @@ public class CheckerII extends DonutBaseListener {
         } else {
             System.out.println("Can't recognize this prefix!");
         }
-
-    }
-
-    @Override
-    public void enterBoolExpr(DonutParser.BoolExprContext ctx) {
 
     }
 
@@ -627,19 +570,9 @@ public class CheckerII extends DonutBaseListener {
 
     }
 
-    @Override
-    public void exitIdExpr(DonutParser.IdExprContext ctx) {
-
-    }
-
     /*
         -- Parenthesis
      */
-
-    @Override
-    public void enterParExpr(DonutParser.ParExprContext ctx) {
-
-    }
 
     /**
      * Exit parenthesis expression
