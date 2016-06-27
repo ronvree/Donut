@@ -1,6 +1,7 @@
-package donut;
+package donut.checkers;
 
-import donut.checkers.CheckerII;
+import donut.DonutLexer;
+import donut.DonutParser;
 import donut.errors.Error;
 import donut.errors.TypeError;
 import org.antlr.v4.runtime.*;
@@ -13,9 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by Ron on 23-6-2016.
- */
 public class CheckerIITest {
 
     private static final String BASE_DIR = "src/donut/sample/testfiles/checker/";
@@ -48,22 +46,22 @@ public class CheckerIITest {
         final int count = 3;
         Assert.assertEquals(count, errors.size());
 
-        for (Error error : errors)  {
-            System.out.println(error);
-        }
-
     }
 
     @Test
     public void testConcurrent()   {
         DonutParser.ProgramContext prog = parse("concurrent");
         List<Error> errors = listErrors(prog);
-        final int count = 2;
+        final int count = 3;
         Assert.assertEquals(count, errors.size());
+    }
 
-        for (Error error : errors)  {
-            System.out.println(error);
-        }
+    @Test
+    public void testLocks() {
+        DonutParser.ProgramContext prog = parse("locks");
+        List<Error> errors = listErrors(prog);
+        final int count = 4;
+        Assert.assertEquals(count, errors.size());
     }
 
     private List<Error> listErrors(DonutParser.ProgramContext prog) {

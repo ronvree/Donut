@@ -108,15 +108,18 @@ public class CheckerII extends DonutBaseListener {
     @Override
     public void enterLockStat(DonutParser.LockStatContext ctx) {
         String id = ctx.ID().getText();
-        if (scopes.getCurrentScope().isShared(id))   {
-            this.types.put(ctx.ID(), scopes.getCurrentScope().getType(id));
-            this.result.setType(ctx.ID(), this.scopes.getCurrentScope().getType(id));
-            this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(id));
-            this.result.setShared(ctx.ID(), true);
+        if (scopes.getCurrentScope().contains(id)) {
+            if (scopes.getCurrentScope().isShared(id))   {
+                this.types.put(ctx.ID(), scopes.getCurrentScope().getType(id));
+                this.result.setType(ctx.ID(), this.scopes.getCurrentScope().getType(id));
+                this.result.setOffset(ctx.ID(), this.scopes.getCurrentScope().getOffset(id));
+                this.result.setShared(ctx.ID(), true);
+            } else {
+                this.errors.add(new LockError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
+            }
         } else {
-            this.errors.add(new LockError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
+            this.errors.add(new MissingDeclError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), id));
         }
-
     }
 
     @Override

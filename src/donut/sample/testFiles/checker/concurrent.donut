@@ -27,7 +27,15 @@ Alright brain... it's all up to you {
 
     number b = 1;
     duff {
-        b = 2;
+        b = 2;                  Marge: This should give an error;
+    }
+
+    duff {
+        global reaction r = WOOHOO;
+    }
+
+    duff {
+        r = D'OH;               Marge: This should give an error;
     }
 
 } I hope I didn't brain my damage.
