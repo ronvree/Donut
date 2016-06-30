@@ -45,7 +45,6 @@ public class CheckerIITest {
         List<Error> errors = listErrors(prog);
         final int count = 3;
         Assert.assertEquals(count, errors.size());
-
     }
 
     @Test
@@ -84,8 +83,6 @@ public class CheckerIITest {
         DonutParser.ProgramContext prog = parser.program();
         return prog;
     }
-
-
 
 
 }

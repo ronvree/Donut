@@ -222,7 +222,6 @@ public class CheckerII extends DonutBaseListener {
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.ID().getSymbol().getCharPositionInLine(), idType, exprType));
             }
         }
-        // TODO -- Decl entry?
     }
 
 
@@ -308,11 +307,11 @@ public class CheckerII extends DonutBaseListener {
      */
 
     /*
-        -- -- Multiplication
+        -- -- Multiplication/Division
      */
 
     /**
-     * Exit multiplication expression
+     * Exit multiplication/division expression
      * Check if both expressions are of type NUMBER
      *  - if so: Set the type of this expression to NUMBER
      *  - else : Add an error
@@ -326,7 +325,7 @@ public class CheckerII extends DonutBaseListener {
         if (t1 instanceof Type.NumberType)   {
             // OK
             if (t2 instanceof Type.NumberType)   {
-                // OK -- multiplying numbers
+                // OK -- multiplying/dividing numbers
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
@@ -340,42 +339,11 @@ public class CheckerII extends DonutBaseListener {
     }
 
     /*
-        -- -- Division
+        -- -- Addition/Subtraction
      */
 
     /**
-     * Exit division expression
-     * Check if both expressions are of type NUMBER
-     *  - if so: Set the type of this expression to NUMBER
-     *  - else : Add an error
-     */
-    @Override
-    public void exitDivExpr(DonutParser.DivExprContext ctx) {
-        Type t1 = this.types.get(ctx.expr(0));
-        Type t2 = this.types.get(ctx.expr(1));
-        this.types.put(ctx, Type.NUMBER_TYPE);
-        // Check types
-        if (t1 instanceof Type.NumberType)   {
-            // OK
-            if (t2 instanceof Type.NumberType)   {
-                // OK -- division with numbers
-            } else {
-                // NOT OK -- second argument not a number!
-                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
-            }
-        } else {
-            // NOT OK -- first argument not a number!
-            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
-        }
-
-    }
-
-    /*
-        -- -- Addition
-     */
-
-    /**
-     * Exit addition expression
+     * Exit addition/subtraction expression
      * Check if both expressions are of type NUMBER
      *  - if so: Set the type of this expression to NUMBER
      *  - else : Add an error
@@ -386,41 +354,10 @@ public class CheckerII extends DonutBaseListener {
         Type t2 = this.types.get(ctx.expr(1));
         this.types.put(ctx, Type.NUMBER_TYPE);
         // Check types
-        if (t1 instanceof Type.NumberType)   {
+        if (t1 instanceof Type.NumberType) {
             // OK
-            if (t2 instanceof Type.NumberType)   {
-                // OK -- addition with numbers
-            } else {
-                // NOT OK -- second argument not a number!
-                this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));
-            }
-        } else {
-            // NOT OK -- first argument not a number!
-            this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(0).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t1));
-        }
-
-    }
-
-    /*
-        -- -- Subtraction
-     */
-
-    /**
-     * Exit subtraction expression
-     * Check if both expressions are of type NUMBER
-     *  - if so: Set the type of this expression to NUMBER
-     *  - else : Add an error
-     */
-    @Override
-    public void exitMinusExpr(DonutParser.MinusExprContext ctx) {
-        Type t1 = this.types.get(ctx.expr(0));
-        Type t2 = this.types.get(ctx.expr(1));
-        this.types.put(ctx, Type.NUMBER_TYPE);
-        // Check types
-        if (t1 instanceof Type.NumberType)   {
-            // OK
-            if (t2 instanceof Type.NumberType)   {
-                // OK -- subtraction with numbers
+            if (t2 instanceof Type.NumberType) {
+                // OK -- addition/subtraction with numbers
             } else {
                 // NOT OK -- second argument not a number!
                 this.errors.add(new TypeError(ctx.start.getLine(), ctx.expr(1).getStart().getCharPositionInLine(), Type.NUMBER_TYPE, t2));

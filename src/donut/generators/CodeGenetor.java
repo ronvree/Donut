@@ -207,36 +207,33 @@ public abstract class CodeGenetor extends DonutBaseVisitor<Integer> {
         -- Operations
      */
 
-    /** Visit multiplication expression - Visit the two expressions first and compute the result */
+    /** Visit multiplication expression - Visit the two expressions first, determine the operator and compute the result */
     @Override
     public Integer visitMultExpr(DonutParser.MultExprContext ctx) {
         int begin = visit(ctx.expr(0));
         visit(ctx.expr(1));
         Reg r0 = reg(ctx.expr(0));
         Reg r1 = reg(ctx.expr(1));
-        emit(new Compute(Operator.MUL, r0, r1, reg(ctx)));
+        if (ctx.multop().MULT() != null)   {
+            emit(new Compute(Operator.MUL, r0, r1, reg(ctx)));
+        } else {
+            emit(new Compute(Operator.DIV, r0, r1, reg(ctx))); // Div operation no longer supported by Sprockell
+        }
         return begin;
     }
 
-    /** Visit subtraction expression - Visit the two expressions first and compute the result */
-    @Override
-    public Integer visitMinusExpr(DonutParser.MinusExprContext ctx) {
-        int begin = visit(ctx.expr(0));
-        visit(ctx.expr(1));
-        Reg r0 = reg(ctx.expr(0));
-        Reg r1 = reg(ctx.expr(1));
-        emit(new Compute(Operator.SUB, r0, r1, reg(ctx)));
-        return begin;
-    }
-
-    /** Visit addition expression - Visit the two expressions first and compute the result */
+    /** Visit addition expression - Visit the two expressions first, determine the operator and compute the result */
     @Override
     public Integer visitPlusExpr(DonutParser.PlusExprContext ctx) {
         int begin = visit(ctx.expr(0));
         visit(ctx.expr(1));
         Reg r0 = reg(ctx.expr(0));
         Reg r1 = reg(ctx.expr(1));
-        emit(new Compute(Operator.ADD, r0, r1, reg(ctx)));
+        if (ctx.plusop().PLUS() != null)   {
+            emit(new Compute(Operator.ADD, r0, r1, reg(ctx)));
+        } else {
+            emit(new Compute(Operator.SUB, r0, r1, reg(ctx)));
+        }
         return begin;
     }
 
@@ -262,17 +259,6 @@ public abstract class CodeGenetor extends DonutBaseVisitor<Integer> {
         } else if (ctx.compOperator().LE() != null)    {
             emit(new Compute(Operator.LTE, r0, r1, reg(ctx)));
         }
-        return begin;
-    }
-
-    /** Visit division expression - Visit the two expressions first and compute the result */
-    @Override
-    public Integer visitDivExpr(DonutParser.DivExprContext ctx) {
-        int begin = visit(ctx.expr(0));
-        visit(ctx.expr(1));
-        Reg r0 = reg(ctx.expr(0));
-        Reg r1 = reg(ctx.expr(1));
-        emit(new Compute(Operator.DIV, r0, r1, reg(ctx))); // Div operation no longer supported by Sprockell
         return begin;
     }
 
