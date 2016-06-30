@@ -15,7 +15,7 @@ import java.util.List;
  * Supports threads
  *
  */
-public class MainGenerator extends CodeGenetor {
+public class MainGenerator extends CodeGenerator {
 
     /** List of all programs (main and threads */
     private List<Program> programs;

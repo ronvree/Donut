@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Responsible for generating threads
  */
-public class ThreadGenerator extends CodeGenetor {
+public class ThreadGenerator extends CodeGenerator {
 
     /** Distance in shared memory between a variable and its lock */
     private static final int LOCKDISTANCE = (SHAREDMEMSIZE - THREADS)/2;
