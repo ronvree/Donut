@@ -80,8 +80,7 @@ public class CheckerIITest {
         Lexer lexer = new DonutLexer(chars);
         TokenStream tokens = new CommonTokenStream(lexer);
         DonutParser parser = new DonutParser(tokens);
-        DonutParser.ProgramContext prog = parser.program();
-        return prog;
+        return parser.program();
     }
 
 
