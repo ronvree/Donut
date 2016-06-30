@@ -122,7 +122,7 @@ class Collector extends Thread {
             String line;
             int i = 0;
             while ((line = br.readLine()) != null) {
-                System.out.println(type + "> " + line);
+//                System.out.println(type + "> " + line);
                 buffer.append(line + "\n");
                 if (i > HaskelRunner.NR_OF_LINES) {
                     buffer = new StringBuffer();

@@ -30,6 +30,7 @@ public class GeneratorTest {
     @Test
     public void petersonTest()  {
         this.runTest("peterson");
+        System.out.println(getSharedMem());
     }
 
     public void runTest(String fileName) {
@@ -61,8 +62,7 @@ public class GeneratorTest {
         Lexer lexer = new DonutLexer(chars);
         TokenStream tokens = new CommonTokenStream(lexer);
         DonutParser parser = new DonutParser(tokens);
-        DonutParser.ProgramContext prog = parser.program();
-        return prog;
+        return parser.program();
     }
 
     public ArrayList<ArrayList> getLocalMem() {
