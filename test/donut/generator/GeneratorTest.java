@@ -27,6 +27,9 @@ public class GeneratorTest {
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
 
+    public GeneratorTest() {
+        // Emtpy by design.
+    }
 
     public void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
