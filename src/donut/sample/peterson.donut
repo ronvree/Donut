@@ -17,7 +17,7 @@ Alright brain... it's all up to you {
         Marge: P0 --------------------------------------- ;
         flag0 = WOOHOO;
         turn = 1;
-        whileyoulittle(flag1 && turn == 1) {
+        whileyoulittle(flag1 and turn is 1) {
             Marge: Busy wait;
         }
         Marge: Critical section;
@@ -30,7 +30,7 @@ Alright brain... it's all up to you {
         Marge: P1 --------------------------------------- ;
         flag1 = WOOHOO;
         turn = 0;
-        whileyoulittle (flag0 && turn == 0) {
+        whileyoulittle (flag0 and turn is 0) {
             Marge: Busy wait;
         }
         Marge: Critical section;

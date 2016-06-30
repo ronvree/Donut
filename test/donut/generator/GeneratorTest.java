@@ -27,8 +27,9 @@ public class GeneratorTest {
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
 
-    public GeneratorTest() {
-        // Emtpy by design.
+    @Test
+    public void petersonTest()  {
+        this.runTest("peterson");
     }
 
     public void runTest(String fileName) {
