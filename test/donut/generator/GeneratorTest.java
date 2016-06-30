@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class GeneratorTest {
 
-    private static final String BASE_DIR = "src/donut/sample/";
+    private static final String BASE_DIR = "src/donut/sample/testfiles/";
     private static final String EXT = ".donut";
 
     private ArrayList<ArrayList> localMem;
