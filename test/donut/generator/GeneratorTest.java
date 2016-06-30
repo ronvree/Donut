@@ -28,9 +28,7 @@ public class GeneratorTest {
     private ArrayList<Integer> sharedMem;
 
 
-    @Test
-    public void runTest() {
-        String fileName = "threads2";
+    public void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
         CheckerII checker = new CheckerII();
@@ -43,9 +41,7 @@ public class GeneratorTest {
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
 
-        HaskelRunner runner = new HaskelRunner();
-        runner.runHaskell("threadResult.hs");
-
+        HaskelRunner runner = new HaskelRunner(fileName);
         this.localMem = runner.getLocalMem();
         this.sharedMem = runner.getSharedMem();
     }
