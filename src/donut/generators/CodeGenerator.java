@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  *
  * All visitor methods return the line number of the first instruction. This makes it easier to know where to jump/branch to.
  */
-public abstract class CodeGenetor extends DonutBaseVisitor<Integer> {
+public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
 
     /** Boolean representation in Spril instructions */
     public static final int TRUE = 1;
