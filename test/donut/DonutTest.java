@@ -37,5 +37,16 @@ public class DonutTest {
         // TODO
     }
 
+    @Test
+    public void testPeterson()  {
+        // TODO
+    }
+
+    @Test
+    public void testBankSystem()    {
+        // TODO
+    }
+
+
 
 }
