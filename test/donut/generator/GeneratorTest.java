@@ -44,7 +44,7 @@ public class GeneratorTest {
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
 
-        HaskelRunner runner = new HaskelRunner("result");
+        HaskelRunner runner = new HaskelRunner("threadResult");
         this.localMem = runner.getLocalMem();
         this.sharedMem = runner.getSharedMem();
     }
