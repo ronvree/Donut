@@ -1,5 +1,7 @@
-package donut;
+package donut.tests;
 
+import donut.DonutBaseListener;
+import donut.DonutParser;
 import donut.graphassets.Graph;
 import donut.graphassets.Node;
 import org.antlr.v4.runtime.ParserRuleContext;

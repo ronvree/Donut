@@ -1,14 +1,11 @@
 package donut.tests;
 
-import donut.BottomUpCFGBuilder;
 import donut.graphassets.Graph;
 import donut.graphassets.Node;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**

@@ -1,4 +1,4 @@
-package donut;
+package donut.grammar;
 
 import donut.DonutLexer;
 import donut.DonutParser;

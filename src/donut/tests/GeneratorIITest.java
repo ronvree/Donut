@@ -1,5 +1,7 @@
-package donut;
+package donut.tests;
 
+import donut.DonutLexer;
+import donut.DonutParser;
 import donut.checkers.deprecated.Checker;
 import donut.generators.deprecated.GeneratorII;
 import donut.spril.Program;

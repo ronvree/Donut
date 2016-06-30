@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/donut/checkers/deprecated" />
       <excludeFolder url="file://$MODULE_DIR$/src/donut/generators/deprecated" />
+      <excludeFolder url="file://$MODULE_DIR$/src/donut/tests" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
