@@ -24,39 +24,30 @@ public class GeneratorTest {
     private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
 
+    private ArrayList<ArrayList> localMem;
+    private ArrayList<Integer> sharedMem;
+
+
     @Test
-    public void testThreads() {
-        DonutParser.ProgramContext programContext = parse("threads2");
+    public void runTest() {
+        String fileName = "threads2";
+        DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
         CheckerII checker = new CheckerII();
 
         walker.walk(checker, programContext);
-        checker.getErrors().forEach(System.err::println);
 
         MainGenerator generator = new MainGenerator();
         List<Program> programs = generator.generate(programContext, checker.getResult());
 
-        for (Program prog : programs) {
-            System.out.println("====================================================");
-            prog.printInstructions();
-            System.out.println("====================================================");
-
-//            prog.writeHaskellFile(HASKELL_FILE);
-        }
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
 
         HaskelRunner runner = new HaskelRunner();
         runner.runHaskell("threadResult.hs");
-        ArrayList<Integer> shared = runner.getSharedMem();
-        ArrayList<ArrayList> local = runner.getLocalMem();
 
-
-
-//        System.out.println("\n\n\n\n\n\n\n\n\n");
-//        HaskelRunner runner = new HaskelRunner();
-//        runner.runHaskell("threadResult.hs", 1);
-
+        this.localMem = runner.getLocalMem();
+        this.sharedMem = runner.getSharedMem();
     }
 
     private DonutParser.ProgramContext parse(String filename)   {
@@ -72,5 +63,13 @@ public class GeneratorTest {
         DonutParser parser = new DonutParser(tokens);
         DonutParser.ProgramContext prog = parser.program();
         return prog;
+    }
+
+    public ArrayList<ArrayList> getLocalMem() {
+        return localMem;
+    }
+
+    public ArrayList<Integer> getSharedMem() {
+        return sharedMem;
     }
 }

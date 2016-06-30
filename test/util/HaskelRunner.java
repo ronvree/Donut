@@ -1,8 +1,11 @@
 package util;
 
+import donut.generators.CodeGenerator;
+import donut.generators.MainGenerator;
+
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.nio.file.*;
 import java.util.ArrayList;
 
 /**
@@ -11,38 +14,25 @@ import java.util.ArrayList;
 
 public class HaskelRunner {
 
-//    public static final String FILE_DIR = "C:\\Users\\Gijs\\IdeaProjects\\CompilerConstruction\\Donut";
-    public static final String FILE_DIR = Paths.get("Donut").toString();
-    public static final int NR_OF_SPROCKELLS = 4;
+    public static final int NR_OF_SPROCKELLS = 1 + CodeGenerator.THREADS;
     public static final int NR_OF_LINES = 5 + NR_OF_SPROCKELLS;
-    public static final int SHARED_MEM_SIZE = 16;
+    public static final int SHARED_MEM_SIZE = CodeGenerator.SHAREDMEMSIZE;
 
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
 
-    public HaskelRunner() {
-        // Empty by design.
+    public HaskelRunner(String fileName) {
+        String result = runHaskell(fileName);
+        localMem = getLocalMemory(result);
+        sharedMem = getSharedMemory(result);
     }
 
-    /**
-     * Create and runs specified file and returns value from given localMemory address of the Sprockell.
-     * @param fileName Haskell file to run.
-     */
-
-    public void runHaskell(String fileName) {
-        if (createExecutable(fileName)) {
-            String data = runExecutable();
-            localMem = getLocalMemory(data);
-            sharedMem = getSharedMemory(data);
-        }
-    }
-
-
-    private String runExecutable() {
-        System.out.println(FILE_DIR);
+    public String runHaskell(String fileName) {
+        String command = "runhaskell " + fileName;
         try {
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec("result.exe", null, new File(FILE_DIR));
+//            Process proc = rt.exec(command, null, new File(FILE_DIR));
+            Process proc = rt.exec(command);
 
             Collector errorCollector = new
                     Collector(proc.getErrorStream(), "ERROR");
@@ -62,37 +52,6 @@ public class HaskelRunner {
         return null;
     }
 
-    private boolean createExecutable(String fileName) {
-
-        // Because we create a .exe file, this will not run on operating systems other than Windows;
-        String os = System.getProperty("os.name");
-        if (!os.toLowerCase().contains("windows")) {
-            System.err.println("HaskellRunner not available on your OS. \nSorry...");
-            return false;
-        }
-
-        String command = "ghc -o result " + fileName;       // Create executable.
-        try {
-            Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(command, null, new File(FILE_DIR));
-
-            Collector errorCollector = new
-                    Collector(proc.getErrorStream(), "ERROR");
-
-            Collector outputCollector = new
-                    Collector(proc.getInputStream(), "OUTPUT");
-
-            errorCollector.start();
-            outputCollector.start();
-
-            int exitVal = proc.waitFor();
-//            System.out.println("Process exitValue: " + exitVal);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return false;
-        }
-        return true;
-    }
 
 
     private ArrayList<ArrayList> getLocalMemory(String data) {
@@ -163,7 +122,7 @@ class Collector extends Thread {
             String line;
             int i = 0;
             while ((line = br.readLine()) != null) {
-//                System.out.println(type + "> " + line);
+                System.out.println(type + "> " + line);
                 buffer.append(line + "\n");
                 if (i > HaskelRunner.NR_OF_LINES) {
                     buffer = new StringBuffer();
