@@ -17,11 +17,9 @@ stat: ID ASSIGN expr EOL                        #assStat
     ;
 
 expr: prfOperator expr          #prfExpr
-    | expr MULT expr            #multExpr
-    | expr PLUS expr            #plusExpr
-    | expr MINUS expr           #minusExpr
-    | expr DIV expr             #divExpr
     | expr POW expr             #powExpr
+    | expr multop expr          #multExpr
+    | expr plusop expr          #plusExpr
     | expr compOperator expr    #compExpr
     | expr boolOperator expr    #boolExpr
     | LPAR expr RPAR            #parExpr
@@ -32,6 +30,9 @@ expr: prfOperator expr          #prfExpr
     | (ARRAYTYPE NUM)+ type     #arrayExpr
     | CHARACTER                 #charExpr
     ;
+
+plusop: PLUS | MINUS;
+multop: MULT | DIV;
 
 type: INTTYPE | FLOATTYPE | LONGTYPE | BOOLEANTYPE | CHARTYPE | ARRAYTYPE type;
 
