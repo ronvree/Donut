@@ -1,6 +1,6 @@
 package util;
 
-import donut.generators.CodeGenetor;
+import donut.generators.CodeGenerator;
 import donut.generators.MainGenerator;
 
 import java.io.*;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class HaskelRunner {
 
-    public static final int NR_OF_SPROCKELLS = 1 + CodeGenetor.THREADS;
+    public static final int NR_OF_SPROCKELLS = 1 + CodeGenerator.THREADS;
     public static final int NR_OF_LINES = 5 + NR_OF_SPROCKELLS;
-    public static final int SHARED_MEM_SIZE = CodeGenetor.SHAREDMEMSIZE;
+    public static final int SHARED_MEM_SIZE = CodeGenerator.SHAREDMEMSIZE;
 
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
