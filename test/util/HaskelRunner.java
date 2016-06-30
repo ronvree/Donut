@@ -27,7 +27,7 @@ public class HaskelRunner {
         sharedMem = getSharedMemory(result);
     }
 
-    public String runHaskell(String fileName) {
+    private String runHaskell(String fileName) {
         String command = "runhaskell " + fileName;
         try {
             Runtime rt = Runtime.getRuntime();
