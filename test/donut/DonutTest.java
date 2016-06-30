@@ -1,6 +1,7 @@
 package donut;
 
 import donut.checkers.CheckerIITest;
+import donut.generator.GeneratorTest;
 import donut.grammar.GrammarTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +30,9 @@ public class DonutTest {
 
     @Test
     public void testGenerator() {
-        // TODO
+        GeneratorTest test = new GeneratorTest();
+        test.runTest("threads2");
+        System.out.println(test.getLocalMem());
     }
 
     @Test

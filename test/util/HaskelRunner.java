@@ -28,7 +28,7 @@ public class HaskelRunner {
     }
 
     private String runHaskell(String fileName) {
-        String command = "runhaskell " + fileName;
+        String command = "runhaskell " + fileName + ".hs";
         try {
             Runtime rt = Runtime.getRuntime();
 //            Process proc = rt.exec(command, null, new File(FILE_DIR));

@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class GeneratorTest {
 
-    private static final String BASE_DIR = "src/donut/sample/testfiles/";
+    private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
 
     private ArrayList<ArrayList> localMem;
@@ -44,7 +44,7 @@ public class GeneratorTest {
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
 
-        HaskelRunner runner = new HaskelRunner(fileName);
+        HaskelRunner runner = new HaskelRunner("result");
         this.localMem = runner.getLocalMem();
         this.sharedMem = runner.getSharedMem();
     }
