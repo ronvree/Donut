@@ -15,7 +15,7 @@ public class HaskelRunner {
 
     public static final String FILE_DIR = "C:\\Users\\Gijs\\IdeaProjects\\CompilerConstruction\\Donut";
     public static final int NR_OF_SPROCKELLS = 4;
-    public static final int NR_OF_LINES = 6 + NR_OF_SPROCKELLS;
+    public static final int NR_OF_LINES = 5 + NR_OF_SPROCKELLS;
     public static final int SHARED_MEM_SIZE = 16;
 
     private ArrayList<ArrayList> localMem;
@@ -35,14 +35,11 @@ public class HaskelRunner {
             String data = runExecutable();
             localMem = getLocalMemory(data);
             sharedMem = getSharedMemory(data);
-//            System.out.println("\n\n\n\n\n\n");
-//            System.out.println(localMemory.toString());
-//            System.out.println(sharedMemory.toString());
         }
     }
 
 
-    public String runExecutable() {
+    private String runExecutable() {
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec("result.exe", null, new File(FILE_DIR));
@@ -65,7 +62,7 @@ public class HaskelRunner {
         return null;
     }
 
-    public boolean createExecutable(String fileName) {
+    private boolean createExecutable(String fileName) {
 
         // Because we create a .exe file, this will not run on operating systems other than Windows;
         String os = System.getProperty("os.name");
@@ -98,12 +95,13 @@ public class HaskelRunner {
     }
 
 
-    public ArrayList<ArrayList> getLocalMemory(String data) {
+    private ArrayList<ArrayList> getLocalMemory(String data) {
         ArrayList<ArrayList> result = new ArrayList<>();
 //        System.out.println(data);
         String[] mem = data.split("localMem");
+//        System.out.println("mem.length = " + mem.length);
         for (int i = 1; i < mem.length; i++) {
-            System.out.println(i + " " + mem[i]);
+//            System.out.println(i + " " + mem[i]);
 
             String[] m = mem[1].split(",");
 
@@ -122,14 +120,14 @@ public class HaskelRunner {
             }
             result.add(localMem);
         }
-        System.out.println("Result " + result);
+//        System.out.println("Result " + result);
         return result;
     }
 
-    public ArrayList<Integer> getSharedMemory(String data) {
+    private ArrayList<Integer> getSharedMemory(String data) {
         ArrayList<Integer> sharedMem = new ArrayList<>();
         String mem = data.substring(data.length() - (SHARED_MEM_SIZE*2+2)).split("\\]")[0];
-        System.out.println("mem: " + mem);
+//        System.out.println("mem: " + mem);
         String[] res = mem.split(",");
         for(int i = 0; i < res.length; i ++) {
             sharedMem.add(Integer.parseInt(res[i]));
@@ -167,7 +165,7 @@ class Collector extends Thread {
             while ((line = br.readLine()) != null) {
 //                System.out.println(type + "> " + line);
                 buffer.append(line + "\n");
-                if (i >= HaskelRunner.NR_OF_LINES) {
+                if (i > HaskelRunner.NR_OF_LINES) {
                     buffer = new StringBuffer();
                     i = 0;
                 }

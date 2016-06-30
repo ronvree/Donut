@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,20 +28,6 @@ public class GeneratorTest {
 
     private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
-    private static final String RESULT_FILE = "result.hs";
-
-    @Test
-    public void test()  {
-        DonutParser.ProgramContext programContext = parse("test");
-        ParseTreeWalker walker = new ParseTreeWalker();
-        Checker checker = new Checker();
-        walker.walk(checker, programContext);
-
-        GeneratorII generator = new GeneratorII();
-        Program prog = generator.generate(programContext, checker.getResult());
-        prog.printInstructions();
-        prog.writeHaskellFile(RESULT_FILE);
-    }
 
     @Test
     public void testThreads() {
@@ -66,6 +53,9 @@ public class GeneratorTest {
 
         HaskelRunner runner = new HaskelRunner();
         runner.runHaskell("threadResult.hs");
+        ArrayList<Integer> shared = runner.getSharedMem();
+        ArrayList<ArrayList> local = runner.getLocalMem();
+
 
 
 //        System.out.println("\n\n\n\n\n\n\n\n\n");
@@ -81,11 +71,11 @@ public class GeneratorTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Lexer lexer = new DonutLexer(chars);
         TokenStream tokens = new CommonTokenStream(lexer);
         DonutParser parser = new DonutParser(tokens);
         DonutParser.ProgramContext prog = parser.program();
         return prog;
     }
-
 }
