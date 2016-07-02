@@ -51,24 +51,6 @@ public class Program {
         }
     }
 
-    public void writeHaskellFile(String filename) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(INIT_FILE)
-                .append("program :: [Instruction]\n" +
-                        "program = [");
-        for (Instruction i : instructions) {
-            buffer.append("    " + i.toString() + ",\n");
-        }
-        buffer.deleteCharAt(buffer.toString().length() - 2);
-        buffer.append("    ]\n")
-                .append("main = sysTest [program]");
-        try {
-            Files.write(Paths.get(filename), buffer.toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String writeProgram(String programName) {
         this.programName = programName;
         StringBuffer buffer = new StringBuffer();
