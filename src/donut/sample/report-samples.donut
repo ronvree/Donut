@@ -1,5 +1,9 @@
 Marge:
     Created by Ron on 1-7-2016.
+
+
+
+    THIS CODE DOES NOT COMPILE (DOUBLE DECLARATIONS)
 ;
 
 Alright brain... it's all up to you {
@@ -62,23 +66,62 @@ Alright brain... it's all up to you {
 
 
     global number g;
-        duff {
-            number i = 0;
-            whileyoulittle (i < 10) {
-                my (g) {
-                    g = g + 1;
-                }
-                i = i + 1;
+    duff {
+        number i = 0;
+        whileyoulittle (i < 10) {
+            my (g) {
+                g = g + 1;
             }
+            i = i + 1;
+        }
 
-            number j = 0;
-            whileyoulittle (j < 10) {
-                my (g) {
-                    g = g + 1;
-                }
-                j = j + 1;
+        number j = 0;
+        whileyoulittle (j < 10) {
+            my (g) {
+                g = g + 1;
+            }
+            j = j + 1;
+        }
+    }
+
+
+    global number x;
+    global number y;
+    duff {
+        my (x) {
+            my (y) {
+                x = x + y;
+            }
+            x = x + 1;
+        }
+    }
+
+
+    global number x;
+    global number y;
+    duff {
+        my (x) {
+            my (y) {
+                x = x + y;
+            }
+            x = x + 1;
+        }
+        my (y) {
+            my (x) {
+                x = x + y;
+            }
+            x = x + 1;
+        }
+    }
+
+    global number x;
+    duff {
+        my (x) {
+            my (x) { Marge: Double Lock ;
+                x = x + 1;
             }
         }
+    }
 
 
 

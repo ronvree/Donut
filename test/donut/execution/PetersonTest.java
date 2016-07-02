@@ -1,8 +1,10 @@
-package donut.generator;
+package donut.execution;
 
-import donut.*;
+import donut.DonutLexer;
+import donut.DonutParser;
+import donut.HaskellWriter;
+import donut.MainGeneratorII;
 import donut.checkers.CheckerII;
-import donut.generators.MainGenerator;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -19,10 +21,7 @@ import java.util.List;
 import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
 import static donut.generators.CodeGenerator.THREADS;
 
-/**
- * Created by Gijs on 30-6-2016.
- */
-public class GeneratorTest {
+public class PetersonTest {
 
     private static final String BASE_DIR = "src/donut/sample/";
     private static final String EXT = ".donut";
@@ -32,21 +31,11 @@ public class GeneratorTest {
 
     @Test
     public void petersonTest()  {
-        Assert.assertEquals(2, MainGeneratorII.THREADS); // For this test to work, only two threads need to be used
+        Assert.assertEquals(2, MainGeneratorII.THREADS); // IMPORTANT: For this test to work, only two threads need to be used (change CodeGenerator's THREAD constant)
         this.runTest("peterson");
         Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
         System.out.println("- Peterson test done.");
     }
-
-    @Test
-    public void bankTest() {
-        this.runTest("bank");
-        System.out.println("- Bank test done.");
-    }
-
-    /*
-        Help methods
-     */
 
     /** Calculates the starting index of variables in shared memory */
     private static int sharedVarIndex() {
@@ -84,4 +73,5 @@ public class GeneratorTest {
         DonutParser parser = new DonutParser(tokens);
         return parser.program();
     }
+
 }

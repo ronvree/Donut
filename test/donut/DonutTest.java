@@ -10,7 +10,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
 /**
- * Test the complete Donut language automatically!
+ * Test the execution Donut language automatically!
  */
 public class DonutTest {
 
