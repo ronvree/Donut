@@ -4,14 +4,50 @@ Marge:
 
 Alright brain... it's all up to you {
 
-    global number balance = 1000;
+    global number balanceHomer = 500;
+    global number balanceMarge = 700;
+    Marge: Total = 500 + 700 = 1200;
+
+    duff {
+        my (balanceHomer)   {
+            my (balanceMarge) {
+                balanceHomer = balanceHomer - 300; Marge: balanceHomer = 200;
+                balanceMarge = balanceMarge + 300; Marge: balanceMarge = 1000;
+            }
+        }
+
+        my (balanceHomer) {
+            my (balanceMarge) {
+                balanceMarge = balanceMarge - 100; Marge: balanceMarge: 900;
+                balanceHomer = balanceHomer + 100; Marge: balanceHomer: 300;
+            }
+        }
+
+        my (balanceHomer) {
+            my (balanceMarge) {
+                balanceMarge = balanceMarge - 800; Marge: balanceMarge = 100;
+                balanceHomer = balanceHomer + 800; Marge: balanceHomer = 1100;
+            }
+        }
+
+        my (balanceHomer) {
+            my (balanceMarge) {
+                balanceHomer = balanceHomer - 300; Marge: balanceHomer = 800;
+                balanceMarge = balanceMarge + 300; Marge: balanceMarge = 400;
+                balanceHomer = balanceHomer + 200; Marge: balanceHomer = 1000;
+                balanceMarge = balanceMarge - 200; Marge: balanceMarge = 200;
+            }
+        }
+    }
+
+
+    Marge: Secondary test on a single bank account.;
+
+    global number balance = 1200;
 
     duff {
         my (balance)   {
-            balance = balance + 300; Marge: 1300 ;
-        }
-        my (balance)   {
-            balance = balance - 400; Marge: 900 ;
+            balance = balance - 300; Marge: 900 ;
             balance = balance - 100; Marge: 800 ;
             balance = balance - 200; Marge: 600 ;
         }
@@ -60,7 +96,6 @@ Alright brain... it's all up to you {
         my (balance) {
             balance = balance - 100; Marge: 1700 ;
         }
-
     }
 
 } I hope I didn't brain my damage.

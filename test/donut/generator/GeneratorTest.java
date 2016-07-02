@@ -33,10 +33,17 @@ public class GeneratorTest {
     @Test
     public void petersonTest()  {
         this.runTest("peterson");
+        System.out.print("\nRunning peterson...");
         Assert.assertEquals(60, sharedMem.get(sharedVarIndex()).intValue());
+        System.out.print(" Passed.");    }
     }
 
-
+    @Test
+    public void bankTest() {
+        System.out.print("\nRunning bank...");
+        this.runTest("bank");
+        System.out.print(" Passed.");
+    }
 
     /*
         Help methods
@@ -45,7 +52,10 @@ public class GeneratorTest {
     /** Calculates the starting index of variables in shared memory */
     private static int sharedVarIndex() {
         return THREADS + (SHAREDMEMSIZE - THREADS)/2;
-    }
+
+
+
+
 
     private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
@@ -78,5 +88,4 @@ public class GeneratorTest {
         DonutParser parser = new DonutParser(tokens);
         return parser.program();
     }
-
 }

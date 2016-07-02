@@ -85,8 +85,8 @@ public class HaskelRunner {
     }
 
     private ArrayList<Integer> getSharedMemory(String data) {
-        String[] split1 = data.split("Nothing");
-        String tmp = split1[split1.length - 1];
+        String[] split = data.split("Nothing");
+        String tmp = split[split.length - 1];
         String[] tmp1 = tmp.split("[\\[]");
         String tmp2 = tmp1[tmp1.length - 1];
         String tmp3 = tmp2.split("\\]")[0];
@@ -95,7 +95,6 @@ public class HaskelRunner {
         for(int i = 0; i < tmp4.length; i ++) {
             sharedMem.add(Integer.parseInt(tmp4[i].trim()));
         }
-        System.out.println(sharedMem);
         return sharedMem;
     }
 
