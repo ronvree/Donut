@@ -1,16 +1,13 @@
-package donut.execution;
+package donut;
 
-import donut.DonutLexer;
-import donut.DonutParser;
-import util.HaskellWriter;
-import donut.generators.MainGenerator;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import donut.checkers.Checker;
+import donut.generators.MainGenerator;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.Assert;
-import org.junit.Test;
 import util.HaskelRunner;
+import util.HaskellWriter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -18,33 +15,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
-import static donut.generators.CodeGenerator.THREADS;
+/**
+ * Runs the Sandbox.donut file in directory testfiles.
+ */
+public class Sandbox {
 
-public class PetersonTest {
-
-    private static final String BASE_DIR = "src/donut/testfiles/generator/";
+    private static final String BASE_DIR = "src/donut/testfiles/";
     private static final String EXT = ".donut";
 
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
 
-    @Test
-    public void petersonTest()  {
-        if (MainGenerator.THREADS == 2) {
-            this.runTest("peterson");
-            Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
-        } else {
-            System.err.println("IMPORTANT: For petersonTest to work, only two threads need to be used (change CodeGenerator's THREAD constant)");
-        }
+    public static void main(String[] args) {
+        Sandbox s = new Sandbox();
+        s.runFile("sandbox");
+        System.out.println("Results of sandbox.donut:\n");
+        System.out.println("    Local Memory:\n");
+        System.out.println("    " + s.localMem);
+        System.out.println("\n    Shared Memory: " + s.sharedMem);
     }
 
-    /** Calculates the starting index of variables in shared memory */
-    private static int sharedVarIndex() {
-        return THREADS + (SHAREDMEMSIZE - THREADS) / 2;
+    public Sandbox() {
+        localMem = new ArrayList<>();
+        sharedMem = new ArrayList<>();
     }
-
-    private void runTest(String fileName) {
+    private void runFile(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
         Checker checker = new Checker();
@@ -58,11 +53,11 @@ public class PetersonTest {
         writer.writeFile(programs);
 
         HaskelRunner runner = new HaskelRunner("result");
-        this.localMem = runner.getLocalMem();
-        this.sharedMem = runner.getSharedMem();
+        localMem = runner.getLocalMem();
+        sharedMem = runner.getSharedMem();
     }
 
-    private DonutParser.ProgramContext parse(String filename)   {
+    private static DonutParser.ProgramContext parse(String filename)   {
         CharStream chars = null;
         try {
             chars = new ANTLRInputStream(new FileReader(new File(BASE_DIR + filename + EXT)));
@@ -75,5 +70,4 @@ public class PetersonTest {
         DonutParser parser = new DonutParser(tokens);
         return parser.program();
     }
-
 }

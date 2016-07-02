@@ -1,9 +1,7 @@
 package donut;
 
 import donut.checkers.CheckerTest;
-import donut.execution.PetersonTest;
 import donut.generator.GeneratorTest;
-import donut.generators.CodeGenerator;
 import donut.grammar.GrammarTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +14,7 @@ import org.junit.runner.Result;
 public class DonutTest {
 
     private JUnitCore core = new JUnitCore();
+
 
     @Test
     public void testGrammar() {
@@ -36,22 +35,6 @@ public class DonutTest {
         System.out.println("\nGenerator tests:");
         Result res = core.run(GeneratorTest.class);
         Assert.assertEquals(0, res.getFailureCount());
-
-
-        // Peterson test.
-        int previousThreads = CodeGenerator.THREADS;
-        setNumberOfThreads(2);                              // PetersonTest must be executed on 2 threads.
-        Result pres = core.run(PetersonTest.class);
-        Assert.assertEquals(0, pres.getFailureCount());
-        System.out.println("    - Peterson test done.");
-        setNumberOfThreads(previousThreads);
-
         System.out.println("- Generator tests done.");
-
-    }
-
-    private void setNumberOfThreads(int numberOfThreads) {
-        CodeGenerator.THREADS = numberOfThreads;
-
     }
 }

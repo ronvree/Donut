@@ -7,9 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * Created by Gijs on 24-Jun-16.
- */
 public class HaskellWriter {
 
     private String INIT_FILE =

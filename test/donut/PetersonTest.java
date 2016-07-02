@@ -1,15 +1,17 @@
-package donut.generator;
+package donut;
 
-import donut.*;
-import donut.checkers.Checker;
+import donut.DonutLexer;
+import donut.DonutParser;
+import donut.generators.CodeGenerator;
+import util.HaskellWriter;
 import donut.generators.MainGenerator;
+import donut.checkers.Checker;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Assert;
 import org.junit.Test;
 import util.HaskelRunner;
-import util.HaskellWriter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,7 +19,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneratorTest {
+import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
+import static donut.generators.CodeGenerator.THREADS;
+
+public class PetersonTest {
 
     private static final String BASE_DIR = "src/donut/testfiles/generator/";
     private static final String EXT = ".donut";
@@ -26,32 +31,23 @@ public class GeneratorTest {
     private ArrayList<Integer> sharedMem;
 
     @Test
-    public void bankTest() {
-        this.runTest("bank");
-        Assert.assertEquals(1000, (int) sharedMem.get(9));      // Homers' balance.
-        Assert.assertEquals(200, (int) sharedMem.get(10));      // Marge's balance.
-        Assert.assertEquals(1700, (int) sharedMem.get(11));     // Balance.
-        System.out.println("    - Bank test done.");
+    public void petersonTest()  {
+        int previous = MainGenerator.THREADS;
+        MainGenerator.THREADS = 2;
+        if (MainGenerator.THREADS == 2) {
+            this.runTest("peterson");
+            Assert.assertEquals(1000, sharedMem.get(sharedVarIndex()).intValue());
+        } else {
+            System.err.println("IMPORTANT: For petersonTest to work, only two threads need to be used (change CodeGenerator's THREAD constant)");
+        }
+        MainGenerator.THREADS = previous;
+        System.out.println("    - Peterson test done.");
     }
 
-    @Test
-    public void gcdTest() {
-        this.runTest("gcd");
-        Assert.assertEquals(3, (int) localMem.get(0).get(1));   // GCD of 9 and 6.
-        System.out.println("    - GCD test done.");
+    /** Calculates the starting index of variables in shared memory */
+    private static int sharedVarIndex() {
+        return THREADS + (SHAREDMEMSIZE - THREADS) / 2;
     }
-
-    @Test
-    public void producerConsumerTest() {
-        this.runTest("producerConsumer");
-        Assert.assertEquals(10, (int) sharedMem.get(9));        // Value of a.
-        Assert.assertEquals(0, (int) sharedMem.get(10));        // Value of b.
-        System.out.println("    - Producer-consumer test done.");
-    }
-
-    /*
-        Help methods
-     */
 
     private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
@@ -84,4 +80,5 @@ public class GeneratorTest {
         DonutParser parser = new DonutParser(tokens);
         return parser.program();
     }
+
 }

@@ -11,9 +11,8 @@ import java.util.ArrayList;
 
 public class HaskelRunner {
 
-    public static final int NR_OF_SPROCKELLS = 1 + CodeGenerator.THREADS;
-    public static final int NR_OF_LINES = 5 + NR_OF_SPROCKELLS;
-    public static final int SHARED_MEM_SIZE = CodeGenerator.SHAREDMEMSIZE;
+    public static int NR_OF_SPROCKELLS = 1 + CodeGenerator.THREADS;
+    public static int NR_OF_LINES = 5 + NR_OF_SPROCKELLS;
 
     private ArrayList<ArrayList> localMem;
     private ArrayList<Integer> sharedMem;
@@ -28,7 +27,6 @@ public class HaskelRunner {
         String command = "runhaskell " + fileName + ".hs";
         try {
             Runtime rt = Runtime.getRuntime();
-//            Process proc = rt.exec(command, null, new File(FILE_DIR));
             Process proc = rt.exec(command);
 
             Collector errorCollector = new
@@ -40,8 +38,7 @@ public class HaskelRunner {
             errorCollector.start();
             outputCollector.start();
 
-            int exitVal = proc.waitFor();
-//            System.out.println("Process exitValue: " + exitVal);
+            proc.waitFor();
             return outputCollector.getResult();
         } catch (Throwable t) {
             t.printStackTrace();
@@ -53,18 +50,14 @@ public class HaskelRunner {
 
     private ArrayList<ArrayList> getLocalMemory(String data) {
         ArrayList<ArrayList> result = new ArrayList<>();
-//        System.out.println(data);
         String[] mem = data.split("localMem");
-//        System.out.println("mem.length = " + mem.length);
         for (int i = 1; i < mem.length; i++) {
-//            System.out.println(i + " " + mem[i]);
-
             String[] m = mem[1].split(",");
-
             ArrayList<Integer> localMem = new ArrayList<>();
 
             // First slot in local memory is always zero.
             localMem.add(0);
+
             // skip first local memory slot, this cannot be changed and will always be zero.
             for (int j = 1; j < m.length - 1; j++) {
                 try {
@@ -76,7 +69,6 @@ public class HaskelRunner {
             }
             result.add(localMem);
         }
-//        System.out.println("Result " + result);
         return result;
     }
 
@@ -89,7 +81,11 @@ public class HaskelRunner {
         String[] tmp4 = tmp3.split(",");
         ArrayList<Integer> sharedMem = new ArrayList<>();
         for(int i = 0; i < tmp4.length; i ++) {
-            sharedMem.add(Integer.parseInt(tmp4[i].trim()));
+            try {
+                sharedMem.add(Integer.parseInt(tmp4[i].trim()));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         return sharedMem;
     }
@@ -122,7 +118,6 @@ class Collector extends Thread {
             String line;
             int i = 0;
             while ((line = br.readLine()) != null) {
-//                System.out.println(type + "> " + line);
                 buffer.append(line + "\n");
                 if (i > HaskelRunner.NR_OF_LINES) {
                     buffer = new StringBuffer();
@@ -133,7 +128,6 @@ class Collector extends Thread {
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
-//        System.out.println("buffer: " + buffer.toString());
         result = buffer.toString();
     }
 
