@@ -32,16 +32,15 @@ public class GeneratorTest {
 
     @Test
     public void petersonTest()  {
-        System.out.print("\nRunning peterson...");
         this.runTest("peterson");
         Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
+        System.out.println("- Peterson test done.");
     }
 
     @Test
     public void bankTest() {
-        System.out.print("\nRunning bank...");
         this.runTest("bank");
-        System.out.print(" Passed.");
+        System.out.println("- Bank test done.");
     }
 
     /*
@@ -51,8 +50,8 @@ public class GeneratorTest {
     /** Calculates the starting index of variables in shared memory */
     private static int sharedVarIndex() {
         return THREADS + (SHAREDMEMSIZE - THREADS) / 2;
-
     }
+
 
 
 

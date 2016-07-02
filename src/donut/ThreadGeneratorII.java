@@ -42,7 +42,7 @@ public class ThreadGeneratorII extends CodeGeneratorII {
         try {
             reg = this.getRegpool().get();
         } catch (RegUlator.NoRegException e) {
-            System.out.println("Can't generate thread: No registers");
+            System.err.println("Can't generate thread: No registers left!");
         }
         emit(new LoadI(id, SPRID));
         emit(new Read(SPRID));                   // Read from reserved location in shared memory
