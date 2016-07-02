@@ -5,7 +5,7 @@ module BasicFunctions where
 -- ==========================================================================================================
 reg0          = 0    :: Int                                 -- names for registers. reg0 is ALWAYS 0
 regSprID      = 1    :: Int                                 -- regSprID: contains the sprockellID
-reg1          = 2    :: Int                                 -- registers A-E for other usage
+reg1          = 2    :: Int                                 -- registers 1-21 for other usage
 reg2          = 3    :: Int
 reg3          = 4    :: Int
 reg4          = 5    :: Int
