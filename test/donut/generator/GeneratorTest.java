@@ -30,6 +30,8 @@ public class GeneratorTest {
     @Test
     public void petersonTest()  {
         this.runTest("peterson");
+//        Assert.assertEquals(60, sharedMem.get());
+
     }
 
     public void runTest(String fileName) {

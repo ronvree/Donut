@@ -2,6 +2,8 @@ Marge:
     Created by Ron on 30-6-2016.
 
     Donut implementation of Peterson's algorithm
+
+    NOTE -- This implementation breaks with more than 2 threads!
 ;
 
 Alright brain... it's all up to you {

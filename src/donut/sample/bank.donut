@@ -1,0 +1,66 @@
+Marge:
+    Created by Ron on 30-6-2016.
+;
+
+Alright brain... it's all up to you {
+
+    global number balance = 1000;
+
+    duff {
+        my (balance)   {
+            balance = balance + 300; Marge: 1300 ;
+        }
+        my (balance)   {
+            balance = balance - 400; Marge: 900 ;
+            balance = balance - 100; Marge: 800 ;
+            balance = balance - 200; Marge: 600 ;
+        }
+        my (balance) {
+            balance = balance + 800; Marge: 1400 ;
+        }
+        my (balance) {
+            balance = balance - 200; Marge: 1200 ;
+        }
+        my (balance) {
+            balance = balance + 100; Marge: 1300 ;
+        }
+        my (balance) {
+            balance = balance + 100; Marge: 1400 ;
+        }
+        my (balance) {
+            balance = balance - 300; Marge: 1100 ;
+        }
+        my (balance) {
+            balance = balance + 300; Marge: 1400 ;
+        }
+        my (balance) {
+            balance = balance + 200; Marge: 1600 ;
+        }
+        my (balance) {
+            balance = balance + 200; Marge: 1800 ;
+        }
+        my (balance) {
+            balance = balance - 300; Marge: 1500 ;
+        }
+        my (balance) {
+            balance = balance + 300; Marge: 1800 ;
+        }
+        my (balance) {
+            balance = balance - 600; Marge: 1200 ;
+        }
+        my (balance) {
+            balance = balance + 300; Marge: 1500 ;
+        }
+        my (balance) {
+            balance = balance + 400; Marge: 1900 ;
+        }
+        my (balance) {
+            balance = balance - 100; Marge: 1800 ;
+        }
+        my (balance) {
+            balance = balance - 100; Marge: 1700 ;
+        }
+
+    }
+
+} I hope I didn't brain my damage.
