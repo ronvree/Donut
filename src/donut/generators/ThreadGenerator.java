@@ -1,12 +1,12 @@
 package donut.generators;
 
-import donut.checkers.CheckerResultII;
 import donut.DonutParser;
+import donut.RegUlator;
+import donut.checkers.CheckerResult;
 import donut.spril.Program;
 import donut.spril.Reg;
 import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.List;
 
@@ -35,14 +35,17 @@ public class ThreadGenerator extends CodeGenerator {
      * @param thread     -- Program that will contain the thread
      * @return           -- The program appended with a newly generated thread executing the giving statements
      */
-    public Program generate(List<ParseTree> statements, CheckerResultII result, Program thread)   {
+    public Program generate(List<ParseTree> statements, CheckerResult result, Program thread)   {
         this.setProgram(thread);
         this.setResult(result);
-        this.setRegisters(new ParseTreeProperty<>());
-        this.setRegCount(1);                    // Register 0 cannot be used
-        this.setLineCount(thread.size());       // Continue writing at the end of the program
+        this.setLineCount(thread.size());        // Continue writing at the end of the program
 
-        Reg reg = new Reg("reg1");               // Temporary use of register 1 to indicate when the thread can start
+        Reg reg = null;       // Temporary use of register to indicate when the thread can start
+        try {
+            reg = this.getRegpool().get();
+        } catch (RegUlator.NoRegException e) {
+            System.err.println("Can't generate thread: No registers left!");
+        }
         emit(new LoadI(id, SPRID));
         emit(new Read(SPRID));                   // Read from reserved location in shared memory
         emit(new Receive(reg));                  // Receive value from memory
@@ -58,6 +61,7 @@ public class ThreadGenerator extends CodeGenerator {
         emit(new Receive(reg));
         emit(new BranchI(reg, -2, false));
 
+        release(reg);
         return this.getProgram();
     }
 

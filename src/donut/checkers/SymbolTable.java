@@ -1,6 +1,6 @@
 package donut.checkers;
 
-import donut.MainGeneratorII;
+import donut.generators.MainGenerator;
 import donut.Type;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Stack;
  *
  * Aids the checker in keeping track types, offsets and memory locations (shared or local) for variables in multiple scopes
  */
-public class SymbolTableII {
+public class SymbolTable {
 
     /** Stores the scopes needed for type checking */
     private Stack<Scope> scopes;
@@ -21,12 +21,12 @@ public class SymbolTableII {
     /** Current size of shared memory */
     private int sharedSize;
 
-    public SymbolTableII()    {
+    public SymbolTable()    {
         this.scopes = new Stack<>();
         this.scopes.push(new Scope());
         this.size = 1;                                                  // Address 0 can't be used
-        this.sharedSize = MainGeneratorII.THREADS;                         // Activity of threads is indicated in the first part of shared memory
-        this.sharedSize += (MainGeneratorII.SHAREDMEMSIZE - sharedSize)/2; // The first half of remaining memory is used to indicate locks
+        this.sharedSize = MainGenerator.THREADS;                         // Activity of threads is indicated in the first part of shared memory
+        this.sharedSize += (MainGenerator.SHAREDMEMSIZE - sharedSize)/2; // The first half of remaining memory is used to indicate locks
     }
 
     /**

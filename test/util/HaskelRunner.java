@@ -1,12 +1,8 @@
 package util;
 
 import donut.generators.CodeGenerator;
-import donut.generators.MainGenerator;
-import org.junit.Test;
 
 import java.io.*;
-import java.net.URI;
-import java.nio.file.*;
 import java.util.ArrayList;
 
 /**

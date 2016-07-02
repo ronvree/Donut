@@ -14,9 +14,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-public class CheckerIITest {
+public class CheckerTest {
 
-    private static final String BASE_DIR = "src/donut/sample/testfiles/checker/";
+    private static final String BASE_DIR = "src/donut/testfiles/checker/";
     private static final String EXT = ".donut";
 
     @Test
@@ -65,7 +65,7 @@ public class CheckerIITest {
 
     private List<Error> listErrors(DonutParser.ProgramContext prog) {
         ParseTreeWalker walker = new ParseTreeWalker();
-        CheckerII checker = new CheckerII();
+        Checker checker = new Checker();
         walker.walk(checker, prog);
         return checker.getErrors();
     }

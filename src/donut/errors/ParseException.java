@@ -1,4 +1,4 @@
-package donut;
+package donut.errors;
 
 import java.util.List;
 

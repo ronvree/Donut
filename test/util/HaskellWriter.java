@@ -1,4 +1,4 @@
-package donut;
+package util;
 
 import donut.spril.Program;
 

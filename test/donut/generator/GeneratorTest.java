@@ -1,8 +1,7 @@
 package donut.generator;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import donut.*;
-import donut.checkers.CheckerII;
+import donut.checkers.Checker;
 import donut.generators.MainGenerator;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
@@ -10,6 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Assert;
 import org.junit.Test;
 import util.HaskelRunner;
+import util.HaskellWriter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,12 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
-import static donut.generators.CodeGenerator.THREADS;
-
 public class GeneratorTest {
 
-    private static final String BASE_DIR = "src/donut/sample/";
+    private static final String BASE_DIR = "src/donut/testfiles/generator/";
     private static final String EXT = ".donut";
 
     private ArrayList<ArrayList> localMem;
@@ -59,11 +56,11 @@ public class GeneratorTest {
     private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
-        CheckerII checker = new CheckerII();
+        Checker checker = new Checker();
 
         walker.walk(checker, programContext);
 
-        MainGeneratorII generator = new MainGeneratorII();
+        MainGenerator generator = new MainGenerator();
         List<Program> programs = generator.generate(programContext, checker.getResult());
 
         HaskellWriter writer = new HaskellWriter();

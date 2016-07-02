@@ -1,8 +1,9 @@
 package donut.generators;
 
-import donut.checkers.CheckerResultII;
 import donut.DonutBaseVisitor;
 import donut.DonutParser;
+import donut.RegUlator;
+import donut.checkers.CheckerResult;
 import donut.spril.Instruction;
 import donut.spril.Operator;
 import donut.spril.Program;
@@ -22,24 +23,31 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
     /** Boolean representation in Spril instructions */
     public static final int TRUE = 1;
     public static final int FALSE = 0;
-    /** Number of threads that do work during concurrent blocks */
-    public static final int THREADS = 3;
     /** Memory sizes (4 bytes per location) */
     public static final int LOCALMEMSIZE = 16;
     public static final int SHAREDMEMSIZE = 16;
+    public static final int REGBANKSIZE = 23;
     /** Register with zero constant */
     public static final Reg ZEROREG = new Reg("(reg0)");
 
+    /** Number of threads that do work during concurrent blocks */
+    public static int THREADS = 3;
+
     /** Result of the checker phase */
-    private CheckerResultII result;
-    /** Counter for creating fresh registers */
-    private int regCount;
+    private CheckerResult result;
+    /** Helper class for obtaining fresh registers */
+    private RegUlator regpool;
     /** Line counter (used for jumps) */
     private int lineCount;
     /** Maps expression values to registers */
     private ParseTreeProperty<Reg> registers;
     /** Reference to the main program */
     private Program program;
+
+    public CodeGenerator()    {
+        this.regpool = new RegUlator(REGBANKSIZE - 2);
+        this.registers = new ParseTreeProperty<>();
+    }
 
     /*
         Visitor methods
@@ -76,6 +84,7 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         } else {
             emit(new StoreAI(exprReg, offset));
         }
+        release(exprReg);
         return begin;
     }
 
@@ -135,6 +144,7 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
             } else {
                 emit(new StoreAI(resultExpr, offset(ctx.ID())));
             }
+            release(resultExpr);
         } else {                                                            // No assign context -> Set default value
             begin = lineCount;
             if (ctx.GLOBAL() != null)   {
@@ -215,10 +225,12 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         Reg r0 = reg(ctx.expr(0));
         Reg r1 = reg(ctx.expr(1));
         if (ctx.multop().MULT() != null)   {
-            emit(new Compute(Operator.MUL, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.MUL, r0, r1, r0));
         } else {
-            emit(new Compute(Operator.DIV, r0, r1, reg(ctx))); // Div operation no longer supported by Sprockell
+            emit(new Compute(Operator.DIV, r0, r1, r0)); // Div operation no longer supported by Sprockell
         }
+        setReg(ctx, r0);
+        release(r1);
         return begin;
     }
 
@@ -230,10 +242,12 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         Reg r0 = reg(ctx.expr(0));
         Reg r1 = reg(ctx.expr(1));
         if (ctx.plusop().PLUS() != null)   {
-            emit(new Compute(Operator.ADD, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.ADD, r0, r1, r0));
         } else {
-            emit(new Compute(Operator.SUB, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.SUB, r0, r1, r0));
         }
+        setReg(ctx, r0);
+        release(r1);
         return begin;
     }
 
@@ -247,18 +261,20 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         Reg r1 = reg(ctx.expr(1));
 
         if (ctx.compOperator().EQUALS() != null)   {
-            emit(new Compute(Operator.EQUAL, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.EQUAL, r0, r1, r0));
         } else if (ctx.compOperator().NOTEQUALS() != null)    {
-            emit(new Compute(Operator.NEQ, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.NEQ, r0, r1, r0));
         } else if (ctx.compOperator().GT() != null)    {
-            emit(new Compute(Operator.GT, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.GT, r0, r1, r0));
         } else if (ctx.compOperator().GE() != null)    {
-            emit(new Compute(Operator.GTE, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.GTE, r0, r1, r0));
         } else if (ctx.compOperator().LT() != null)    {
-            emit(new Compute(Operator.LT, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.LT, r0, r1, r0));
         } else if (ctx.compOperator().LE() != null)    {
-            emit(new Compute(Operator.LTE, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.LTE, r0, r1, r0));
         }
+        setReg(ctx, r0);
+        release(r1);
         return begin;
     }
 
@@ -277,12 +293,14 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         Reg r1 = reg(ctx.expr(1));
 
         if (ctx.boolOperator().AND() != null)   {
-            emit(new Compute(Operator.AND, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.AND, r0, r1, r0));
         } else if (ctx.boolOperator().OR() != null) {
-            emit(new Compute(Operator.OR, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.OR, r0, r1, r0));
         } else if (ctx.boolOperator().XOR() != null) {
-            emit(new Compute(Operator.XOR, r0, r1, reg(ctx)));
+            emit(new Compute(Operator.XOR, r0, r1, r0));
         }
+        setReg(ctx, r0);
+        release(r1);
         return begin;
     }
 
@@ -328,9 +346,12 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
     protected Reg reg(ParseTree node) {
         Reg result = this.registers.get(node);
         if (result == null) {
-            result = new Reg("(reg" + this.regCount + ")");
+            try {
+                result = regpool.get();
+            } catch (RegUlator.NoRegException e) {
+                System.out.println("Dude, make your expressions less complex!");
+            }
             this.registers.put(node, result);
-            this.regCount++;
         }
         return result;
     }
@@ -339,24 +360,23 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
         this.registers.put(node, reg);
     }
 
+    /** Indicates that the register can be reused */
+    protected void release(Reg reg) { this.regpool.add(reg); }
+
     /*
         Getters and setters
      */
 
-    protected CheckerResultII getResult() {
+    public RegUlator getRegpool() {
+        return regpool;
+    }
+
+    protected CheckerResult getResult() {
         return result;
     }
 
-    protected void setResult(CheckerResultII result) {
+    protected void setResult(CheckerResult result) {
         this.result = result;
-    }
-
-    protected int getRegCount() {
-        return regCount;
-    }
-
-    protected void setRegCount(int regCount) {
-        this.regCount = regCount;
     }
 
     protected int getLineCount() {

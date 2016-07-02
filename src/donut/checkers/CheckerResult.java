@@ -1,33 +1,20 @@
-package donut.checkers.deprecated;
+package donut.checkers;
 
 import donut.Type;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 /**
- * Created by Ron on 20-6-2016.
+ * Created by Ron on 23-6-2016.
  */
 public class CheckerResult {
 
-    /** Mapping from statements and expressions to the atomic
-     * subtree that is their entry in the control flow graph. */
-    private final ParseTreeProperty<ParserRuleContext> entries = new ParseTreeProperty<>();
     /** Mapping from expressions to types. */
     private final ParseTreeProperty<Type> types = new ParseTreeProperty<>();
     /** Mapping from variables to coordinates. */
     private final ParseTreeProperty<Integer> offsets = new ParseTreeProperty<>();
-
-    /** Adds an association from parse tree node to the flow graph entry. */
-    public void setEntry(ParseTree node, ParserRuleContext entry) {
-        this.entries.put(node, entry);
-    }
-
-    /** Returns the flow graph entry associated
-     * with a given parse tree node. */
-    public ParserRuleContext getEntry(ParseTree node) {
-        return this.entries.get(node);
-    }
+    /** Store for all variables if they shored be stored in shared or local memory */
+    private final ParseTreeProperty<Boolean> shared = new ParseTreeProperty<>();
 
     /** Adds an association from a parse tree node containing a
      * variable reference to the offset
@@ -53,7 +40,10 @@ public class CheckerResult {
         return this.types.get(node);
     }
 
+    /** Returns whether the variable is stored in shared memory */
+    public boolean isShared(ParseTree node) { return this.shared.get(node); }
 
-
+    /** Indicate if the node is stored in shared or local memory */
+    public void setShared(ParseTree node, boolean shared) { this.shared.put(node, shared); }
 
 }

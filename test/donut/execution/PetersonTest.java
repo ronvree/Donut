@@ -2,10 +2,9 @@ package donut.execution;
 
 import donut.DonutLexer;
 import donut.DonutParser;
-import donut.HaskellWriter;
-import donut.MainGeneratorII;
-import donut.checkers.CheckerII;
+import util.HaskellWriter;
 import donut.generators.MainGenerator;
+import donut.checkers.Checker;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -24,7 +23,7 @@ import static donut.generators.CodeGenerator.THREADS;
 
 public class PetersonTest {
 
-    private static final String BASE_DIR = "src/donut/sample/";
+    private static final String BASE_DIR = "src/donut/testfiles/generator/";
     private static final String EXT = ".donut";
 
     private ArrayList<ArrayList> localMem;
@@ -32,7 +31,7 @@ public class PetersonTest {
 
     @Test
     public void petersonTest()  {
-        if (MainGeneratorII.THREADS == 2) {
+        if (MainGenerator.THREADS == 2) {
             this.runTest("peterson");
             Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
         } else {
@@ -48,11 +47,11 @@ public class PetersonTest {
     private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
-        CheckerII checker = new CheckerII();
+        Checker checker = new Checker();
 
         walker.walk(checker, programContext);
 
-        MainGeneratorII generator = new MainGeneratorII();
+        MainGenerator generator = new MainGenerator();
         List<Program> programs = generator.generate(programContext, checker.getResult());
 
         HaskellWriter writer = new HaskellWriter();

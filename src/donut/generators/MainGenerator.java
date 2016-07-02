@@ -1,11 +1,10 @@
 package donut.generators;
 
-import donut.checkers.CheckerResultII;
 import donut.DonutParser;
+import donut.checkers.CheckerResult;
 import donut.spril.Program;
 import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +24,14 @@ public class MainGenerator extends CodeGenerator {
      * @param tree -- The parsed Donut code that will be converted to Spril instructions
      * @param result -- Result from the checker phase
      */
-    public List<Program> generate(ParseTree tree, CheckerResultII result)   {
+    public List<Program> generate(ParseTree tree, CheckerResult result)   {
         this.setProgram(new Program());
         this.programs = new ArrayList<>();
-        this.setRegisters(new ParseTreeProperty<>());
-
         this.programs.add(this.getProgram());                       // Add main
         for (int i = 0; i < THREADS; i++)  {
             programs.add(new Program());                            // Add potential threads
         }
         this.setResult(result);
-        this.setRegCount(1);                                        // Reg 0 cannot be used
         this.setLineCount(0);
 
         tree.accept(this);                                          // Visit the tree

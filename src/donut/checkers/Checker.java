@@ -19,7 +19,7 @@ import java.util.List;
  *  - Correct declarations/visibility of variables in multiple scopes
  *  - Distinguishing between shared and local variables
  */
-public class CheckerII extends DonutBaseListener {
+public class Checker extends DonutBaseListener {
 
     /**
      * Temporarily store node types needed for type checking
@@ -32,24 +32,24 @@ public class CheckerII extends DonutBaseListener {
     /**
      * Keep track of scopes
      */
-    private SymbolTableII scopes;
+    private SymbolTable scopes;
 
     /**
      * Store resulting type and offset
      */
-    private CheckerResultII result;
+    private CheckerResult result;
 
-    public CheckerII()  {
+    public Checker()  {
         this.types = new ParseTreeProperty<>();
         this.errors = new ArrayList<>();
-        this.scopes = new SymbolTableII();
-        this.result = new CheckerResultII();
+        this.scopes = new SymbolTable();
+        this.result = new CheckerResult();
     }
 
     public List<Error> getErrors()  {
         return this.errors;
     }
-    public CheckerResultII getResult() { return this.result; }
+    public CheckerResult getResult() { return this.result; }
 
     /*
         Listener methods
