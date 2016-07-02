@@ -1,11 +1,9 @@
 package donut;
 
 import donut.checkers.CheckerResultII;
-import donut.DonutParser;
 import donut.spril.Program;
 import donut.spril.instructions.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.ArrayList;
 import java.util.List;

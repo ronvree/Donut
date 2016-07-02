@@ -6,9 +6,12 @@ import java.util.Stack;
 
 /**
  * Ulates registers
+ *
+ * A pool of registers
  */
 public class RegUlator {
 
+    /** Registers are stored on a stack */
     private Stack<Reg> regStack;
 
     public RegUlator(int size) {

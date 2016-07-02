@@ -110,7 +110,6 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
             this.program.replace(endJump, new JumpI(lineCount, true));
             emit(new Nop());
         }
-        release(r_cmp);
         return begin;
     }
 
@@ -126,7 +125,6 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
         program.replace(branch, new BranchI(r_cmp, 2, false));          // Update the branch/jump instructions with the right line numbers
         program.replace(jump, new JumpI(lineCount, true));
         emit(new Nop());
-        release(r_cmp);
         return begin;
     }
 
