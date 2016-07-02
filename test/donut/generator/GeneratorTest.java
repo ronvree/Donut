@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
+import static donut.generators.CodeGenerator.THREADS;
+
 /**
  * Created by Gijs on 30-6-2016.
  */
@@ -30,11 +33,21 @@ public class GeneratorTest {
     @Test
     public void petersonTest()  {
         this.runTest("peterson");
-//        Assert.assertEquals(60, sharedMem.get());
-
+        Assert.assertEquals(60, sharedMem.get(sharedVarIndex()).intValue());
     }
 
-    public void runTest(String fileName) {
+
+
+    /*
+        Help methods
+     */
+
+    /** Calculates the starting index of variables in shared memory */
+    private static int sharedVarIndex() {
+        return THREADS + (SHAREDMEMSIZE - THREADS)/2;
+    }
+
+    private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);
         ParseTreeWalker walker = new ParseTreeWalker();
         CheckerII checker = new CheckerII();
@@ -66,11 +79,4 @@ public class GeneratorTest {
         return parser.program();
     }
 
-    public ArrayList<ArrayList> getLocalMem() {
-        return localMem;
-    }
-
-    public ArrayList<Integer> getSharedMem() {
-        return sharedMem;
-    }
 }
