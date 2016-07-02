@@ -43,7 +43,7 @@ public class HaskellWriter {
         }
         buffer.deleteCharAt(buffer.toString().length()-1).append("]");
         try {
-            Files.write(Paths.get("threadResult.hs"), buffer.toString().getBytes());
+            Files.write(Paths.get("result.hs"), buffer.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -30,9 +30,7 @@ public class DonutTest {
 
     @Test
     public void testGenerator() {
-        GeneratorTest test = new GeneratorTest();
-        test.runTest("threads2");
-        System.out.println(test.getLocalMem());
+        Result res = core.run(GeneratorTest.class);
     }
 
     @Test

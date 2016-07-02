@@ -2,6 +2,7 @@ package util;
 
 import donut.generators.CodeGenerator;
 import donut.generators.MainGenerator;
+import org.junit.Test;
 
 import java.io.*;
 import java.net.URI;
@@ -84,13 +85,17 @@ public class HaskelRunner {
     }
 
     private ArrayList<Integer> getSharedMemory(String data) {
+        String[] split1 = data.split("Nothing");
+        String tmp = split1[split1.length - 1];
+        String[] tmp1 = tmp.split("[\\[]");
+        String tmp2 = tmp1[tmp1.length - 1];
+        String tmp3 = tmp2.split("\\]")[0];
+        String[] tmp4 = tmp3.split(",");
         ArrayList<Integer> sharedMem = new ArrayList<>();
-        String mem = data.substring(data.length() - (SHARED_MEM_SIZE*2+2)).split("\\]")[0];
-//        System.out.println("mem: " + mem);
-        String[] res = mem.split(",");
-        for(int i = 0; i < res.length; i ++) {
-            sharedMem.add(Integer.parseInt(res[i]));
+        for(int i = 0; i < tmp4.length; i ++) {
+            sharedMem.add(Integer.parseInt(tmp4[i].trim()));
         }
+        System.out.println(sharedMem);
         return sharedMem;
     }
 

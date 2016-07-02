@@ -30,7 +30,6 @@ public class GeneratorTest {
     @Test
     public void petersonTest()  {
         this.runTest("peterson");
-        System.out.println(getSharedMem());
     }
 
     public void runTest(String fileName) {
@@ -46,7 +45,7 @@ public class GeneratorTest {
         HaskellWriter writer = new HaskellWriter();
         writer.writeFile(programs);
 
-        HaskelRunner runner = new HaskelRunner("threadResult");
+        HaskelRunner runner = new HaskelRunner("result");
         this.localMem = runner.getLocalMem();
         this.sharedMem = runner.getSharedMem();
     }
