@@ -1,7 +1,7 @@
 package donut.checkers;
 
+import donut.MainGeneratorII;
 import donut.Type;
-import donut.generators.deprecated.GeneratorIII;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +25,8 @@ public class SymbolTableII {
         this.scopes = new Stack<>();
         this.scopes.push(new Scope());
         this.size = 1;                                                  // Address 0 can't be used
-        this.sharedSize = GeneratorIII.THREADS;                         // Activity of threads is indicated in the first part of shared memory
-        this.sharedSize += (GeneratorIII.SHAREDMEMSIZE - sharedSize)/2; // The first half of remaining memory is used to indicate locks
+        this.sharedSize = MainGeneratorII.THREADS;                         // Activity of threads is indicated in the first part of shared memory
+        this.sharedSize += (MainGeneratorII.SHAREDMEMSIZE - sharedSize)/2; // The first half of remaining memory is used to indicate locks
     }
 
     /**
