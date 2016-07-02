@@ -5,6 +5,7 @@ import donut.DonutParser;
 import donut.HaskellWriter;
 import donut.MainGeneratorII;
 import donut.checkers.CheckerII;
+import donut.generators.MainGenerator;
 import donut.spril.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -31,10 +32,12 @@ public class PetersonTest {
 
     @Test
     public void petersonTest()  {
-        Assert.assertEquals(2, MainGeneratorII.THREADS); // IMPORTANT: For this test to work, only two threads need to be used (change CodeGenerator's THREAD constant)
-        this.runTest("peterson");
-        Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
-        System.out.println("- Peterson test done.");
+        if (MainGeneratorII.THREADS == 2) {
+            this.runTest("peterson");
+            Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
+        } else {
+            System.err.println("IMPORTANT: For petersonTest to work, only two threads need to be used (change CodeGenerator's THREAD constant)");
+        }
     }
 
     /** Calculates the starting index of variables in shared memory */

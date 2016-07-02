@@ -293,7 +293,6 @@ public class CheckerII extends DonutBaseListener {
         } else if (typeContext.INTTYPE() != null)    {
             type = Type.NUMBER_TYPE;
         } else {
-            System.out.println("Unsupported type in Checker.enterArrayExpr");
             type = null;
         }
         for (int i = 0; i < ctx.getChildCount() - 2; i += 2)  {

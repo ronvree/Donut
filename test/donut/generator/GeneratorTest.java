@@ -1,5 +1,6 @@
 package donut.generator;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import donut.*;
 import donut.checkers.CheckerII;
 import donut.generators.MainGenerator;
@@ -19,9 +20,6 @@ import java.util.List;
 import static donut.generators.CodeGenerator.SHAREDMEMSIZE;
 import static donut.generators.CodeGenerator.THREADS;
 
-/**
- * Created by Gijs on 30-6-2016.
- */
 public class GeneratorTest {
 
     private static final String BASE_DIR = "src/donut/sample/";
@@ -31,27 +29,32 @@ public class GeneratorTest {
     private ArrayList<Integer> sharedMem;
 
     @Test
-    public void petersonTest()  {
-        Assert.assertEquals(2, MainGeneratorII.THREADS); // For this test to work, only two threads need to be used
-        this.runTest("peterson");
-        Assert.assertEquals(2000, sharedMem.get(sharedVarIndex()).intValue());
-        System.out.println("- Peterson test done.");
+    public void bankTest() {
+        this.runTest("bank");
+        Assert.assertEquals(1000, (int) sharedMem.get(9));      // Homers' balance.
+        Assert.assertEquals(200, (int) sharedMem.get(10));      // Marge's balance.
+        Assert.assertEquals(1700, (int) sharedMem.get(11));     // Balance.
+        System.out.println("    - Bank test done.");
     }
 
     @Test
-    public void bankTest() {
-        this.runTest("bank");
-        System.out.println("- Bank test done.");
+    public void gcdTest() {
+        this.runTest("gcd");
+        Assert.assertEquals(3, (int) localMem.get(0).get(1));   // GCD of 9 and 6.
+        System.out.println("    - GCD test done.");
+    }
+
+    @Test
+    public void producerConsumerTest() {
+        this.runTest("threads");
+        Assert.assertEquals(10, (int) sharedMem.get(9));        // Value of a.
+        Assert.assertEquals(0, (int) sharedMem.get(10));        // Value of b.
+        System.out.println("    - Producer-consumer test done.");
     }
 
     /*
         Help methods
      */
-
-    /** Calculates the starting index of variables in shared memory */
-    private static int sharedVarIndex() {
-        return THREADS + (SHAREDMEMSIZE - THREADS) / 2;
-    }
 
     private void runTest(String fileName) {
         DonutParser.ProgramContext programContext = parse(fileName);

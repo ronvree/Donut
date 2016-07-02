@@ -1,20 +1,15 @@
-Marge:
-    Created by Ron on 22-6-2016.
-;
-
 Alright brain... it's all up to you {
 
-    number x = 36;
-    number y = 8;
+Marge: Calculate greatest common divisor of 9 and 6.;
 
-    whileyoulittle (x is not y) {
+    number x = 9;
+    number y = 6;
+
+    whileyoulittle (y is not 0) {
         (x > y) eh? {
             x = x - y;
         } nope {
             y = y - x;
         }
     }
-
-    Marge: gcd = x;
-
 } I hope I didn't brain my damage.

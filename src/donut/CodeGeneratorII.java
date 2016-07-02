@@ -22,14 +22,15 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
     /** Boolean representation in Spril instructions */
     public static final int TRUE = 1;
     public static final int FALSE = 0;
-    /** Number of threads that do work during concurrent blocks */
-    public static final int THREADS = 2;
     /** Memory sizes (4 bytes per location) */
     public static final int LOCALMEMSIZE = 16;
     public static final int SHAREDMEMSIZE = 16;
     public static final int REGBANKSIZE = 23;
     /** Register with zero constant */
     public static final Reg ZEROREG = new Reg("(reg0)");
+
+    /** Number of threads that do work during concurrent blocks */
+    public static int THREADS = 3;
 
     /** Result of the checker phase */
     private CheckerResultII result;
