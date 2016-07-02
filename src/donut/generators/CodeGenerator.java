@@ -23,7 +23,7 @@ public abstract class CodeGenerator extends DonutBaseVisitor<Integer> {
     public static final int TRUE = 1;
     public static final int FALSE = 0;
     /** Number of threads that do work during concurrent blocks */
-    public static final int THREADS = 2;
+    public static final int THREADS = 3;
     /** Memory sizes (4 bytes per location) */
     public static final int LOCALMEMSIZE = 16;
     public static final int SHAREDMEMSIZE = 16;
