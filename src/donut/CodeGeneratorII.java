@@ -227,6 +227,7 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
         } else {
             emit(new Compute(Operator.DIV, r0, r1, r0)); // Div operation no longer supported by Sprockell
         }
+        setReg(ctx, r0);
         release(r1);
         return begin;
     }
@@ -243,6 +244,7 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
         } else {
             emit(new Compute(Operator.SUB, r0, r1, r0));
         }
+        setReg(ctx, r0);
         release(r1);
         return begin;
     }
@@ -269,6 +271,7 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
         } else if (ctx.compOperator().LE() != null)    {
             emit(new Compute(Operator.LTE, r0, r1, r0));
         }
+        setReg(ctx, r0);
         release(r1);
         return begin;
     }
@@ -294,6 +297,7 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
         } else if (ctx.boolOperator().XOR() != null) {
             emit(new Compute(Operator.XOR, r0, r1, r0));
         }
+        setReg(ctx, r0);
         release(r1);
         return begin;
     }
