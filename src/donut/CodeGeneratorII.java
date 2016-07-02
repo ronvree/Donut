@@ -33,7 +33,7 @@ public abstract class CodeGeneratorII extends DonutBaseVisitor<Integer> {
 
     /** Result of the checker phase */
     private CheckerResultII result;
-    /** Counter for creating fresh registers */
+    /** Helper class for obtaining fresh registers */
     private RegUlator regpool;
     /** Line counter (used for jumps) */
     private int lineCount;
