@@ -54,7 +54,7 @@ public class GeneratorTest {
 
         walker.walk(checker, programContext);
 
-        MainGenerator generator = new MainGenerator();
+        MainGeneratorII generator = new MainGeneratorII();
         List<Program> programs = generator.generate(programContext, checker.getResult());
 
         HaskellWriter writer = new HaskellWriter();
