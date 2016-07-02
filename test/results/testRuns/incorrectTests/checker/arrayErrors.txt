@@ -1,0 +1,5 @@
+D'OH at line 10:19 - Type Error: expected ARRAY-NUMBER, found ARRAY-REACTION
+D'OH at line 16:27 - Type Error: expected ARRAY-ARRAY-NUMBER, found ARRAY-null
+D'OH at line 18:27 - Type Error: expected ARRAY-ARRAY-NUMBER, found ARRAY-NUMBER
+
+Source file see: src/donut/testfiles/checker/arrays.donut

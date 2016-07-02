@@ -1,0 +1,6 @@
+D'OH at line 16:12 - Missing declaration of variable b
+D'OH at line 17:12 - Missing declaration of variable b
+D'OH at line 23:12 - Cannot lock on a non-global variable: c
+D'OH at line 43:12 - Missing declaration of variable f
+
+Source file see: src/donut/testfiles/checker/locks.donut

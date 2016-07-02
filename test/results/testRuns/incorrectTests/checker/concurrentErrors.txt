@@ -1,0 +1,5 @@
+D'OH at line 19:15 - Variable z already declared!
+D'OH at line 30:8 - Missing declaration of variable b
+D'OH at line 38:8 - Missing declaration of variable r
+
+Source file see: src/donut/testfiles/checker/concurrent.donut

@@ -1,0 +1,15 @@
+D'OH at line 8:21 - Syntax Error: extraneous input 'a' expecting {'+', '-', '/', '*', '^', 'is', 'is not', '>=', '<=', '>', '<', 'and', 'or', 'xor', ';'}
+D'OH at line 10:11 - Syntax Error: extraneous input 'symbol' expecting ID
+D'OH at line 12:7 - Syntax Error: mismatched input '=' expecting {')', '+', '-', '/', '*', '^', 'is', 'is not', '>=', '<=', '>', '<', 'and', 'or', 'xor'}
+D'OH at line 15:13 - Syntax Error: mismatched input ':' expecting '='
+D'OH at line 15:21 - Syntax Error: missing '=' at 'comment'
+D'OH at line 19:9 - Syntax Error: mismatched input ':' expecting '='
+D'OH at line 19:17 - Syntax Error: missing '=' at 'comment'
+D'OH at line 22:0 - Syntax Error: mismatched input '}' expecting {'+', '-', '/', '*', '^', 'is', 'is not', '>=', '<=', '>', '<', 'and', 'or', 'xor', ';'}
+
+Source file see: src/donut/testfiles/grammartests/failTest.donut
+
+
+
+D'OH at line 1:0 - Syntax Error: mismatched input '<EOF>' expecting 'Alright brain... it's all up to you'
+Source file see: src/donut/testfiles/grammartests/emptyTest.donut

@@ -1,0 +1,27 @@
+End result for values:
+    - x = 9
+    - y = 6
+    
+[Receive 0,EndProg,EndProg,EndProg]
+SprState {pc = 28, sp = 16, regbank = [0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+[[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest]]
+[[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing]]
+[]
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+End result for values:
+    - x = 10
+    - y = 8
+
+[Receive 0,EndProg,EndProg,EndProg]
+SprState {pc = 28, sp = 16, regbank = [0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 0, sp = 16, regbank = [0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+[[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest]]
+[[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing]]
+[]
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]   

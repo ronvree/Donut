@@ -1,0 +1,25 @@
+End result for values:
+    - i < 1000 in while loop
+    
+[Receive 0,EndProg,EndProg]
+SprState {pc = 24, sp = 16, regbank = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 44, sp = 16, regbank = [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,1000,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 44, sp = 16, regbank = [0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,1000,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+[[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest]]
+[[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing]]
+[]
+[0,0,0,0,0,0,0,0,0,2000,0,0,0,0,0,0]
+
+    
+End result for values:
+    - i < 500 in while loop
+
+[Receive 0,EndProg,EndProg]
+SprState {pc = 24, sp = 16, regbank = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 44, sp = 16, regbank = [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+SprState {pc = 44, sp = 16, regbank = [0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], localMem = [0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+[[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest],[NoRequest,NoRequest,NoRequest,NoRequest]]
+[[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing]]
+[]
+[0,0,0,0,0,0,0,0,0,1000,0,0,0,0,0,0]
+    

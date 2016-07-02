@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.*;
 
 import org.junit.Assert;
 import org.junit.Test;
+import util.HaskellWriter;
 
 import java.io.*;
 import java.util.List;
@@ -30,7 +31,6 @@ public class GrammarTest {
 
 
     //Tests for certain parts of the code that have to pass the test.
-
     private static final String IntegerDeclaration = "number n = 4;";
     private static final String IntegerDeclaration2 = "number j;";
     private static final String ArrayDeclaration = "bunchof number a = bunchof 6 number;";
@@ -45,8 +45,7 @@ public class GrammarTest {
     private static final String failTest = "src/donut/testfiles/grammartests/failTest.donut";
     private static final String emptyTest = "src/donut/testfiles/grammartests/totallyEmpty.donut";
 
-
-     // Actual tests.
+    // Actual tests.
 
     @Test
     public void testArrayDeclaration() {

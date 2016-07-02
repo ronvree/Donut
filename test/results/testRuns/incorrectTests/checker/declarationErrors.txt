@@ -1,0 +1,10 @@
+D'OH at line 8:11 - Variable x already declared!
+D'OH at line 15:15 - Variable z already declared!
+D'OH at line 19:11 - Variable xx already declared!
+D'OH at line 21:4 - Missing declaration of variable yy
+D'OH at line 29:8 - Missing declaration of variable xxx
+D'OH at line 44:19 - Variable zzz already declared!
+D'OH at line 48:13 - Missing declaration of variable r
+D'OH at line 50:11 - Variable zz already declared!
+
+Source file see: src/donut/testfiles/checker/declarations.donut
